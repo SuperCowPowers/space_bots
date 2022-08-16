@@ -87,6 +87,7 @@ def test():
     class SimpleActor(actor.Actor):
         def update(self):
             pass
+
         def draw(self):
             self.display.draw_circle((255, 255, 255), (250, 250), 25)
     simple_actor = SimpleActor(my_display_adapter)

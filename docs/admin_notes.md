@@ -43,7 +43,7 @@ Tox will install the SageMaker Sandbox package into a blank virtualenv and then 
 ### Make sure ALL tests pass
 
 ``` {.bash}
-$ cd sagemaker_sandbox
+$ cd space_bots
 $ tox 
 ```
 

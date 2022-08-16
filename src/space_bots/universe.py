@@ -67,7 +67,7 @@ class Universe():
 
 # Simple test of the Universe functionality
 def test():
-    
+
     """Test for Universe Class"""
 
     # Create our Universe
