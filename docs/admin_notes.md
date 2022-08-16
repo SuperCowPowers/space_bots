@@ -38,7 +38,7 @@ password=<pypi password>
 
 ### Tox Background
 
-Tox will install the SageMaker Sandbox package into a blank virtualenv and then execute all the tests against the newly installed package. So if everything goes okay, you know the pypi package installed fine and the tests (which pull from the installed `sagesand` package) also ran okay.
+Tox will install the SageMaker Sandbox package into a blank virtualenv and then execute all the tests against the newly installed package. So if everything goes okay, you know the pypi package installed fine and the tests (which pull from the installed `space_bots` package) also ran okay.
 
 ### Make sure ALL tests pass
 
@@ -61,7 +61,7 @@ $ twine upload dist/* -r testpypi
 ### Install the TEST PyPI Release
 
 ``` {.bash}
-$ pip install --index-url https://test.pypi.org/simple sagesand
+$ pip install --index-url https://test.pypi.org/simple space_bots
 ```
 
 ### Create the REAL PyPI Release
@@ -74,7 +74,7 @@ $ twine upload dist/* -r pypi
 
 ``` {.bash}
 $ git add setup.py
-$ get commit -m "sagesand version 1.8.7 (or whatever)"
+$ get commit -m "space_bots version 1.8.7 (or whatever)"
 $ git tag v1.8.7 (or whatever)
 $ git push --tags
 $ git push
