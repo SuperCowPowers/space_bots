@@ -31,7 +31,7 @@ setup(
     include_package_data=True,
     data_files=get_files('data') + get_files('examples'),
     install_requires=[
-        'pgzero',
+        'pygame',
     ],
     license='Apache License 2.0',
     keywords='AutoChess, Battler, Python, PyGame',
