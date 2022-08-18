@@ -20,10 +20,19 @@ class DisplayAdapter():
         self.running = True
         self.actors = []
         self.background_color = (20, 20, 30)
+        self.collision_detection = None
 
     def register_actor(self, actor):
         """Register a new Actor"""
         self.actors.append(actor)
+
+    def remove_actor(self, actor):
+        """Remove an Actor"""
+        self.actors.remove(actor)
+
+    def set_collision_detector(self, collision_func):
+        # Now store our collision detection function
+        self.collision_detection = collision_func
 
     def get_surface(self):
         """Return the drawable surface (display screen)"""
@@ -43,6 +52,12 @@ class DisplayAdapter():
             # Draw the background
             self.draw_background()
 
+            # Make sure all actors are not colliding
+            for actor in self.actors:
+                actor.reset_collisions()
+            if self.collision_detection:
+                self.collision_detection(self.actors)
+
             # Update the Registered Actors (in order)
             for actor in self.actors:
                 actor.update()
@@ -57,6 +72,10 @@ class DisplayAdapter():
     def draw_circle(self, color, center, radius, width=3):
         """Draw a Circle with the given parameters"""
         pygame.draw.circle(self.screen, color, center, radius, width)
+
+    def draw_line(self, color, start, end, width=2):
+        """Draw a Lince with the given parameters"""
+        pygame.draw.line(self.screen, color, start, end, width)
 
     def draw_polygon(self, color, points, width=3):
         pygame.draw.polygon(self.screen, color, points, width)
@@ -80,8 +99,10 @@ def test():
     """Test for DisplayAdapter Class"""
     from space_bots import actor
 
-    # Create the DisplayAdapter
-    my_display_adapter = DisplayAdapter()
+    # Create a fake universe (just for testing)
+    class Universe:
+        pass
+    Universe.display = DisplayAdapter()
 
     # Create an example Actor Class (needs update() and draw() methods)
     class SimpleActor(actor.Actor):
@@ -90,11 +111,12 @@ def test():
 
         def draw(self):
             self.display.draw_circle((255, 255, 255), (250, 250), 25)
-    simple_actor = SimpleActor(my_display_adapter)
+            self.display.draw_line((255, 255, 255), (250, 250), (270, 270))
+    simple_actor = SimpleActor(Universe)
 
     # Register the Actor with the Display Adapter
-    my_display_adapter.register_actor(simple_actor)
-    my_display_adapter.event_loop()
+    Universe.display.register_actor(simple_actor)
+    Universe.display.event_loop()
 
 
 if __name__ == "__main__":

@@ -10,11 +10,14 @@ import math
 class Actor(ABC):
     """Actor: Abstract Base Class for all object (ships, planets, etc)"""
 
-    def __init__(self, display_adapter, x=100, y=100):
-        self.display = display_adapter
+    def __init__(self, universe, x=100, y=100):
+        self.universe = universe
+        self.display = universe.display
         self.x = x
         self.y = y
         self.angle = 0
+        self.collision_radius = None  # This collision radius needs to be set
+        self.collisions = set()  # Set of actors colliding with this actor
 
     @abstractmethod
     def update(self):
@@ -23,6 +26,18 @@ class Actor(ABC):
     @abstractmethod
     def draw(self):
         pass
+
+    def reset_collisions(self):
+        self.collisions = set()
+
+    def collides(self, actor):
+        if self.distance_to(actor) < (self.collision_radius + actor.collision_radius):
+            self.collisions.add(actor)
+            return True
+        return False
+
+    def in_collision(self):
+        return self.collisions
 
     def distance_to(self, actor):
         dx = actor.x - self.x
@@ -35,7 +50,6 @@ class Actor(ABC):
         angle = math.degrees(math.atan2(dy, dx))
         if angle > 0:
             return angle
-
         return 360 + angle
 
     def move_towards(self, actor, dist):
@@ -61,8 +75,10 @@ def test():
     """Test for Actor Class"""
     from space_bots import display_adapter
 
-    # Create our display_adapter
-    my_display = display_adapter.DisplayAdapter()
+    # Create a fake universe (just for testing)
+    class Universe:
+        pass
+    Universe.display = display_adapter.DisplayAdapter()
 
     # Create an example Actor Class (needs update() and draw() methods)
     class SimpleActor(Actor):
@@ -71,11 +87,11 @@ def test():
 
         def draw(self):
             self.display.draw_circle((255, 255, 255), (250, 250), 25)
-    simple_actor = SimpleActor(my_display)
+    simple_actor = SimpleActor(Universe)
 
     # Register the Actor with the Display Adapter
-    my_display.register_actor(simple_actor)
-    my_display.event_loop()
+    Universe.display.register_actor(simple_actor)
+    Universe.display.event_loop()
 
 
 if __name__ == "__main__":

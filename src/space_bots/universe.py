@@ -10,13 +10,29 @@ class Universe():
     """Universe: Class that contains all the stuff"""
     # Note: Maybe refactor/rethink how this class should be used later
 
-    def __init__(self, width=1600, height=1000, planets=8, ships=1):
+    def __init__(self, width=1600, height=1000, planets=8, ships=5):
         """Initialize the Universe class"""
-        self.pad = 100
+        self.pad = 150
+        self.ship_pad = 50
         self.width = width
         self.height = height
         self.display = display_adapter.DisplayAdapter(width, height)
-        self.display.set_background_color((30, 30, 40))
+        self.display.set_background_color((30, 30, 30))
+        self.display.set_collision_detector(self.collision_detection)
+
+        # Add Ships
+        self.ships = []
+
+        # Create 5 blue/random, 5 green/closest, and 5 red/low_health
+        # self.add_ships('blue', 'random', 5)
+        # self.add_ships('green', 'closest', 'defensive', 8)
+        self.add_ships('purple', 'random', 'offensive', 10)
+        self.add_ships('red', 'low_health', 'offensive', 10)
+        self.add_ships('green', 'closest', 'offensive', 10)
+        self.add_ships('blue', 'closest', 'defensive', 8)
+        # self.add_ships('purple', 'low_health', 'offensive', 6)
+        for _ship in self.ships:
+            _ship.post_init()
 
         # Add Planets
         self.planets = []
@@ -24,44 +40,96 @@ class Universe():
             self.add_planet()
 
         # Space Planets Apart from each other
-
-        # Add Ships
-        self.ships = []
-        for _ in range(ships):
-            self.add_ship()
+        self._space_out_planets()
 
     def add_planet(self):
         """Add a Planet to the Universe"""
-        new_planet = planet.Planet(self.display,
+        new_planet = planet.Planet(self,
                                    x=randint(self.pad, self.width-self.pad),
                                    y=randint(self.pad, self.height-self.pad),
-                                   color=self._random_color(),
-                                   radius=25)
+                                   color=self._random_planet_color(),
+                                   radius=35)
         self.planets.append(new_planet)
 
         # Register with the display adapter
         self.display.register_actor(new_planet)
 
-    def add_ship(self):
+    def add_ships(self, team, strategy, stance, count):
+        """Add a set of ships"""
+        for _ in range(count):
+            self.add_ship(team, strategy, stance)
+
+    def add_ship(self, team, strategy, stance):
         """Add a Ship to the Universe"""
-        new_ship = ship.Ship(self.display,
+        new_ship = ship.Ship(self,
                              x=randint(self.pad, self.width - self.pad),
-                             y=randint(self.pad, self.height - self.pad))
+                             y=randint(self.pad, self.height - self.pad),
+                             team=team, strategy=strategy, stance=stance,
+                             radius=12)
         self.ships.append(new_ship)
 
         # Register with the display adapter
         self.display.register_actor(new_ship)
 
+    def remove_ship(self, ship):
+        """Remove a Ship from the Universe"""
+        self.ships.remove(ship)
+
+        # Register with the display adapter
+        self.display.remove_actor(ship)
+
+    def adversary_ships(self, ship):
+        """A Ship can ask for adversary ships (not on my team)"""
+        return [s for s in self.ships if s.team != ship.team]
+
     def go(self):
         """Have the Universe enter it's main event loop"""
         self.display.event_loop()
 
+    def collision_detection(self, actor_list):
+        """Detect if any actor is colliding with another actor"""
+
+        # First ships against planets
+        for _ship in self.ships:
+            for _planet in self.planets:
+                if _ship.collides(_planet):
+                    _ship.move_towards(_planet, -5)
+
+        # Second ships against ships
+        for _ship in self.ships:
+            for co_ship in self.ships:
+                if _ship == co_ship:
+                    continue
+                if _ship.collides(co_ship):
+                    _ship.move_towards(co_ship, -5)
+
+        # Last ships against boundaries
+        for _ship in self.ships:
+            _ship.x = min(max(_ship.x, self.ship_pad), self.width-self.ship_pad)
+            _ship.y = min(max(_ship.y, self.ship_pad), self.height-self.ship_pad)
+
+    def _space_out_planets(self):
+        """Make sure planets don't overlap"""
+        for _ in range(50):
+            for _planet in self.planets:
+                for co_planet in self.planets:
+                    # Skip self
+                    if _planet == co_planet:
+                        continue
+                    # Move if too close
+                    if _planet.distance_to(co_planet) < 400:
+                        _planet.move_towards(co_planet, -30)
+                    # Boundaries
+                    _planet.x = max(min(_planet.x, self.width-self.pad), self.pad)
+                    _planet.y = max(min(_planet.y, self.height-self.pad), self.pad)
+
     @staticmethod
-    def _random_color():
+    def _random_planet_color():
         """Helper to create a random RGB color"""
-        red = randint(50, 200)
-        green = randint(50, 200)
-        blue = randint(50, 200)
+        # Browish
+        red = randint(140, 160)
+        green = randint(120, 140)
+        blue = randint(70, 90)
         return red, green, blue
 
 

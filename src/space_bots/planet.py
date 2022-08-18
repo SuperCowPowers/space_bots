@@ -7,14 +7,15 @@ from space_bots import actor
 class Planet(actor.Actor):
     """Planet: Class for the Planets in Space Bots"""
 
-    def __init__(self, display_adapter, x, y, color, radius):
+    def __init__(self, universe, x, y, color, radius):
 
         # Call my superclass init
-        super().__init__(display_adapter, x, y)
+        super().__init__(universe, x, y)
 
         # Set my attributes
         self.color = color
         self.radius = radius
+        self.collision_radius = radius + 10
 
     def update(self):
         """Update the Planet"""
@@ -31,7 +32,7 @@ class Planet(actor.Actor):
 
     def draw_shield(self):
         """Draw the Shield"""
-        self.display.draw_circle((255, 255, 255), (self.x, self.y), self.radius + 10)
+        self.display.draw_circle((128, 128, 220), (self.x, self.y), self.radius + 2, width=5)
 
 
 # Simple test of the Planet functionality
@@ -39,15 +40,17 @@ def test():
     """Test for Planet Class"""
     from space_bots import display_adapter
 
-    # Create our display_adapter
-    my_display = display_adapter.DisplayAdapter()
+    # Create a fake universe (just for testing)
+    class Universe:
+        pass
+    Universe.display = display_adapter.DisplayAdapter()
 
     # Create our Planet
-    my_planet = Planet(my_display, 100, 100, (100, 220, 200), 25)
+    my_planet = Planet(Universe, 100, 100, (100, 220, 200), 25)
 
     # Register the Actor with the Display Adapter
-    my_display.register_actor(my_planet)
-    my_display.event_loop()
+    Universe.display.register_actor(my_planet)
+    Universe.display.event_loop()
 
 
 if __name__ == "__main__":
