@@ -40,6 +40,7 @@ class Squad:
         self.target_strategy = target_strategy
         self.main_target = None
         self.stance = stance
+        self.spacing = 80
         self.initial_pos = initial_pos
         self.grid = {'min_x': universe.pad,
                      'min_y': universe.pad,
@@ -56,6 +57,9 @@ class Squad:
         # Keep a list of my adversaries (populated in update)
         self.adversaries = None
 
+        # Special Data for Random
+        self.random_targets = {}
+
     def create_ships(self, num_ships, team, stance):
         """Create a set of ships for this squad"""
         return [self.create_ship(team, stance) for _ in range(num_ships)]
@@ -64,8 +68,8 @@ class Squad:
         """Create a Ship for this Squad"""
 
         # Set the initial position of the ship, this will quickly change based on formation
-        init_x = self.initial_pos[0] + randint(-50, 50)
-        init_y = self.initial_pos[1] + randint(-50, 50)
+        init_x = self.initial_pos[0] + randint(-200, 200)
+        init_y = self.initial_pos[1] + randint(-200, 200)
         new_ship = ship.Ship(self.universe,
                              x=init_x,
                              y=init_y,
@@ -84,8 +88,6 @@ class Squad:
 
         # Get my adversaries
         self.adversaries = self.universe.adversary_ships(self)
-        if not self.adversaries:
-            return
 
         # Compute information about the squad
         self.x, self.y = self.compute_centroid()
@@ -99,7 +101,7 @@ class Squad:
         # Squad Movement: Group up
         if self.stance == 'defensive':
             for _ship in self.ships:
-                delta = _ship.position_delta((self.x, self.y), .02)
+                delta = _ship.position_delta((self.x, self.y), .01)
                 _ship.force_x += delta[0]
                 _ship.force_y += delta[1]
 
@@ -141,23 +143,31 @@ class Squad:
 
     def compute_main_target(self):
         """Select the squads main target based on a Strategy"""
-        if self.target_strategy == 'low_health':
-            return self.lowest_health()[0]
-        if self.target_strategy == 'nearest':
-            return self.closest_to_squad()[0]
-        if self.target_strategy == 'random':
-            # There is NO main target
+        try:
+            if self.target_strategy == 'low_health':
+                return self.lowest_health()[0]
+            if self.target_strategy == 'nearest':
+                return self.closest_to_squad()[0]
+            if self.target_strategy == 'random':
+                return None  # Special Logic for Random
+        except IndexError:
             return None
 
     def secondary_target(self, my_ship):
         """A ship might ask for a secondary target"""
-        if self.target_strategy == 'low_health':
-            return choice(self.lowest_health()[1:3])
-        if self.target_strategy == 'nearest':
-            return self.closest_to_ship(my_ship)[0]
-
-        # Randomly pick an adversary
-        return choice(self.adversaries)
+        try:
+            if self.target_strategy == 'low_health':
+                return choice(self.lowest_health()[0:2])
+            if self.target_strategy == 'nearest':
+                return self.closest_to_ship(my_ship)[0]
+            if self.target_strategy == 'random':
+                if my_ship not in self.random_targets:
+                    self.random_targets[my_ship] = choice(self.adversaries)
+                elif self.random_targets[my_ship] not in self.adversaries:
+                    self.random_targets[my_ship] = choice(self.adversaries)
+                return self.random_targets[my_ship]
+        except IndexError:
+            return None
 
 
 # Simple test of the Squad functionality

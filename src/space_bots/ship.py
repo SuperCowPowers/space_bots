@@ -17,11 +17,15 @@ class Ship(actor.Actor):
         self.squad = squad
         self.team = squad.team
         self.color = self.squad.team_colors[self.team]
-        self.speed = 0.25
+        if strategy == 'low_health':
+            self.speed = 1.5
+        else:
+            self.speed = 0.25
         self.radius = radius
         self.shield_radius = radius + 5
         self.collision_radius = radius + 7
-        self.laser_range = 120
+        self.laser_range = 150
+        self.laser_damage = 0.2
         self.hp = 200
         self.shield = 250
         self.shield_recharge = 0.01
@@ -34,7 +38,7 @@ class Ship(actor.Actor):
         self.force_x = 0
         self.force_y = 0
         if self.stance == 'defensive':
-            self.stay_away_distance = 400
+            self.stay_away_distance = self.laser_range + 20
         else:
             self.stay_away_distance = 0
 
@@ -73,17 +77,15 @@ class Ship(actor.Actor):
         self.shield += self.shield_recharge
         self.shield = min(self.shield, 250)
 
-        # Get my next target
-        if self.squad.target_strategy == 'random':
-            if self.target is None or self.target.is_dead():
-                self.target = self.squad.secondary_target(self)
-
-        # All other strategies will try to choose the main target if it's within range
+        # Choose the main target if it's within range, otherwise ask for secondary target
+        if self.squad.main_target and self.within_range(self.squad.main_target):
+            self.target = self.squad.main_target
         else:
-            if self.within_range(self.squad.main_target):
-                self.target = self.squad.main_target
-            else:
-                self.target = self.squad.secondary_target(self)
+            self.target = self.squad.secondary_target(self)
+
+        # If I have no target, so don't update
+        if self.target is None:
+            return
 
         # Compute my non targets
         self.non_targets = self.squad.adversaries.copy()
@@ -98,16 +100,21 @@ class Ship(actor.Actor):
         # Move Away from Others
         for ship in self.non_targets:
             if self.distance_to(ship) < self.stay_away_distance:
-                delta = self.position_delta((ship.x, ship.y), .001 * 1.0/(self.health_percent()*self.health_percent()))
+                delta = self.position_delta((ship.x, ship.y), .005 * 1.0/(self.health_percent()*self.health_percent()))
                 self.force_x -= delta[0]
                 self.force_y -= delta[1]
 
         # Now use the force parameters to actually move
+        # self.x += self.force_x * self.speed
+        # self.y += self.force_y * self.speed
+        # return
         # FIXME: Improve implementation performance
         norm = math.sqrt(self.force_x*self.force_x + self.force_y*self.force_y)
         if norm:
-            self.x += self.force_x / norm * self.speed
-            self.y += self.force_y / norm * self.speed
+            # Low Health Speed Boost
+            boost = 2.0 if self.low_health() else 1.0
+            self.x += self.force_x / norm * self.speed * boost
+            self.y += self.force_y / norm * self.speed * boost
 
     def draw(self):
         """Draw the entire ship"""
@@ -134,7 +141,7 @@ class Ship(actor.Actor):
         """Draw the laser"""
         if self.target and self.distance_to(self.target) < self.laser_range:
             self.display.draw_line(self.color, (self.x, self.y), (self.target.x, self.target.y), width=4)
-            self.target.damage(0.25)
+            self.target.damage(self.laser_damage)
 
     def draw_direction(self, actor):
         """Draw an indicator for the Ship's direction"""

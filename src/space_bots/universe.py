@@ -22,10 +22,10 @@ class Universe():
 
         # Add Squads/Ships
         self.squads = [
-            squad.Squad(self, 15, 'red', target_strategy='low_health', stance='offensive', initial_pos=(200, 200)),
-            squad.Squad(self, 15, 'green', target_strategy='nearest', stance='offensive',  initial_pos=(200, 800)),
-            squad.Squad(self, 20, 'purple', target_strategy='random', stance='offensive', initial_pos=(1400, 200)),
-            squad.Squad(self, 5, 'blue', target_strategy='nearest', stance='defensive', initial_pos=(1400, 800))
+            squad.Squad(self, 12, 'red', target_strategy='low_health', stance='offensive', initial_pos=(200, 200)),
+            squad.Squad(self, 8, 'green', target_strategy='nearest', stance='offensive',  initial_pos=(200, 800)),
+            squad.Squad(self, 8, 'purple', target_strategy='random', stance='offensive', initial_pos=(1400, 200)),
+            squad.Squad(self, 8, 'blue', target_strategy='nearest', stance='defensive', initial_pos=(1400, 800))
         ]
 
         # Add the Squads as Event subscribers
