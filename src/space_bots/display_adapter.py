@@ -19,12 +19,17 @@ class DisplayAdapter():
         self.height = height
         self.running = True
         self.actors = []
+        self.event_subscribers = []
         self.background_color = (20, 20, 30)
         self.collision_detection = None
 
     def register_actor(self, actor):
         """Register a new Actor"""
         self.actors.append(actor)
+
+    def add_event_subscriber(self, subscriber):
+        """Register a new Actor"""
+        self.event_subscribers.append(subscriber)
 
     def remove_actor(self, actor):
         """Remove an Actor"""
@@ -58,9 +63,9 @@ class DisplayAdapter():
             if self.collision_detection:
                 self.collision_detection(self.actors)
 
-            # Update the Registered Actors (in order)
-            for actor in self.actors:
-                actor.update()
+            # Update any Event Subscribers
+            for subscriber in self.event_subscribers:
+                subscriber.update()
 
             # Draw the Registered Actors (in order)
             for actor in self.actors:
@@ -89,7 +94,8 @@ class DisplayAdapter():
             if event.type == pygame.QUIT:
                 self.running = False
 
-    def quit(self):
+    @staticmethod
+    def quit():
         """Quit the main event loop/display"""
         pygame.quit()
 

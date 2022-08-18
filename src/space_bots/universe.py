@@ -3,7 +3,7 @@ from random import randint
 
 # Local Imports
 from space_bots import display_adapter
-from space_bots import planet, ship
+from space_bots import planet, squad
 
 
 class Universe():
@@ -20,19 +20,20 @@ class Universe():
         self.display.set_background_color((30, 30, 30))
         self.display.set_collision_detector(self.collision_detection)
 
-        # Add Ships
-        self.ships = []
+        # Add Squads/Ships
+        self.squads = [
+            squad.Squad(self, 15, 'red', target_strategy='low_health', stance='offensive', initial_pos=(200, 200)),
+            squad.Squad(self, 15, 'green', target_strategy='nearest', stance='offensive',  initial_pos=(200, 800)),
+            squad.Squad(self, 20, 'purple', target_strategy='random', stance='offensive', initial_pos=(1400, 200)),
+            squad.Squad(self, 5, 'blue', target_strategy='nearest', stance='defensive', initial_pos=(1400, 800))
+        ]
 
-        # Create 5 blue/random, 5 green/closest, and 5 red/low_health
-        # self.add_ships('blue', 'random', 5)
-        # self.add_ships('green', 'closest', 'defensive', 8)
-        self.add_ships('purple', 'random', 'offensive', 10)
-        self.add_ships('red', 'low_health', 'offensive', 10)
-        self.add_ships('green', 'closest', 'offensive', 10)
-        self.add_ships('blue', 'closest', 'defensive', 8)
-        # self.add_ships('purple', 'low_health', 'offensive', 6)
-        for _ship in self.ships:
-            _ship.post_init()
+        # Add the Squads as Event subscribers
+        for _squad in self.squads:
+            self.display.add_event_subscriber(_squad)
+
+        # We need a list of individual ships for collision detections
+        self.ships = [ship for _squad in self.squads for ship in _squad.ships]
 
         # Add Planets
         self.planets = []
@@ -41,6 +42,10 @@ class Universe():
 
         # Space Planets Apart from each other
         self._space_out_planets()
+
+        # Add the Planets as Event subscribers
+        for _planet in self.planets:
+            self.display.add_event_subscriber(_planet)
 
     def add_planet(self):
         """Add a Planet to the Universe"""
@@ -54,23 +59,6 @@ class Universe():
         # Register with the display adapter
         self.display.register_actor(new_planet)
 
-    def add_ships(self, team, strategy, stance, count):
-        """Add a set of ships"""
-        for _ in range(count):
-            self.add_ship(team, strategy, stance)
-
-    def add_ship(self, team, strategy, stance):
-        """Add a Ship to the Universe"""
-        new_ship = ship.Ship(self,
-                             x=randint(self.pad, self.width - self.pad),
-                             y=randint(self.pad, self.height - self.pad),
-                             team=team, strategy=strategy, stance=stance,
-                             radius=12)
-        self.ships.append(new_ship)
-
-        # Register with the display adapter
-        self.display.register_actor(new_ship)
-
     def remove_ship(self, ship):
         """Remove a Ship from the Universe"""
         self.ships.remove(ship)
@@ -78,9 +66,9 @@ class Universe():
         # Register with the display adapter
         self.display.remove_actor(ship)
 
-    def adversary_ships(self, ship):
-        """A Ship can ask for adversary ships (not on my team)"""
-        return [s for s in self.ships if s.team != ship.team]
+    def adversary_ships(self, squad):
+        """A Squad can ask for adversary ships (not on my team)"""
+        return [s for s in self.ships if s.team != squad.team]
 
     def go(self):
         """Have the Universe enter it's main event loop"""
