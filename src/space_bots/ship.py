@@ -5,9 +5,69 @@ import math
 from space_bots import actor
 
 
+# FIXME
+ship_specs = {
+    'scout':
+        {'mass': 20,
+         'speed': 1.25,
+         'radius': 8,
+         'hp': 100,
+         'shield': 50,
+         'laser_range': 50,
+         'laser_damage': 0.05,
+         'shield_recharge': 0.0005,
+         'hull_recharge': 0.0005
+         },
+    'destroyer':
+        {'mass': 30,
+         'speed': 1.0,
+         'radius': 10,
+         'hp': 150,
+         'shield': 100,
+         'laser_range': 80,
+         'laser_damage': 0.1,
+         'shield_recharge': 0.001,
+         'hull_recharge': 0.001
+         },
+    'cruiser':
+        {'mass': 40,
+         'speed': 0.5,
+         'radius': 12,
+         'hp': 200,
+         'shield': 150,
+         'laser_range': 120,
+         'laser_damage': 0.15,
+         'shield_recharge': 0.0015,
+         'hull_recharge': 0.0015
+         },
+    'battleship':
+        {'mass': 60,
+         'speed': 0.25,
+         'radius': 14,
+         'hp': 300,
+         'shield': 200,
+         'laser_range': 150,
+         'laser_damage': 0.2,
+         'shield_recharge': 0.002,
+         'hull_recharge': 0.002
+         },
+    'starbase':
+        {'mass': 200,
+         'speed': 0.05,
+         'radius': 20,
+         'hp': 800,
+         'shield': 500,
+         'laser_range': 250,
+         'laser_damage': 1.0,
+         'shield_recharge': 0.01,
+         'hull_recharge': 0.01
+         }
+}
+
+
 class Ship(actor.Actor):
     """Ship: Class for the ships in Space Bots"""
-    def __init__(self, universe, x, y, squad, radius=12, strategy='random', stance='defensive'):
+    def __init__(self, universe, x, y, squad, ship_type='cruiser', strategy='random', stance='defensive'):
 
         # Call my superclass init
         super().__init__(universe, x, y)
@@ -17,19 +77,21 @@ class Ship(actor.Actor):
         self.squad = squad
         self.team = squad.team
         self.color = self.squad.team_colors[self.team]
-        if strategy == 'low_health':
-            self.speed = 1.5
-        else:
-            self.speed = 0.25
-        self.radius = radius
-        self.shield_radius = radius + 5
-        self.collision_radius = radius + 7
-        self.laser_range = 150
-        self.laser_damage = 0.2
-        self.hp = 200
-        self.shield = 250
-        self.shield_recharge = 0.01
-        self.total_health = 350
+
+        # Parameters based on ship_type
+        self.ship_type = ship_type
+        self.mass = ship_specs[ship_type]['mass']
+        self.speed = ship_specs[ship_type]['speed']
+        self.radius = ship_specs[ship_type]['radius']
+        self.hp = ship_specs[ship_type]['hp']
+        self.shield = ship_specs[ship_type]['shield']
+        self.laser_range = ship_specs[ship_type]['laser_range']
+        self.laser_damage = ship_specs[ship_type]['laser_damage']
+        self.shield_recharge = ship_specs[ship_type]['shield_recharge']
+        self.hull_recharge = ship_specs[ship_type]['hull_recharge']
+        self.shield_radius = self.radius + 5
+        self.collision_radius = self.radius + 7
+        self.total_health = self.hp + self.shield
         self.target = None
         self.non_targets = []
         self.strategy = strategy
@@ -48,7 +110,7 @@ class Ship(actor.Actor):
 
     def damage(self, points):
         """Inflict damage on this ship"""
-        if self.shield:
+        if self.shield > 1:
             self.shield = max(self.shield - points, 0)
         else:
             self.hp = max(self.hp-points, 0)
@@ -75,7 +137,11 @@ class Ship(actor.Actor):
 
         # Shield recharge
         self.shield += self.shield_recharge
-        self.shield = min(self.shield, 250)
+        self.shield = min(self.shield, ship_specs[self.ship_type]['shield'])
+
+        # Shield recharge
+        self.hp += self.hull_recharge
+        self.hp = min(self.hp, ship_specs[self.ship_type]['hp'])
 
         # Choose the main target if it's within range, otherwise ask for secondary target
         if self.squad.main_target and self.within_range(self.squad.main_target):
@@ -154,7 +220,8 @@ class Ship(actor.Actor):
 
     def draw_shield(self):
         """Draw the Shield"""
-        shield_color = (self.shield, self.shield, self.shield)
+        shield_health = self.shield * 255 / ship_specs[self.ship_type]['shield']
+        shield_color = (shield_health, shield_health, shield_health)
         self.display.draw_circle(shield_color, (self.x, self.y), self.shield_radius, width=2)
 
 
@@ -168,8 +235,14 @@ def test():
         pass
     Universe.display = display_adapter.DisplayAdapter()
 
+    # Create a fake squad (just for testing)
+    class Squad:
+        pass
+    Squad.team = 'red'
+    Squad.team_colors = {'red': (200, 80, 80)}
+
     # Create our ship
-    my_ship = Ship(Universe, 100, 100, 'blue', 20)
+    my_ship = Ship(Universe, 100, 100, squad=Squad, ship_type='destroyer')
 
     # Register the Actor with the Display Adapter
     Universe.display.register_actor(my_ship)

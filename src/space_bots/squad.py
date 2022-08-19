@@ -26,9 +26,11 @@ class Squad:
     team_colors = {'blue': (100, 100, 255),
                    'green': (80, 200, 80),
                    'red': (200, 80, 80),
-                   'purple': (180, 50, 220)}
+                   'purple': (180, 50, 220),
+                   'yellow': (180, 180, 100)
+                   }
 
-    def __init__(self, universe, num_ships, team='blue', target_strategy='random', stance='defensive',
+    def __init__(self, universe, num_ships, ship_type='cruiser', team='blue', target_strategy='random', stance='defensive',
                  formation='tdb', initial_pos=(200, 200)):
 
         # Set my attributes
@@ -52,29 +54,26 @@ class Squad:
         self.y = initial_pos[1]
 
         # Create my Ships
-        self.ships = self.create_ships(num_ships, team, stance)
+        self.ships = self.create_ships(num_ships, ship_type, stance)
 
         # Keep a list of my adversaries (populated in update)
         self.adversaries = None
 
-        # Special Data for Random
-        self.random_targets = {}
+        # Capture Sticky Targets for Random and Low Health Targeting
+        self.sticky_targets = {}
 
-    def create_ships(self, num_ships, team, stance):
+    def create_ships(self, num_ships, ship_type, stance):
         """Create a set of ships for this squad"""
-        return [self.create_ship(team, stance) for _ in range(num_ships)]
+        return [self.create_ship(ship_type, stance) for _ in range(num_ships)]
 
-    def create_ship(self, team, stance):
+    def create_ship(self, ship_type, stance):
         """Create a Ship for this Squad"""
 
         # Set the initial position of the ship, this will quickly change based on formation
         init_x = self.initial_pos[0] + randint(-200, 200)
         init_y = self.initial_pos[1] + randint(-200, 200)
-        new_ship = ship.Ship(self.universe,
-                             x=init_x,
-                             y=init_y,
-                             squad=self, strategy=self.target_strategy, stance=stance,
-                             radius=12)
+        new_ship = ship.Ship(self.universe, x=init_x, y=init_y,
+                             squad=self, ship_type=ship_type, strategy=self.target_strategy, stance=stance)
 
         # Register with the Universe display adapter
         self.universe.display.register_actor(new_ship)
@@ -157,17 +156,23 @@ class Squad:
         """A ship might ask for a secondary target"""
         try:
             if self.target_strategy == 'low_health':
-                return choice(self.lowest_health()[0:2])
+                return self.get_sticky_target(my_ship, self.lowest_health()[1:4])
             if self.target_strategy == 'nearest':
                 return self.closest_to_ship(my_ship)[0]
             if self.target_strategy == 'random':
-                if my_ship not in self.random_targets:
-                    self.random_targets[my_ship] = choice(self.adversaries)
-                elif self.random_targets[my_ship] not in self.adversaries:
-                    self.random_targets[my_ship] = choice(self.adversaries)
-                return self.random_targets[my_ship]
+                return self.get_sticky_target(my_ship, self.adversaries)
         except IndexError:
-            return None
+            if self.adversaries:
+                return choice(self.adversaries)
+            else:
+                return None
+
+    def get_sticky_target(self, my_ship, choice_list):
+        if my_ship not in self.sticky_targets:
+            self.sticky_targets[my_ship] = choice(choice_list)
+        elif self.sticky_targets[my_ship] not in self.adversaries:
+            self.sticky_targets[my_ship] = choice(choice_list)
+        return self.sticky_targets[my_ship]
 
 
 # Simple test of the Squad functionality
@@ -185,8 +190,8 @@ def test():
     fake_universe = Universe()
 
     # Create a couple of squads
-    Squad(fake_universe, 5, team='blue', target='nearest', stance='defensive', initial_pos=(300, 300))
-    Squad(fake_universe, 5, team='green', target='random', stance='offensive', initial_pos=(800, 800))
+    Squad(fake_universe, 5, team='blue', target_strategy='nearest', stance='defensive', initial_pos=(300, 300))
+    Squad(fake_universe, 5, team='green', target_strategy='random', stance='offensive', initial_pos=(800, 800))
 
     # Start the event loop
     fake_universe.display.event_loop()
