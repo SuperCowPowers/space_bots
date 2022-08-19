@@ -57,6 +57,11 @@ class DisplayAdapter():
             # Draw the background
             self.draw_background()
 
+            # Clear any previous commands/movements/forces
+            for actor in self.actors:
+                actor.force_x = 0
+                actor.force_y = 0
+
             # Make sure all actors are not colliding
             for actor in self.actors:
                 actor.reset_collisions()

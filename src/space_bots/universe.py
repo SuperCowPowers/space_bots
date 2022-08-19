@@ -20,27 +20,6 @@ class Universe():
         self.display.set_background_color((30, 30, 30))
         self.display.set_collision_detector(self.collision_detection)
 
-        # Add Squads/Ships
-        self.squads = [
-            squad.Squad(self, 15, ship_type='destroyer', team='red',
-                        target_strategy='low_health', stance='offensive', initial_pos=(200, 200)),
-            squad.Squad(self, 10, ship_type='cruiser', team='green',
-                        target_strategy='nearest', stance='offensive',  initial_pos=(200, 800)),
-            squad.Squad(self, 10, ship_type='cruiser', team='purple',
-                        target_strategy='random', stance='offensive', initial_pos=(1400, 200)),
-            squad.Squad(self, 3, ship_type='battleship', team='blue',
-                        target_strategy='nearest', stance='defensive', initial_pos=(1400, 800)),
-            squad.Squad(self, 1, ship_type='starbase', team='blue',
-                        target_strategy='nearest', stance='defensive', initial_pos=(800, 500))
-        ]
-
-        # Add the Squads as Event subscribers
-        for _squad in self.squads:
-            self.display.add_event_subscriber(_squad)
-
-        # We need a list of individual ships for collision detections
-        self.ships = [ship for _squad in self.squads for ship in _squad.ships]
-
         # Add Planets
         self.planets = []
         for _ in range(planets):
@@ -52,6 +31,34 @@ class Universe():
         # Add the Planets as Event subscribers
         for _planet in self.planets:
             self.display.add_event_subscriber(_planet)
+
+        # Add Squads/Ships
+        self.squads = [
+            squad.Squad(self, 20, ship_type='scout', team='red', alliance='pirates',
+                        target_strategy='low_health', stance='offensive', initial_pos=(200, 200)),
+            squad.Squad(self, 20, ship_type='destroyer', team='yellow', alliance='pirates',
+                        target_strategy='low_health', stance='offensive', initial_pos=(200, 200)),
+            squad.Squad(self, 7, ship_type='cruiser', team='green', alliance='pirates',
+                        target_strategy='nearest', stance='offensive',  initial_pos=(200, 800)),
+            squad.Squad(self, 15, ship_type='scout', team='blue', alliance='player',
+                        target_strategy='low_health', stance='defensive', initial_pos=(800, 500)),
+            squad.Squad(self, 2, ship_type='battleship', team='blue', alliance='player',
+                        target_strategy='nearest', stance='defensive', initial_pos=(800, 500)),
+            squad.Squad(self, 1, ship_type='starbase', team='blue', alliance='player',
+                        target_strategy='nearest', stance='defensive', initial_pos=(800, 500))
+        ]
+
+        # Add the Squads as Event subscribers
+        for _squad in self.squads:
+            self.display.add_event_subscriber(_squad)
+
+        # We need a list of individual ships for collision detections
+        self.ships = [ship for _squad in self.squads for ship in _squad.ships]
+
+        # Protection Assignments
+        self.squads[3].protect(self.squads[5])
+        self.squads[4].protect(self.squads[5])
+        self.squads[5].protect(self.closest_planet(self.squads[5]))
 
     def add_planet(self):
         """Add a Planet to the Universe"""
@@ -73,12 +80,20 @@ class Universe():
         self.display.remove_actor(ship)
 
     def adversary_ships(self, squad):
-        """A Squad can ask for adversary ships (not on my team)"""
-        return [s for s in self.ships if s.team != squad.team]
+        """A Squad can ask for adversary ships (not in my appliance)"""
+        return [s for s in self.ships if s.alliance != squad.alliance]
 
     def go(self):
         """Have the Universe enter it's main event loop"""
         self.display.event_loop()
+
+    @staticmethod
+    def force_delta(source, target):
+        # Force delta is based on mass of the source and target
+        mass_ratio = target.mass/source.mass
+        dx = (target.x - source.x) * mass_ratio
+        dy = (target.y - source.y) * mass_ratio
+        return dx, dy
 
     def collision_detection(self, actor_list):
         """Detect if any actor is colliding with another actor"""
@@ -87,7 +102,9 @@ class Universe():
         for _ship in self.ships:
             for _planet in self.planets:
                 if _ship.collides(_planet):
-                    _ship.move_towards(_planet, -5)
+                    delta = self.force_delta(_ship, _planet)
+                    _ship.force_x -= delta[0]
+                    _ship.force_y -= delta[1]
 
         # Second ships against ships
         for _ship in self.ships:
@@ -95,12 +112,19 @@ class Universe():
                 if _ship == co_ship:
                     continue
                 if _ship.collides(co_ship):
-                    _ship.move_towards(co_ship, -5)
+                    delta = self.force_delta(_ship, co_ship)
+                    _ship.force_x -= delta[0]
+                    _ship.force_y -= delta[1]
 
         # Last ships against boundaries
         for _ship in self.ships:
             _ship.x = min(max(_ship.x, self.ship_pad), self.width-self.ship_pad)
             _ship.y = min(max(_ship.y, self.ship_pad), self.height-self.ship_pad)
+
+    def closest_planet(self, ship):
+        planet_distance = [(p, ship.distance_to(p)) for p in self.planets]
+        planet_distance.sort(key=lambda tup: tup[1])
+        return [p[0] for p in planet_distance][0]
 
     def _space_out_planets(self):
         """Make sure planets don't overlap"""
@@ -120,7 +144,7 @@ class Universe():
     @staticmethod
     def _random_planet_color():
         """Helper to create a random RGB color"""
-        # Browish
+        # Brownish
         red = randint(140, 160)
         green = randint(120, 140)
         blue = randint(70, 90)

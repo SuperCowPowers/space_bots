@@ -13,6 +13,7 @@ class Planet(actor.Actor):
         super().__init__(universe, x, y)
 
         # Set my attributes
+        self.mass = 1000
         self.color = color
         self.radius = radius
         self.collision_radius = radius + 10

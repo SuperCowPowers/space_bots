@@ -9,47 +9,59 @@ from space_bots import actor
 ship_specs = {
     'scout':
         {'mass': 20,
-         'speed': 1.25,
-         'radius': 8,
+         'speed': 0.75,
+         'radius': 6,
          'hp': 100,
          'shield': 50,
          'laser_range': 50,
          'laser_damage': 0.05,
+         'laser_width': 2,
+         'ship_width': 2,
+         'shield_width': 1,
          'shield_recharge': 0.0005,
          'hull_recharge': 0.0005
          },
     'destroyer':
         {'mass': 30,
-         'speed': 1.0,
-         'radius': 10,
+         'speed': 0.5,
+         'radius': 9,
          'hp': 150,
          'shield': 100,
          'laser_range': 80,
          'laser_damage': 0.1,
+         'laser_width': 3,
+         'ship_width': 3,
+         'shield_width': 2,
          'shield_recharge': 0.001,
          'hull_recharge': 0.001
          },
     'cruiser':
         {'mass': 40,
-         'speed': 0.5,
+         'speed': 0.25,
          'radius': 12,
          'hp': 200,
          'shield': 150,
          'laser_range': 120,
          'laser_damage': 0.15,
+         'laser_width': 4,
+         'ship_width': 3,
+         'shield_width': 2,
          'shield_recharge': 0.0015,
          'hull_recharge': 0.0015
          },
     'battleship':
         {'mass': 60,
-         'speed': 0.25,
+         'speed': 0.1,
          'radius': 14,
          'hp': 300,
          'shield': 200,
          'laser_range': 150,
-         'laser_damage': 0.2,
-         'shield_recharge': 0.002,
-         'hull_recharge': 0.002
+         'laser_damage': 0.3,
+         'laser_width': 5,
+         'ship_width': 4,
+         'shield_width': 2,
+         'shield_recharge': 0.01,
+         'hull_recharge': 0.01
          },
     'starbase':
         {'mass': 200,
@@ -59,8 +71,11 @@ ship_specs = {
          'shield': 500,
          'laser_range': 250,
          'laser_damage': 1.0,
-         'shield_recharge': 0.01,
-         'hull_recharge': 0.01
+         'laser_width': 6,
+         'ship_width': 5,
+         'shield_width': 3,
+         'shield_recharge': 0.1,
+         'hull_recharge': 0.1
          }
 }
 
@@ -76,6 +91,7 @@ class Ship(actor.Actor):
         self.universe = universe
         self.squad = squad
         self.team = squad.team
+        self.alliance = squad.alliance
         self.color = self.squad.team_colors[self.team]
 
         # Parameters based on ship_type
@@ -87,18 +103,19 @@ class Ship(actor.Actor):
         self.shield = ship_specs[ship_type]['shield']
         self.laser_range = ship_specs[ship_type]['laser_range']
         self.laser_damage = ship_specs[ship_type]['laser_damage']
+        self.laser_width = ship_specs[ship_type]['laser_width']
         self.shield_recharge = ship_specs[ship_type]['shield_recharge']
         self.hull_recharge = ship_specs[ship_type]['hull_recharge']
-        self.shield_radius = self.radius + 5
-        self.collision_radius = self.radius + 7
+        self.ship_width = ship_specs[ship_type]['ship_width']
+        self.shield_width = ship_specs[ship_type]['shield_width']
+        self.shield_radius = self.radius + self.shield_width + 1
+        self.collision_radius = self.radius + self.shield_width + 4
         self.total_health = self.hp + self.shield
         self.target = None
         self.non_targets = []
         self.strategy = strategy
         self.stance = stance
         self.run_away_factor = 0.2
-        self.force_x = 0
-        self.force_y = 0
         if self.stance == 'defensive':
             self.stay_away_distance = self.laser_range + 20
         else:
@@ -149,19 +166,18 @@ class Ship(actor.Actor):
         else:
             self.target = self.squad.secondary_target(self)
 
-        # If I have no target, so don't update
-        if self.target is None:
-            return
+        # Compute target logic only if I have a target
+        if self.target:
 
-        # Compute my non targets
-        self.non_targets = self.squad.adversaries.copy()
-        self.non_targets.remove(self.target)
+            # Compute my non targets
+            self.non_targets = self.squad.adversaries.copy()
+            self.non_targets.remove(self.target)
 
-        # Move Towards (Attack)
-        if self.distance_to(self.target) > self.laser_range/4:
-            delta = self.position_delta((self.target.x, self.target.y), .01)
-            self.force_x += delta[0]
-            self.force_y += delta[1]
+            # Move Towards (Attack)
+            if self.distance_to(self.target) > self.laser_range/2.0:
+                delta = self.position_delta((self.target.x, self.target.y), .01)
+                self.force_x += delta[0]
+                self.force_y += delta[1]
 
         # Move Away from Others
         for ship in self.non_targets:
@@ -194,10 +210,12 @@ class Ship(actor.Actor):
 
     def draw_ship(self):
         """Draw the Ship Icon"""
-        self.display.draw_circle(self.color, (self.x, self.y), self.radius, width=4)
+        hull_health = min(self.hp / ship_specs[self.ship_type]['hp'] + 0.5, 1.0)
+        hull_color = (self.color[0] * hull_health, self.color[1] * hull_health, self.color[2] * hull_health)
+        self.display.draw_circle(hull_color, (self.x, self.y), self.radius, width=self.ship_width)
+        self.display.draw_circle((30, 30, 30), (self.x, self.y), self.radius-self.ship_width, width=0)
         if self.low_health():
-            self.display.draw_circle((240, 240, 240), (self.x, self.y), 4)
-        # self.display.draw_circle((100, 100, 100), (self.x, self.y), self.radius-3)
+            self.display.draw_circle((240, 240, 240), (self.x, self.y), 3)
 
     def draw_dead(self):
         """Draw the Dead Ship Icon"""
@@ -206,7 +224,7 @@ class Ship(actor.Actor):
     def draw_laser(self):
         """Draw the laser"""
         if self.target and self.distance_to(self.target) < self.laser_range:
-            self.display.draw_line(self.color, (self.x, self.y), (self.target.x, self.target.y), width=4)
+            self.display.draw_line(self.color, (self.x, self.y), (self.target.x, self.target.y), width=self.laser_width)
             self.target.damage(self.laser_damage)
 
     def draw_direction(self, actor):
@@ -222,7 +240,7 @@ class Ship(actor.Actor):
         """Draw the Shield"""
         shield_health = self.shield * 255 / ship_specs[self.ship_type]['shield']
         shield_color = (shield_health, shield_health, shield_health)
-        self.display.draw_circle(shield_color, (self.x, self.y), self.shield_radius, width=2)
+        self.display.draw_circle(shield_color, (self.x, self.y), self.shield_radius, width=self.shield_width)
 
 
 # Simple test of the Ship functionality

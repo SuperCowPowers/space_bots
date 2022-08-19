@@ -15,6 +15,8 @@ class Actor(ABC):
         self.display = universe.display
         self.x = x
         self.y = y
+        self.force_x = 0
+        self.force_y = 0
         self.angle = 0
         self.collision_radius = None  # This collision radius needs to be set
         self.collisions = set()  # Set of actors colliding with this actor

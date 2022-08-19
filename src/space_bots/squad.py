@@ -1,6 +1,7 @@
 """Squad: Class for the squads in Space Bots"""
 from random import randint, choice
 import statistics
+import math
 
 # Local imports
 from space_bots import ship
@@ -27,22 +28,22 @@ class Squad:
                    'green': (80, 200, 80),
                    'red': (200, 80, 80),
                    'purple': (180, 50, 220),
-                   'yellow': (180, 180, 100)
+                   'yellow': (200, 200, 80)
                    }
 
-    def __init__(self, universe, num_ships, ship_type='cruiser', team='blue', target_strategy='random', stance='defensive',
+    def __init__(self, universe, num_ships, ship_type, team, alliance, target_strategy='random', stance='defensive',
                  formation='tdb', initial_pos=(200, 200)):
 
         # Set my attributes
         self.universe = universe
         self.num_ships = num_ships
         self.team = team
+        self.alliance = alliance
         self.color = self.team_colors[team]
         self.adversaries = None
         self.target_strategy = target_strategy
         self.main_target = None
         self.stance = stance
-        self.spacing = 80
         self.initial_pos = initial_pos
         self.grid = {'min_x': universe.pad,
                      'min_y': universe.pad,
@@ -59,8 +60,11 @@ class Squad:
         # Keep a list of my adversaries (populated in update)
         self.adversaries = None
 
-        # Capture Sticky Targets for Random and Low Health Targeting
+        # Capture Sticky Targets
         self.sticky_targets = {}
+
+        # Protection Asset
+        self.protection_asset = None
 
     def create_ships(self, num_ships, ship_type, stance):
         """Create a set of ships for this squad"""
@@ -70,14 +74,19 @@ class Squad:
         """Create a Ship for this Squad"""
 
         # Set the initial position of the ship, this will quickly change based on formation
-        init_x = self.initial_pos[0] + randint(-200, 200)
-        init_y = self.initial_pos[1] + randint(-200, 200)
+        init_x = self.initial_pos[0] + randint(-100, 100)
+        init_y = self.initial_pos[1] + randint(-100, 100)
         new_ship = ship.Ship(self.universe, x=init_x, y=init_y,
                              squad=self, ship_type=ship_type, strategy=self.target_strategy, stance=stance)
 
         # Register with the Universe display adapter
         self.universe.display.register_actor(new_ship)
         return new_ship
+
+    def protect(self, asset):
+        """Tell the Squad to protect a planet, squad or ship (asset)"""
+        self.stance = 'protect'
+        self.protection_asset = asset
 
     def update(self):
         """Update the Squad"""
@@ -92,15 +101,17 @@ class Squad:
         self.x, self.y = self.compute_centroid()
         self.main_target = self.compute_main_target()
 
-        # Clear any previous commands/movements/forces
-        for _ship in self.ships:
-            _ship.force_x = 0
-            _ship.force_y = 0
-
         # Squad Movement: Group up
         if self.stance == 'defensive':
             for _ship in self.ships:
                 delta = _ship.position_delta((self.x, self.y), .01)
+                _ship.force_x += delta[0]
+                _ship.force_y += delta[1]
+
+        # Protect Stance
+        if self.stance == 'protect':
+            for _ship in self.ships:
+                delta = _ship.position_delta((self.protection_asset.x, self.protection_asset.y), .01)
                 _ship.force_x += delta[0]
                 _ship.force_y += delta[1]
 
@@ -112,6 +123,8 @@ class Squad:
         """Draw the entire squad"""
         for _ship in self.ships:
             _ship.draw()
+        # Draw the centroid (for debugging)
+        self.display.draw_circle((240, 240, 240), (self.x, self.y), 3)
 
     def compute_centroid(self):
         if not self.ships:
@@ -139,6 +152,11 @@ class Squad:
         dx = self.x - target.x
         dy = self.y - target.y
         return dx, dy
+
+    def distance_to(self, target):
+        dx = target.x - self.x
+        dy = target.y - self.y
+        return math.sqrt(dx ** 2 + dy ** 2)
 
     def compute_main_target(self):
         """Select the squads main target based on a Strategy"""
