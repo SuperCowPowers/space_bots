@@ -17,7 +17,7 @@ class Planet(actor.Actor):
         self.mass = 1000
         self.color = color
         self.radius = radius
-        self.collision_radius = radius + 10
+        self.collision_radius = radius
 
         # Grab our planet image
         self.planet_image = pygame.image.load('images/planet_brown.png')

@@ -9,7 +9,7 @@ from space_bots import actor
 ship_specs = {
     'scout':
         {'mass': 20,
-         'speed': 0.75,
+         'speed': 1.0,
          'radius': 6,
          'hp': 100,
          'shield': 50,
@@ -74,8 +74,8 @@ ship_specs = {
          'hp': 800,
          'shield': 500,
          'laser_range': 250,
-         'laser_damage': 0.8,
-         'laser_width': 8,
+         'laser_damage': 0.7,
+         'laser_width': 7,
          'capacitor': 100,
          'ship_width': 6,
          'shield_width': 3,
@@ -203,7 +203,10 @@ class Ship(actor.Actor):
         norm = math.sqrt(self.force_x*self.force_x + self.force_y*self.force_y)
         if norm:
             # Low Health/No Targets Speed Boost
-            boost = 1.5 if self.low_health() or not self.target else 1.0
+            if self.ship_type in ['battleship', 'starbase']:
+                boost = 2.0 if self.low_health() or not self.target else 1.0
+            else:
+                boost = 1.0
             self.x += self.force_x / norm * self.speed * boost
             self.y += self.force_y / norm * self.speed * boost
 
