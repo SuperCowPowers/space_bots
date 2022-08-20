@@ -7,3 +7,6 @@ An AutoChess (Battler) where you compete with Space Mining Robots.
 ```
 pip install space_bots
 ```
+
+## Screen Shots
+<img style="padding:0px" src="docs/images/screen_shot_1.png">
