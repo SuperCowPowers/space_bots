@@ -59,6 +59,10 @@ class Squad:
 
         # Keep a list of my adversaries (populated in update)
         self.adversaries = None
+        self.ship_health = None
+        self.ship_distance = None
+        self.ship_mass = None
+        self.ship_threat = None
 
         # Capture Sticky Targets
         self.sticky_targets = {}
@@ -96,6 +100,12 @@ class Squad:
 
         # Get my adversaries
         self.adversaries = self.universe.adversary_ships(self)
+
+        # Compute health, mass, and threat (mass*1/distance)
+        self.ship_health = self.lowest_health()
+        self.ship_distance = self.distance_from_squad()
+        self.ship_mass = self.highest_mass()
+        self.ship_threat = self.highest_threat()
 
         # Compute information about the squad
         self.x, self.y = self.compute_centroid()
@@ -138,17 +148,31 @@ class Squad:
         ship_health.sort(key=lambda tup: tup[1])
         return [s[0] for s in ship_health]
 
-    def closest_to_squad(self):
-        squad_distance = [(s, self.distance_centroid(s)) for s in self.adversaries]
+    def highest_mass(self):
+        ship_mass = [(s, s.mass) for s in self.adversaries]
+        ship_mass.sort(key=lambda tup: -tup[1])
+        return [s[0] for s in ship_mass]
+
+    def highest_threat(self):
+        threat_list = []
+        for s in self.adversaries:
+            dist = self.distance_to(s)
+            damage = s.laser_damage
+            threat_list.append((s, damage/dist))
+            threat_list.sort(key=lambda tup: -tup[1])
+        return [s[0] for s in threat_list]
+
+    def distance_from_squad(self):
+        squad_distance = [(s, self.distance_to(s)) for s in self.adversaries]
         squad_distance.sort(key=lambda tup: tup[1])
         return [s[0] for s in squad_distance]
 
-    def closest_to_ship(self, ship):
+    def distance_from_ship(self, ship):
         ship_distance = [(s, ship.distance_to(s)) for s in self.adversaries]
         ship_distance.sort(key=lambda tup: tup[1])
         return [s[0] for s in ship_distance]
 
-    def distance_centroid(self, target):
+    def _distance_centroid(self, target):
         dx = self.x - target.x
         dy = self.y - target.y
         return dx, dy
@@ -162,9 +186,11 @@ class Squad:
         """Select the squads main target based on a Strategy"""
         try:
             if self.target_strategy == 'low_health':
-                return self.lowest_health()[0]
+                return self.ship_health[0]
             if self.target_strategy == 'nearest':
-                return self.closest_to_squad()[0]
+                return self.ship_distance[0]
+            if self.target_strategy == 'threat':
+                return self.ship_threat[0]
             if self.target_strategy == 'random':
                 return None  # Special Logic for Random
         except IndexError:
@@ -174,9 +200,11 @@ class Squad:
         """A ship might ask for a secondary target"""
         try:
             if self.target_strategy == 'low_health':
-                return self.get_sticky_target(my_ship, self.lowest_health()[1:4])
+                return self.get_sticky_target(my_ship, self.ship_health[1:4])
             if self.target_strategy == 'nearest':
-                return self.closest_to_ship(my_ship)[0]
+                return self.distance_from_ship(my_ship)[0]
+            if self.target_strategy == 'threat':
+                return self.distance_from_ship(my_ship)[0]
             if self.target_strategy == 'random':
                 return self.get_sticky_target(my_ship, self.adversaries)
         except IndexError:

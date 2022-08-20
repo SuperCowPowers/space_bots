@@ -19,8 +19,8 @@ ship_specs = {
          'capacitor': 10,
          'ship_width': 2,
          'shield_width': 1,
-         'shield_recharge': 0.0005,
-         'hull_recharge': 0.0005
+         'shield_recharge': 0.001,
+         'hull_recharge': 0.001
          },
     'destroyer':
         {'mass': 30,
@@ -34,8 +34,8 @@ ship_specs = {
          'capacitor': 20,
          'ship_width': 3,
          'shield_width': 2,
-         'shield_recharge': 0.001,
-         'hull_recharge': 0.001
+         'shield_recharge': 0.0025,
+         'hull_recharge': 0.0025
          },
     'cruiser':
         {'mass': 40,
@@ -49,8 +49,8 @@ ship_specs = {
          'capacitor': 30,
          'ship_width': 3,
          'shield_width': 2,
-         'shield_recharge': 0.0015,
-         'hull_recharge': 0.0015
+         'shield_recharge': 0.005,
+         'hull_recharge': 0.005
          },
     'battleship':
         {'mass': 60,
@@ -75,7 +75,7 @@ ship_specs = {
          'shield': 500,
          'laser_range': 250,
          'laser_damage': 0.8,
-         'laser_width': 6,
+         'laser_width': 8,
          'capacitor': 100,
          'ship_width': 6,
          'shield_width': 3,

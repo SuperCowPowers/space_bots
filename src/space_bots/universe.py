@@ -34,25 +34,23 @@ class Universe():
 
         # Add Squads/Ships
         self.squads = [
-            squad.Squad(self, 15, ship_type='scout', team='red', alliance='pirates',
-                        target_strategy='low_health', stance='offensive', initial_pos=(200, 200)),
             squad.Squad(self, 15, ship_type='destroyer', team='yellow', alliance='pirates',
                         target_strategy='low_health', stance='offensive', initial_pos=(200, 200)),
             squad.Squad(self, 10, ship_type='cruiser', team='green', alliance='pirates',
                         target_strategy='nearest', stance='offensive',  initial_pos=(200, 800)),
-            squad.Squad(self, 8, ship_type='battleship', team='purple', alliance='pirates',
-                        target_strategy='nearest', stance='offensive', initial_pos=(500, 700)),
-            squad.Squad(self, 20, ship_type='scout', team='blue', alliance='player',
-                        target_strategy='low_health', stance='offensive', initial_pos=(800, 500)),
+            squad.Squad(self, 4, ship_type='battleship', team='purple', alliance='pirates',
+                        target_strategy='nearest', stance='offensive', initial_pos=(400, 600)),
+            squad.Squad(self, 2, ship_type='cruiser', team='blue', alliance='player',
+                        target_strategy='nearest', stance='defensive', initial_pos=(800, 500)),
             squad.Squad(self, 3, ship_type='battleship', team='blue', alliance='player',
                         target_strategy='nearest', stance='defensive', initial_pos=(800, 500)),
             squad.Squad(self, 1, ship_type='starbase', team='blue', alliance='player',
-                        target_strategy='nearest', stance='defensive', initial_pos=(800, 500))
+                        target_strategy='threat', stance='defensive', initial_pos=(800, 500))
         ]
         # Protection Assignments
-        self.squads[4].protect(self.squads[6])
-        self.squads[5].protect(self.squads[6])
-        self.squads[6].protect(self.closest_planet(self.squads[6]))
+        self.squads[3].protect(self.squads[5])
+        self.squads[4].protect(self.squads[5])
+        self.squads[5].protect(self.closest_planet(self.squads[5]))
         """
         self.squads = [
             squad.Squad(self, 18, ship_type='destroyer', team='red', alliance='pirates',
