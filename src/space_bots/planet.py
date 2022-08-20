@@ -1,4 +1,5 @@
 """Planet: Class for the Planets in Space Bots"""
+import pygame
 
 # Local Imports
 from space_bots import actor
@@ -18,9 +19,17 @@ class Planet(actor.Actor):
         self.radius = radius
         self.collision_radius = radius + 10
 
+        # Grab our planet image
+        self.planet_image = pygame.image.load('images/planet_brown.png')
+        self.planet_image = pygame.transform.scale(self.planet_image, (80, 80))
+        self.image_x = self.x
+        self.image_y = self.y
+        self.surface = universe.display.get_surface()
+
     def update(self):
         """Update the Planet"""
-        pass
+        self.image_x = self.x-self.radius-5
+        self.image_y = self.y-self.radius-5
 
     def draw(self):
         """Draw the entire Planet"""
@@ -29,11 +38,11 @@ class Planet(actor.Actor):
 
     def draw_planet(self):
         """Draw the Planet Icon"""
-        self.display.draw_circle(self.color, (self.x, self.y), self.radius, width=0)
+        self.surface.blit(self.planet_image, (self.image_x, self.image_y))
 
     def draw_shield(self):
         """Draw the Shield"""
-        self.display.draw_circle((128, 128, 220), (self.x, self.y), self.radius + 2, width=5)
+        self.display.draw_circle((128, 128, 220), (self.x, self.y), self.radius+2, width=4)
 
 
 # Simple test of the Planet functionality

@@ -24,11 +24,11 @@ stances = {
 
 class Squad:
     """Squad: Class for the squads in Space Bots"""
-    team_colors = {'blue': (100, 100, 255),
-                   'green': (80, 200, 80),
-                   'red': (200, 80, 80),
-                   'purple': (180, 50, 220),
-                   'yellow': (200, 200, 80)
+    team_colors = {'blue': (100, 100, 220),
+                   'green': (100, 180, 100),
+                   'red': (220, 100, 100),
+                   'purple': (180, 100, 200),
+                   'yellow': (180, 180, 100)
                    }
 
     def __init__(self, universe, num_ships, ship_type, team, alliance, target_strategy='random', stance='defensive',
@@ -104,7 +104,7 @@ class Squad:
         # Squad Movement: Group up
         if self.stance == 'defensive':
             for _ship in self.ships:
-                delta = _ship.position_delta((self.x, self.y), .01)
+                delta = _ship.position_delta((self.x, self.y), .005)
                 _ship.force_x += delta[0]
                 _ship.force_y += delta[1]
 

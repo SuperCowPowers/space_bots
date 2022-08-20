@@ -16,6 +16,7 @@ ship_specs = {
          'laser_range': 50,
          'laser_damage': 0.05,
          'laser_width': 2,
+         'capacitor': 10,
          'ship_width': 2,
          'shield_width': 1,
          'shield_recharge': 0.0005,
@@ -24,12 +25,13 @@ ship_specs = {
     'destroyer':
         {'mass': 30,
          'speed': 0.5,
-         'radius': 9,
+         'radius': 7,
          'hp': 150,
          'shield': 100,
          'laser_range': 80,
          'laser_damage': 0.1,
-         'laser_width': 3,
+         'laser_width': 2,
+         'capacitor': 20,
          'ship_width': 3,
          'shield_width': 2,
          'shield_recharge': 0.001,
@@ -38,12 +40,13 @@ ship_specs = {
     'cruiser':
         {'mass': 40,
          'speed': 0.25,
-         'radius': 12,
+         'radius': 10,
          'hp': 200,
          'shield': 150,
          'laser_range': 120,
          'laser_damage': 0.15,
-         'laser_width': 4,
+         'laser_width': 3,
+         'capacitor': 30,
          'ship_width': 3,
          'shield_width': 2,
          'shield_recharge': 0.0015,
@@ -58,7 +61,8 @@ ship_specs = {
          'laser_range': 150,
          'laser_damage': 0.3,
          'laser_width': 5,
-         'ship_width': 4,
+         'capacitor': 50,
+         'ship_width': 5,
          'shield_width': 2,
          'shield_recharge': 0.01,
          'hull_recharge': 0.01
@@ -70,12 +74,13 @@ ship_specs = {
          'hp': 800,
          'shield': 500,
          'laser_range': 250,
-         'laser_damage': 1.0,
+         'laser_damage': 0.8,
          'laser_width': 6,
-         'ship_width': 5,
+         'capacitor': 100,
+         'ship_width': 6,
          'shield_width': 3,
-         'shield_recharge': 0.1,
-         'hull_recharge': 0.1
+         'shield_recharge': 0.05,
+         'hull_recharge': 0.05
          }
 }
 
@@ -104,6 +109,7 @@ class Ship(actor.Actor):
         self.laser_range = ship_specs[ship_type]['laser_range']
         self.laser_damage = ship_specs[ship_type]['laser_damage']
         self.laser_width = ship_specs[ship_type]['laser_width']
+        self.capacitor = ship_specs[ship_type]['capacitor']
         self.shield_recharge = ship_specs[ship_type]['shield_recharge']
         self.hull_recharge = ship_specs[ship_type]['hull_recharge']
         self.ship_width = ship_specs[ship_type]['ship_width']
@@ -140,6 +146,9 @@ class Ship(actor.Actor):
 
     def low_health(self):
         return self.health_percent() < 0.5
+
+    def critical_health(self):
+        return self.health_percent() < 0.2
 
     def is_dead(self):
         return self.hp == 0
@@ -193,8 +202,8 @@ class Ship(actor.Actor):
         # FIXME: Improve implementation performance
         norm = math.sqrt(self.force_x*self.force_x + self.force_y*self.force_y)
         if norm:
-            # Low Health Speed Boost
-            boost = 2.0 if self.low_health() else 1.0
+            # Low Health/No Targets Speed Boost
+            boost = 1.5 if self.low_health() or not self.target else 1.0
             self.x += self.force_x / norm * self.speed * boost
             self.y += self.force_y / norm * self.speed * boost
 
@@ -215,7 +224,9 @@ class Ship(actor.Actor):
         self.display.draw_circle(hull_color, (self.x, self.y), self.radius, width=self.ship_width)
         self.display.draw_circle((30, 30, 30), (self.x, self.y), self.radius-self.ship_width, width=0)
         if self.low_health():
-            self.display.draw_circle((240, 240, 240), (self.x, self.y), 3)
+            self.display.draw_circle((200, 200, 0), (self.x, self.y), 3)
+        if self.critical_health():
+            self.display.draw_circle((240, 0, 0), (self.x, self.y), 3)
 
     def draw_dead(self):
         """Draw the Dead Ship Icon"""
