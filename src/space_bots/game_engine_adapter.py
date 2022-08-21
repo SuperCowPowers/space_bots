@@ -63,6 +63,16 @@ class GameEngineAdapter():
     def draw_polygon(self, color, points, width=3):
         pygame.draw.polygon(self.screen, color, points, width)
 
+    @staticmethod
+    def image_load(image_file, x_size=0, y_size=0):
+        _image = pygame.image.load(image_file)
+        if x_size:
+            _image = pygame.transform.scale(_image, (x_size, y_size))
+        return _image
+
+    def draw_image(self, image, x, y):
+        self.screen.blit(image, (x, y))
+
     def draw_background(self):
         self.screen.fill(self.background_color)
 

@@ -1,5 +1,4 @@
 """Planet: Class for the Planets in Space Bots"""
-import pygame
 
 # Local Imports
 from space_bots import entity
@@ -18,9 +17,7 @@ class Planet(entity.Entity):
         super().__init__(game_engine, x, y, mass=1000, collision_radius=self.collision_radius)
 
         # Grab our planet image
-        self.planet_image = pygame.image.load('images/planet_brown.png')
-        self.planet_image = pygame.transform.scale(self.planet_image, (80, 80))
-        self.surface = game_engine.get_surface()
+        self.planet_image = game_engine.image_load('images/planet_brown.png', 80, 80)
         self.image_x = self.x - self.radius - 5
         self.image_y = self.y - self.radius - 5
 
@@ -41,7 +38,7 @@ class Planet(entity.Entity):
 
     def draw_planet(self):
         """Draw the Planet Icon"""
-        self.surface.blit(self.planet_image, (self.image_x, self.image_y))
+        self.game_engine.draw_image(self.planet_image, self.image_x, self.image_y)
 
     def draw_shield(self):
         """Draw the Shield"""
