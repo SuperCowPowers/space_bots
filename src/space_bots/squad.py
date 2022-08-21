@@ -1,63 +1,34 @@
 """Squad: Class for the squads in Space Bots"""
-from random import randint, choice
+
+# Note: This class manages a LOT of stuff right now
+#     Future breakouts
+#     - Targeting Strategy
+#     - Stance/Positioning Strategy
+#     - etc...
+from random import choice
 import statistics
 import math
 
-# Local imports
-from space_bots import ship
-
-
-# FIXME
-stances = {
-    'defensive': {
-        'clumping': 1.0,
-        'avoidance': 1.0,
-        'hurt': 0.35
-    },
-    'offensive': {
-        'clumping': 0.5,
-        'avoidance': 0.0,
-        'hurt': 0.0
-    }
-}
-
 
 class Squad:
-    """Squad: Class for the squads in Space Bots"""
-    team_colors = {'blue': (100, 100, 220),
-                   'green': (100, 180, 100),
-                   'red': (220, 100, 100),
-                   'purple': (180, 100, 200),
-                   'yellow': (180, 180, 100)
-                   }
-
-    def __init__(self, universe, num_ships, ship_type, team, alliance, target_strategy='random', stance='defensive',
-                 formation='tdb', initial_pos=(200, 200)):
+    """Squad: Class for the Squads in Space Bots"""
+    def __init__(self, x: int = 100, y: int = 100, team='player', target_strategy='random', stance='defensive'):
 
         # Set my attributes
-        self.universe = universe
-        self.num_ships = num_ships
         self.team = team
-        self.alliance = alliance
-        self.color = self.team_colors[team]
         self.adversaries = None
         self.target_strategy = target_strategy
         self.main_target = None
         self.stance = stance
-        self.initial_pos = initial_pos
-        self.grid = {'min_x': universe.pad,
-                     'min_y': universe.pad,
-                     'max_x': universe.width-universe.pad,
-                     'max_y': universe.height-universe.pad}
 
         # Current position (this will be the centroid of the Squad)
-        self.x = initial_pos[0]
-        self.y = initial_pos[1]
+        self.x = x
+        self.y = y
 
-        # Create my Ships
-        self.ships = self.create_ships(num_ships, ship_type, stance)
+        # The Ships in this Squad
+        self.ships = []
 
-        # Keep a list of my adversaries (populated in update)
+        # Keep info/stats on my adversaries (populated in update)
         self.adversaries = None
         self.ship_health = None
         self.ship_distance = None
@@ -70,27 +41,30 @@ class Squad:
         # Protection Asset
         self.protection_asset = None
 
-    def create_ships(self, num_ships, ship_type, stance):
-        """Create a set of ships for this squad"""
-        return [self.create_ship(ship_type, stance) for _ in range(num_ships)]
+        # Battle State/Reconnaissance
+        self.battle_state = None
 
-    def create_ship(self, ship_type, stance):
-        """Create a Ship for this Squad"""
+    def add_ship(self, ship):
+        """Add a Ship to this Squad"""
+        ship.team = self.team
+        ship.squad = self
+        self.ships.append(ship)
 
-        # Set the initial position of the ship, this will quickly change based on formation
-        init_x = self.initial_pos[0] + randint(-100, 100)
-        init_y = self.initial_pos[1] + randint(-100, 100)
-        new_ship = ship.Ship(self.universe, x=init_x, y=init_y,
-                             squad=self, ship_type=ship_type, strategy=self.target_strategy, stance=stance)
+    def give_battle_state(self, battle_state):
+        self.battle_state = battle_state
 
-        # Register with the Universe display adapter
-        self.universe.display.register_actor(new_ship)
-        return new_ship
+    def adversary_ships(self):
+        """Ask the battle state for ships not on my team"""
+        return [s for s in self.battle_state.all_ships if s.team != self.team]
 
     def protect(self, asset):
         """Tell the Squad to protect a planet, squad or ship (asset)"""
         self.stance = 'protect'
         self.protection_asset = asset
+
+    def communicate(self):
+        """Squad Communication"""
+        pass
 
     def update(self):
         """Update the Squad"""
@@ -99,7 +73,7 @@ class Squad:
         self.ships = [s for s in self.ships if not s.is_dead()]
 
         # Get my adversaries
-        self.adversaries = self.universe.adversary_ships(self)
+        self.adversaries = self.adversary_ships()
 
         # Compute health, mass, and threat (mass*1/distance)
         self.ship_health = self.lowest_health()
@@ -133,8 +107,6 @@ class Squad:
         """Draw the entire squad"""
         for _ship in self.ships:
             _ship.draw()
-        # Draw the centroid (for debugging)
-        self.display.draw_circle((240, 240, 240), (self.x, self.y), 3)
 
     def compute_centroid(self):
         if not self.ships:
@@ -157,7 +129,7 @@ class Squad:
         threat_list = []
         for s in self.adversaries:
             dist = self.distance_to(s)
-            damage = s.laser_damage
+            damage = s.p.laser_damage
             threat_list.append((s, damage/dist))
             threat_list.sort(key=lambda tup: -tup[1])
         return [s[0] for s in threat_list]
@@ -224,23 +196,50 @@ class Squad:
 # Simple test of the Squad functionality
 def test():
     """Test for Squad Class"""
-    from space_bots import display_adapter
+    from space_bots import game_engine_adapter, ship
+    from space_bots.universe import Universe
 
-    # Create a fake universe (just for testing)
-    class Universe:
-        def __init__(self):
-            self.display = display_adapter.DisplayAdapter()
-            self.pad = 150
-            self.width = 1600
-            self.height = 1000
-    fake_universe = Universe()
+    # Create a universe
+    my_universe = Universe()
 
-    # Create a couple of squads
-    Squad(fake_universe, 5, team='blue', target_strategy='nearest', stance='defensive', initial_pos=(300, 300))
-    Squad(fake_universe, 5, team='green', target_strategy='random', stance='offensive', initial_pos=(800, 800))
+    # Create the Game Engine
+    my_game_engine = game_engine_adapter.GameEngineAdapter(my_universe)
 
-    # Start the event loop
-    fake_universe.display.event_loop()
+    # Give the universe the game engine
+    my_universe.set_game_engine(my_game_engine)
+
+    # Create our Squad
+    my_squad = Squad(team='player')
+    miner = ship.Ship(my_game_engine, 100, 100, ship_type='miner')
+    my_squad.add_ship(miner)
+    healer = ship.Ship(my_game_engine, 200, 200, ship_type='healer')
+    my_squad.add_ship(healer)
+    shielder = ship.Ship(my_game_engine, 300, 300, ship_type='shielder')
+    my_squad.add_ship(shielder)
+    fighter = ship.Ship(my_game_engine, 100, 300, ship_type='fighter')
+    my_squad.add_ship(fighter)
+
+    # Create a Pirate Squad (who doesn't want to be a pirate?)
+    pirate_squad = Squad(team='pirate')
+    miner = ship.Ship(my_game_engine, 500, 500, ship_type='miner')
+    pirate_squad.add_ship(miner)
+    healer = ship.Ship(my_game_engine, 600, 600, ship_type='healer')
+    pirate_squad.add_ship(healer)
+    shielder = ship.Ship(my_game_engine, 700, 700, ship_type='shielder')
+    pirate_squad.add_ship(shielder)
+    fighter = ship.Ship(my_game_engine, 500, 700, ship_type='fighter')
+    pirate_squad.add_ship(fighter)
+
+    # Give our Squads the Battle State (universal in this case)
+    my_squad.give_battle_state(my_universe)
+    pirate_squad.give_battle_state(my_universe)
+
+    # Add both Squads to the Universe
+    my_universe.add_squad(my_squad)
+    my_universe.add_squad(pirate_squad)
+
+    # Invoke the event loop
+    my_game_engine.event_loop()
 
 
 if __name__ == "__main__":

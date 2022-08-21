@@ -2,34 +2,37 @@
 import pygame
 
 # Local Imports
-from space_bots import actor
+from space_bots import entity
 
 
-class Planet(actor.Actor):
+class Planet(entity.Entity):
     """Planet: Class for the Planets in Space Bots"""
 
-    def __init__(self, universe, x, y, color, radius):
-
-        # Call my superclass init
-        super().__init__(universe, x, y)
+    def __init__(self, game_engine, x, y):
 
         # Set my attributes
-        self.mass = 1000
-        self.color = color
-        self.radius = radius
-        self.collision_radius = radius
+        self.radius = 35  # Hard coded for now
+        self.collision_radius = self.radius
+
+        # Call SuperClass (Entity) Initialization
+        super().__init__(game_engine, x, y, mass=1000, collision_radius=self.collision_radius)
 
         # Grab our planet image
         self.planet_image = pygame.image.load('images/planet_brown.png')
         self.planet_image = pygame.transform.scale(self.planet_image, (80, 80))
-        self.image_x = self.x
-        self.image_y = self.y
-        self.surface = universe.display.get_surface()
+        self.surface = game_engine.get_surface()
+        self.image_x = self.x - self.radius - 5
+        self.image_y = self.y - self.radius - 5
+
+    def communicate(self):
+        """The Planet can communicate to what?"""
+        pass
 
     def update(self):
         """Update the Planet"""
-        self.image_x = self.x-self.radius-5
-        self.image_y = self.y-self.radius-5
+        # Even though this seems weird... planets CAN move so make sure image goes along with
+        self.image_x = self.x - self.radius - 5
+        self.image_y = self.y - self.radius - 5
 
     def draw(self):
         """Draw the entire Planet"""
@@ -42,25 +45,30 @@ class Planet(actor.Actor):
 
     def draw_shield(self):
         """Draw the Shield"""
-        self.display.draw_circle((128, 128, 220), (self.x, self.y), self.radius+2, width=4)
+        self.game_engine.draw_circle((128, 128, 220), (self.x, self.y), self.radius+2, width=5)
 
 
 # Simple test of the Planet functionality
 def test():
     """Test for Planet Class"""
-    from space_bots import display_adapter
+    from space_bots import game_engine_adapter
+    from space_bots.universe import Universe
 
-    # Create a fake universe (just for testing)
-    class Universe:
-        pass
-    Universe.display = display_adapter.DisplayAdapter()
+    # Create a Universe
+    my_universe = Universe()
 
-    # Create our Planet
-    my_planet = Planet(Universe, 100, 100, (100, 220, 200), 25)
+    # Create the Game Engine
+    my_game_engine = game_engine_adapter.GameEngineAdapter(my_universe)
 
-    # Register the Actor with the Display Adapter
-    Universe.display.register_actor(my_planet)
-    Universe.display.event_loop()
+    # Give the universe the game engine
+    my_universe.set_game_engine(my_game_engine)
+
+    # Create a Planet
+    my_planet = Planet(my_game_engine, 200, 200)
+    my_universe.add_planet(my_planet)
+
+    # Invoke the event loop
+    my_game_engine.event_loop()
 
 
 if __name__ == "__main__":
