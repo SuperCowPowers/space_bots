@@ -1,7 +1,8 @@
 """Ship: Class for the ships in Space Bots"""
 
 # Local Imports
-from space_bots import entity, ship_parameters, ship_state, force_utils
+from space_bots import entity, force_utils
+from space_bots.ships import ship_parameters, ship_state
 
 
 class Ship(entity.Entity):
@@ -81,7 +82,7 @@ class Ship(entity.Entity):
                 self.s.target = self.squad.secondary_target(self)
 
         # Compute my non targets
-        self.s.non_targets = self.squad.adversaries.copy()
+        self.s.non_targets = self.squad.adversaries.copy() if self.squad else []
 
         # Compute target logic only if I have a target
         if self.s.target:

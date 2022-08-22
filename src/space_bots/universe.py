@@ -158,7 +158,7 @@ class Universe:
 def test():
     from space_bots import game_engine_adapter
     from space_bots.squad import Squad
-    from space_bots.ship import Ship
+    from space_bots.ships.ship import Ship
     from space_bots.planet import Planet
 
     """Test for Universe Class"""

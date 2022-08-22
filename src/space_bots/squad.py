@@ -202,7 +202,8 @@ class Squad:
 # Simple test of the Squad functionality
 def test():
     """Test for Squad Class"""
-    from space_bots import game_engine_adapter, ship
+    from space_bots import game_engine_adapter
+    from space_bots.ships import ship
     from space_bots.universe import Universe
 
     # Create a universe
