@@ -74,7 +74,7 @@ class Ship(entity.Entity):
         self.s.hp = min(self.s.hp, self.p.hp)
 
         # Choose the main target if it's within range, otherwise ask for secondary target
-        if self.squad:
+        if self.squad and self.ship_type not in ['healer', 'miner']:
             if self.squad.main_target and self.within_range(self.squad.main_target):
                 self.s.target = self.squad.main_target
             else:
@@ -88,8 +88,8 @@ class Ship(entity.Entity):
             self.s.non_targets.remove(self.s.target)
 
             # Move Towards (Attack)
-            if self.distance_to(self.s.target) > self.p.laser_range/2.0:
-                delta = self.position_delta((self.s.target.x, self.s.target.y), .01)
+            if self.distance_to(self.s.target) > self.p.laser_range/3.0:
+                delta = self.position_delta((self.s.target.x, self.s.target.y), .1)
                 self.force_x += delta[0]
                 self.force_y += delta[1]
 
@@ -97,8 +97,7 @@ class Ship(entity.Entity):
         if self.squad.stance in ['defensive', 'protect']:
             for ship in self.s.non_targets:
                 if self.distance_to(ship) < self.p.keep_range:
-                    print('keep range...')
-                    delta = self.position_delta((ship.x, ship.y), .005)
+                    delta = self.position_delta((ship.x, ship.y), .001)
                     self.force_x -= delta[0]
                     self.force_y -= delta[1]
 
@@ -116,10 +115,7 @@ class Ship(entity.Entity):
         hull_health = min(self.s.hp / self.p.hp + 0.6, 1.0)
         hull_color = (self.p.color[0] * hull_health, self.p.color[1] * hull_health, self.p.color[2] * hull_health)
         self.game_engine.draw_circle((30, 30, 30), (self.x, self.y), self.p.radius, width=0)
-        if self.team == 'pirate':
-            self.game_engine.draw_circle(hull_color, (self.x, self.y), self.p.radius, width=2)
-        else:
-            self.game_engine.draw_circle(hull_color, (self.x, self.y), self.p.radius, width=self.p.ship_width)
+        self.game_engine.draw_circle(hull_color, (self.x, self.y), self.p.radius, width=self.p.ship_width)
         if self.low_health():
             self.game_engine.draw_circle((200, 200, 0), (self.x, self.y), 3)
         if self.critical_health():

@@ -89,23 +89,26 @@ class Squad:
         if self.stance in ['defensive', 'protect']:
             for _ship in self.ships:
                 distance = _ship.distance_to(self)
-                delta = _ship.position_delta((self.x, self.y), .05)
+                delta = _ship.position_delta((self.x, self.y), .2)
                 # Only add force if we're kinda far away
                 if distance > _ship.collision_radius * 8:
-                    _ship.force_x += delta[0]
-                    _ship.force_y += delta[1]
-                elif distance < _ship.collision_radius * 3:
+                    print('group up...')
+                    _ship.force_x += delta[0] * abs(delta[0])
+                    _ship.force_y += delta[1] * abs(delta[1])
+                """
+                elif distance < _ship.collision_radius * 4:
                     print('too close...')
                     _ship.force_x -= delta[0]
                     _ship.force_y -= delta[1]
+                """
 
         # Protect Stance
         if self.stance == 'protect':
             for _ship in self.ships:
                 distance = _ship.distance_to(self.protection_asset)
                 # Only add force if we're kinda far away
-                if distance > _ship.collision_radius * 8:
-                    delta = _ship.position_delta((self.protection_asset.x, self.protection_asset.y), .01)
+                if distance > _ship.collision_radius * 6:
+                    delta = _ship.position_delta((self.protection_asset.x, self.protection_asset.y), .025)
                     _ship.force_x += delta[0]
                     _ship.force_y += delta[1]
 

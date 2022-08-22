@@ -23,7 +23,7 @@ class ShipParameters:
         self.hull_recharge = ship_specs[ship_type]['hull_recharge']
         self.ship_width = ship_specs[ship_type]['ship_width']
         self.shield_width = ship_specs[ship_type]['shield_width']
+        self.keep_range = ship_specs[ship_type]['keep_range']
         self.shield_radius = self.radius + self.shield_width + 1
         self.collision_radius = self.shield_radius
         self.total_health = self.hp + self.shield
-        self.keep_range = 8000/self.total_health

@@ -101,7 +101,7 @@ class Universe:
         for _ship in self.all_ships:
             for _planet in self.planets:
                 if _ship.collides(_planet):
-                    delta = _ship.pos_delta(_planet, 0.1)
+                    delta = _ship.pos_delta(_planet, 3.0)
                     _ship.force_x -= delta[0]
                     _ship.force_y -= delta[1]
 
@@ -111,14 +111,14 @@ class Universe:
                 if _ship == co_ship:
                     continue
                 if _ship.collides(co_ship):
-                    delta = _ship.pos_delta(co_ship, 0.05)
+                    delta = _ship.pos_delta(co_ship, 0.5)
                     _ship.force_x -= delta[0]
                     _ship.force_y -= delta[1]
 
         # Last ships against boundaries
         for _ship in self.all_ships:
-            _ship.x = min(max(_ship.x, self.pad), self.width-self.pad)
-            _ship.y = min(max(_ship.y, self.pad), self.height-self.pad)
+            _ship.x = min(max(_ship.x, self.pad/4), self.width-self.pad/4)
+            _ship.y = min(max(_ship.y, self.pad/4), self.height-self.pad/4)
 
     def closest_planet(self, ship):
         planet_distance = [(p, ship.distance_to(p)) for p in self.planets]
@@ -181,33 +181,31 @@ def test():
     my_universe.set_game_engine(my_game_engine)
 
     # Create our Squad
-    my_squad = Squad(team='player', target_strategy='threat', stance='defensive')
+    my_squad = Squad(team='player', target_strategy='nearest', stance='defensive')
     miner = Ship(my_game_engine, 900, 600, ship_type='miner')
     my_squad.add_ship(miner)
     healer = Ship(my_game_engine, 650, 600, ship_type='healer')
     my_squad.add_ship(healer)
-    healer = Ship(my_game_engine, 650, 600, ship_type='healer')
-    my_squad.add_ship(healer)
-    shielder = Ship(my_game_engine, 700, 500, ship_type='shielder')
-    my_squad.add_ship(shielder)
     shielder = Ship(my_game_engine, 700, 500, ship_type='shielder')
     my_squad.add_ship(shielder)
     fighter = Ship(my_game_engine, 850, 500, ship_type='fighter')
     my_squad.add_ship(fighter)
+    fighter = Ship(my_game_engine, 680, 680, ship_type='fighter')
+    my_squad.add_ship(fighter)
+    fighter = Ship(my_game_engine, 600, 600, ship_type='fighter')
+    my_squad.add_ship(fighter)
 
     # Create a Pirate Squad (who doesn't want to be a pirate?)
     pirate_squad = Squad(team='pirate', target_strategy='nearest', stance='offensive')
-    miner = Ship(my_game_engine, 100, 100, ship_type='miner')
-    pirate_squad.add_ship(miner)
-    healer = Ship(my_game_engine, 150, 100, ship_type='healer')
+    healer = Ship(my_game_engine, 150, 100, ship_type='shaman')
     pirate_squad.add_ship(healer)
-    healer = Ship(my_game_engine, 150, 100, ship_type='healer')
+    healer = Ship(my_game_engine, 150, 100, ship_type='shaman')
     pirate_squad.add_ship(healer)
-    shielder = Ship(my_game_engine, 200, 100, ship_type='shielder')
+    shielder = Ship(my_game_engine, 200, 100, ship_type='berserker')
     pirate_squad.add_ship(shielder)
-    shielder = Ship(my_game_engine, 200, 100, ship_type='shielder')
+    shielder = Ship(my_game_engine, 200, 100, ship_type='berserker')
     pirate_squad.add_ship(shielder)
-    fighter = Ship(my_game_engine, 250, 100, ship_type='fighter')
+    fighter = Ship(my_game_engine, 250, 100, ship_type='berserker')
     pirate_squad.add_ship(fighter)
 
     # Give our Squads the Battle State (universal in this case)

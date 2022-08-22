@@ -14,7 +14,7 @@ class Entity(ABC):
         self.collision_radius = collision_radius
         self.force_x = 0
         self.force_y = 0
-        self.force_damp = 0.999
+        self.force_damp = 0.99
 
     @abstractmethod
     def communicate(self):
