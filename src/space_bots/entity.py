@@ -5,15 +5,16 @@ import math
 
 class Entity(ABC):
     """Entity: Abstract Base Class for all object (ships, planets, etc)"""
-    def __init__(self, game_engine, x=500, y=500, mass=10, collision_radius=10):
+    def __init__(self, game_engine, x=500, y=500, speed=0.1, mass=10, collision_radius=10):
         self.game_engine = game_engine
         self.x = x
         self.y = y
+        self.speed = speed
         self.mass = mass
         self.collision_radius = collision_radius
         self.force_x = 0
         self.force_y = 0
-        self.force_damp = 0.9
+        self.force_damp = 0.99
 
     @abstractmethod
     def communicate(self):
@@ -52,8 +53,12 @@ class Entity(ABC):
         """Move the Entity based on the current set of forces and mass"""
         delta_x = self.force_x / self.mass
         delta_y = self.force_y / self.mass
+        delta_x = max(min(delta_x, self.speed), -self.speed)
+        delta_y = max(min(delta_y, self.speed), -self.speed)
         self.x += delta_x
         self.y += delta_y
+
+        # Damping the force for next time
         self.force_x *= self.force_damp
         self.force_y *= self.force_damp
 

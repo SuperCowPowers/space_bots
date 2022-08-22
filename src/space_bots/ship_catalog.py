@@ -35,7 +35,7 @@ ship_specs = {
          'laser_damage': 0.1,
          'laser_width': 2,
          'capacitor': 20,
-         'ship_width': 4,
+         'ship_width': 5,
          'shield_width': 2,
          'shield_recharge': 0.0025,
          'hull_recharge': 0.0025
@@ -51,7 +51,7 @@ ship_specs = {
          'laser_damage': 0.15,
          'laser_width': 3,
          'capacitor': 30,
-         'ship_width': 4,
+         'ship_width': 5,
          'shield_width': 2,
          'shield_recharge': 0.005,
          'hull_recharge': 0.005
@@ -67,7 +67,7 @@ ship_specs = {
          'laser_damage': 0.1,
          'laser_width': 2,
          'capacitor': 20,
-         'ship_width': 4,
+         'ship_width': 5,
          'shield_width': 2,
          'shield_recharge': 0.0025,
          'hull_recharge': 0.0025
@@ -83,7 +83,7 @@ ship_specs = {
          'laser_damage': 0.15,
          'laser_width': 3,
          'capacitor': 30,
-         'ship_width': 4,
+         'ship_width': 5,
          'shield_width': 2,
          'shield_recharge': 0.005,
          'hull_recharge': 0.005

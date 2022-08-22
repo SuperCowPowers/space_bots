@@ -12,7 +12,7 @@ import math
 
 class Squad:
     """Squad: Class for the Squads in Space Bots"""
-    def __init__(self, x: int = 100, y: int = 100, team='player', target_strategy='random', stance='defensive'):
+    def __init__(self, team='player', target_strategy='random', stance='defensive'):
 
         # Set my attributes
         self.team = team
@@ -21,9 +21,9 @@ class Squad:
         self.main_target = None
         self.stance = stance
 
-        # Current position (this will be the centroid of the Squad)
-        self.x = x
-        self.y = y
+        # Squad position will be centroid of the Squad
+        self.x = 0
+        self.y = 0
 
         # The Ships in this Squad
         self.ships = []
@@ -86,18 +86,24 @@ class Squad:
         self.main_target = self.compute_main_target()
 
         # Squad Movement: Group up
-        if self.stance == 'defensive':
+        if self.stance in ['defensive', 'protect']:
             for _ship in self.ships:
-                delta = _ship.position_delta((self.x, self.y), .005)
-                _ship.force_x += delta[0]
-                _ship.force_y += delta[1]
+                distance = _ship.distance_to(self)
+                delta = _ship.position_delta((self.x, self.y), .05)
+                # Only add force if we're kinda far away
+                if distance > _ship.collision_radius * 5:
+                    _ship.force_x += delta[0]
+                    _ship.force_y += delta[1]
 
         # Protect Stance
         if self.stance == 'protect':
             for _ship in self.ships:
-                delta = _ship.position_delta((self.protection_asset.x, self.protection_asset.y), .01)
-                _ship.force_x += delta[0]
-                _ship.force_y += delta[1]
+                distance = _ship.distance_to(self.protection_asset)
+                # Only add force if we're kinda far away
+                if distance > _ship.collision_radius * 10:
+                    delta = _ship.position_delta((self.protection_asset.x, self.protection_asset.y), .01)
+                    _ship.force_x += delta[0]
+                    _ship.force_y += delta[1]
 
         # Update each ship
         for _ship in self.ships:
@@ -163,7 +169,7 @@ class Squad:
                 return self.ship_distance[0]
             if self.target_strategy == 'threat':
                 return self.ship_threat[0]
-            if self.target_strategy == 'random':
+            if self.target_strategy == 'random' or 'no_target':
                 return None  # Special Logic for Random
         except IndexError:
             return None
@@ -179,6 +185,8 @@ class Squad:
                 return self.distance_from_ship(my_ship)[0]
             if self.target_strategy == 'random':
                 return self.get_sticky_target(my_ship, self.adversaries)
+            if self.target_strategy == 'no_target':
+                return None
         except IndexError:
             if self.adversaries:
                 return choice(self.adversaries)

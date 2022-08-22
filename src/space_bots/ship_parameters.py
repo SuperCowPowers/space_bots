@@ -26,4 +26,4 @@ class ShipParameters:
         self.shield_radius = self.radius + self.shield_width + 1
         self.collision_radius = self.shield_radius
         self.total_health = self.hp + self.shield
-        self.keep_range = self.laser_range
+        self.keep_range = 8000/self.total_health

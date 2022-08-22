@@ -18,7 +18,8 @@ class Ship(entity.Entity):
         self.s = ship_state.ShipState(ship_type)
 
         # Call SuperClass (Entity) Initialization
-        super().__init__(game_engine, x, y, mass=self.p.mass, collision_radius=self.p.collision_radius)
+        super().__init__(game_engine, x, y, mass=self.p.mass, speed=self.p.speed,
+                         collision_radius=self.p.collision_radius)
 
     def within_range(self, target):
         """Is this target within weapons range"""
@@ -93,11 +94,13 @@ class Ship(entity.Entity):
                 self.force_y += delta[1]
 
         # Avoidance of Non Targets
-        for ship in self.s.non_targets:
-            if self.distance_to(ship) < self.p.keep_range:
-                delta = self.position_delta((ship.x, ship.y), .005)
-                self.force_x -= delta[0]
-                self.force_y -= delta[1]
+        if self.squad.stance in ['defensive', 'protect']:
+            for ship in self.s.non_targets:
+                if self.distance_to(ship) < self.p.keep_range:
+                    print('keep range...')
+                    delta = self.position_delta((ship.x, ship.y), .005)
+                    self.force_x -= delta[0]
+                    self.force_y -= delta[1]
 
         # Now actually call the move command (which uses force/mass calc)
         self.move()
@@ -112,8 +115,11 @@ class Ship(entity.Entity):
         """Draw the Ship Icon"""
         hull_health = min(self.s.hp / self.p.hp + 0.6, 1.0)
         hull_color = (self.p.color[0] * hull_health, self.p.color[1] * hull_health, self.p.color[2] * hull_health)
-        self.game_engine.draw_circle(hull_color, (self.x, self.y), self.p.radius, width=0)
-        self.game_engine.draw_circle((30, 30, 30), (self.x, self.y), self.p.radius-self.p.ship_width, width=0)
+        self.game_engine.draw_circle((30, 30, 30), (self.x, self.y), self.p.radius, width=0)
+        if self.team == 'pirate':
+            self.game_engine.draw_circle(hull_color, (self.x, self.y), self.p.radius, width=2)
+        else:
+            self.game_engine.draw_circle(hull_color, (self.x, self.y), self.p.radius, width=self.p.ship_width)
         if self.low_health():
             self.game_engine.draw_circle((200, 200, 0), (self.x, self.y), 3)
         if self.critical_health():
@@ -131,8 +137,11 @@ class Ship(entity.Entity):
 
     def draw_shield(self):
         """Draw the Shield"""
-        shield_health = self.s.shield * 255 / self.p.shield
-        shield_color = (shield_health, shield_health, shield_health)
+        shield_health = 220 * self.s.shield / self.p.shield + 35
+        if self.team == 'pirate':
+            shield_color = (shield_health/4, shield_health/4, shield_health/4)
+        else:
+            shield_color = (shield_health, shield_health, shield_health)
         self.game_engine.draw_circle(shield_color, (self.x, self.y), self.p.shield_radius, width=self.p.shield_width)
 
 
