@@ -111,7 +111,7 @@ class Universe:
                 if _ship == co_ship:
                     continue
                 if _ship.collides(co_ship):
-                    delta = _ship.pos_delta(co_ship, 0.01)
+                    delta = _ship.pos_delta(co_ship, 0.05)
                     _ship.force_x -= delta[0]
                     _ship.force_y -= delta[1]
 
@@ -186,6 +186,8 @@ def test():
     my_squad.add_ship(miner)
     healer = Ship(my_game_engine, 650, 600, ship_type='healer')
     my_squad.add_ship(healer)
+    healer = Ship(my_game_engine, 650, 600, ship_type='healer')
+    my_squad.add_ship(healer)
     shielder = Ship(my_game_engine, 700, 500, ship_type='shielder')
     my_squad.add_ship(shielder)
     shielder = Ship(my_game_engine, 700, 500, ship_type='shielder')
@@ -201,12 +203,10 @@ def test():
     pirate_squad.add_ship(healer)
     healer = Ship(my_game_engine, 150, 100, ship_type='healer')
     pirate_squad.add_ship(healer)
-    healer = Ship(my_game_engine, 150, 100, ship_type='healer')
-    pirate_squad.add_ship(healer)
     shielder = Ship(my_game_engine, 200, 100, ship_type='shielder')
     pirate_squad.add_ship(shielder)
-    fighter = Ship(my_game_engine, 250, 100, ship_type='fighter')
-    pirate_squad.add_ship(fighter)
+    shielder = Ship(my_game_engine, 200, 100, ship_type='shielder')
+    pirate_squad.add_ship(shielder)
     fighter = Ship(my_game_engine, 250, 100, ship_type='fighter')
     pirate_squad.add_ship(fighter)
 
