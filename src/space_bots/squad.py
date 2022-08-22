@@ -9,10 +9,13 @@ from random import choice
 import statistics
 import math
 
+# Local Imports
+from space_bots import force_utils
+
 
 class Squad:
     """Squad: Class for the Squads in Space Bots"""
-    def __init__(self, team='player', target_strategy='random', stance='defensive'):
+    def __init__(self, team='player', target_strategy='nearest', stance='defensive'):
 
         # Set my attributes
         self.team = team
@@ -86,31 +89,17 @@ class Squad:
         self.main_target = self.compute_main_target()
 
         # Squad Movement: Group up
-        if self.stance in ['defensive', 'protect']:
-            for _ship in self.ships:
-                distance = _ship.distance_to(self)
-                delta = _ship.position_delta((self.x, self.y), .2)
-                # Only add force if we're kinda far away
-                if distance > _ship.collision_radius * 8:
-                    print('group up...')
-                    _ship.force_x += delta[0] * abs(delta[0])
-                    _ship.force_y += delta[1] * abs(delta[1])
-                """
-                elif distance < _ship.collision_radius * 4:
-                    print('too close...')
-                    _ship.force_x -= delta[0]
-                    _ship.force_y -= delta[1]
-                """
+        for _ship in self.ships:
+            (_, _), (dx, dy) = force_utils.attraction_forces(self, _ship, 60)
+            _ship.force_x += dx
+            _ship.force_y += dy
 
         # Protect Stance
         if self.stance == 'protect':
             for _ship in self.ships:
-                distance = _ship.distance_to(self.protection_asset)
-                # Only add force if we're kinda far away
-                if distance > _ship.collision_radius * 6:
-                    delta = _ship.position_delta((self.protection_asset.x, self.protection_asset.y), .025)
-                    _ship.force_x += delta[0]
-                    _ship.force_y += delta[1]
+                (_, _), (dx, dy) = force_utils.attraction_forces(self.protection_asset, _ship, 150)
+                _ship.force_x += dx
+                _ship.force_y += dy
 
         # Update each ship
         for _ship in self.ships:
@@ -121,12 +110,18 @@ class Squad:
         for _ship in self.ships:
             _ship.draw()
 
-    def compute_centroid(self):
+    def compute_centroid(self, mass_based=True):
         if not self.ships:
             return 0, 0
-        x_centroid = statistics.fmean([s.x for s in self.ships])
-        y_centroid = statistics.fmean([s.y for s in self.ships])
-        return x_centroid, y_centroid
+        if not mass_based:
+            x_centroid = statistics.fmean([s.x for s in self.ships])
+            y_centroid = statistics.fmean([s.y for s in self.ships])
+            return x_centroid, y_centroid
+        else:
+            total_mass = sum([s.mass for s in self.ships])
+            x_centroid = sum([s.x * s.mass for s in self.ships])
+            y_centroid = sum([s.y * s.mass for s in self.ships])
+            return x_centroid/total_mass, y_centroid/total_mass
 
     def lowest_health(self):
         ship_health = [(s, s.health()) for s in self.adversaries]
@@ -139,21 +134,17 @@ class Squad:
         return [s[0] for s in ship_mass]
 
     def highest_threat(self):
-        threat_list = []
-        for s in self.adversaries:
-            dist = self.distance_to(s)
-            damage = s.p.laser_damage
-            threat_list.append((s, damage/dist))
-            threat_list.sort(key=lambda tup: -tup[1])
-        return [s[0] for s in threat_list]
+        ship_threat = [(s, s.p.threat) for s in self.adversaries]
+        ship_threat.sort(key=lambda tup: -tup[1])
+        return [s[0] for s in ship_threat]
 
     def distance_from_squad(self):
-        squad_distance = [(s, self.distance_to(s)) for s in self.adversaries]
+        squad_distance = [(s, force_utils.distance_between(self, s)) for s in self.adversaries]
         squad_distance.sort(key=lambda tup: tup[1])
         return [s[0] for s in squad_distance]
 
     def distance_from_ship(self, ship):
-        ship_distance = [(s, ship.distance_to(s)) for s in self.adversaries]
+        ship_distance = [(s, force_utils.distance_between(ship, s)) for s in self.adversaries]
         ship_distance.sort(key=lambda tup: tup[1])
         return [s[0] for s in ship_distance]
 
@@ -224,7 +215,7 @@ def test():
     my_universe.set_game_engine(my_game_engine)
 
     # Create our Squad
-    my_squad = Squad(team='player')
+    my_squad = Squad(team='player', target_strategy='threat')
     miner = ship.Ship(my_game_engine, 100, 100, ship_type='miner')
     my_squad.add_ship(miner)
     healer = ship.Ship(my_game_engine, 200, 200, ship_type='healer')
@@ -242,7 +233,7 @@ def test():
     pirate_squad.add_ship(healer)
     shielder = ship.Ship(my_game_engine, 700, 700, ship_type='shielder')
     pirate_squad.add_ship(shielder)
-    fighter = ship.Ship(my_game_engine, 500, 700, ship_type='fighter')
+    fighter = ship.Ship(my_game_engine, 700, 700, ship_type='fighter')
     pirate_squad.add_ship(fighter)
 
     # Give our Squads the Battle State (universal in this case)

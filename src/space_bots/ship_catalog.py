@@ -4,7 +4,7 @@ ship_specs = {
     'shielder':
         {'color': (100, 100, 220),
          'mass': 60,
-         'speed': 0.05,
+         'speed': 0.1,
          'radius': 20,
          'hp': 300,
          'shield': 500,
@@ -16,7 +16,8 @@ ship_specs = {
          'shield_width': 2,
          'shield_recharge': 0.05,
          'hull_recharge': 0.05,
-         'keep_range': 0
+         'keep_range': 80,
+         'threat': 50
          },
     'healer':
         {'color': (100, 200, 100),
@@ -33,7 +34,8 @@ ship_specs = {
          'shield_width': 2,
          'shield_recharge': 0.0025,
          'hull_recharge': 0.0025,
-         'keep_range': 200
+         'keep_range': 400,
+         'threat': 100
          },
     'shaman':
         {'color': (200, 120, 100),
@@ -50,7 +52,8 @@ ship_specs = {
          'shield_width': 2,
          'shield_recharge': 0.0025,
          'hull_recharge': 0.0025,
-         'keep_range': 200
+         'keep_range': 300,
+         'threat': 80
          },
     'fighter':
         {'color': (180, 60, 200),
@@ -67,7 +70,8 @@ ship_specs = {
          'shield_width': 2,
          'shield_recharge': 0.005,
          'hull_recharge': 0.005,
-         'keep_range': 100
+         'keep_range': 100,
+         'threat': 50
          },
     'berserker':
         {'color': (255, 40, 40),
@@ -76,7 +80,7 @@ ship_specs = {
          'radius': 16,
          'hp': 200,
          'shield': 150,
-         'laser_range': 120,
+         'laser_range': 140,
          'laser_damage': 0.15,
          'laser_width': 4,
          'capacitor': 30,
@@ -84,7 +88,8 @@ ship_specs = {
          'shield_width': 2,
          'shield_recharge': 0.005,
          'hull_recharge': 0.005,
-         'keep_range': 80
+         'keep_range': 80,
+         'threat': 50
          },
     'shadow':
         {'color': (180, 100, 200),
@@ -100,7 +105,9 @@ ship_specs = {
          'ship_width': 5,
          'shield_width': 2,
          'shield_recharge': 0.0025,
-         'hull_recharge': 0.0025
+         'hull_recharge': 0.0025,
+         'keep_range': 80,
+         'threat': 50
          },
     'miner':
         {'color': (220, 200, 100),
@@ -117,7 +124,8 @@ ship_specs = {
          'shield_width': 2,
          'shield_recharge': 0.005,
          'hull_recharge': 0.005,
-         'keep_range': 300
+         'keep_range': 300,
+         'threat': 30
          },
     'starbase':
         {'color': (100, 100, 200),
@@ -133,7 +141,9 @@ ship_specs = {
          'ship_width': 7,
          'shield_width': 3,
          'shield_recharge': 0.05,
-         'hull_recharge': 0.05
+         'hull_recharge': 0.05,
+         'keep_range': 200,
+         'threat': 200
          },
     'scout':
         {'color': (100, 100, 100),
@@ -149,7 +159,9 @@ ship_specs = {
          'ship_width': 2,
          'shield_width': 1,
          'shield_recharge': 0.001,
-         'hull_recharge': 0.001
+         'hull_recharge': 0.001,
+         'keep_range': 20,
+         'threat': 20
          },
     'destroyer':
         {'color': (100, 100, 100),
@@ -165,7 +177,9 @@ ship_specs = {
          'ship_width': 3,
          'shield_width': 2,
          'shield_recharge': 0.0025,
-         'hull_recharge': 0.0025
+         'hull_recharge': 0.0025,
+         'keep_range': 40,
+         'threat': 30
          },
     'cruiser':
         {'color': (100, 100, 100),
@@ -181,7 +195,9 @@ ship_specs = {
          'ship_width': 3,
          'shield_width': 2,
          'shield_recharge': 0.005,
-         'hull_recharge': 0.005
+         'hull_recharge': 0.005,
+         'keep_range': 80,
+         'threat': 40
          },
     'battleship':
         {'color': (100, 100, 100),
@@ -197,6 +213,8 @@ ship_specs = {
          'ship_width': 5,
          'shield_width': 2,
          'shield_recharge': 0.01,
-         'hull_recharge': 0.01
+         'hull_recharge': 0.01,
+         'keep_range': 80,
+         'threat': 80
          }
 }

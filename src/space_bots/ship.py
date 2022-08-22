@@ -1,7 +1,7 @@
 """Ship: Class for the ships in Space Bots"""
 
 # Local Imports
-from space_bots import entity, ship_parameters, ship_state
+from space_bots import entity, ship_parameters, ship_state, force_utils
 
 
 class Ship(entity.Entity):
@@ -23,7 +23,7 @@ class Ship(entity.Entity):
 
     def within_range(self, target):
         """Is this target within weapons range"""
-        return self.distance_to(target) < self.p.laser_range
+        return force_utils.distance_between(self, target) < self.p.laser_range
 
     def damage(self, points):
         """Inflict damage on this ship"""
@@ -80,26 +80,25 @@ class Ship(entity.Entity):
             else:
                 self.s.target = self.squad.secondary_target(self)
 
+        # Compute my non targets
+        self.s.non_targets = self.squad.adversaries.copy()
+
         # Compute target logic only if I have a target
         if self.s.target:
-
-            # Compute my non targets
-            self.s.non_targets = self.squad.adversaries.copy()
+            # Remove target from the non targets list
             self.s.non_targets.remove(self.s.target)
 
             # Move Towards (Attack)
-            if self.distance_to(self.s.target) > self.p.laser_range/3.0:
-                delta = self.position_delta((self.s.target.x, self.s.target.y), .1)
-                self.force_x += delta[0]
-                self.force_y += delta[1]
+            (dx, dy), (_, _) = force_utils.attraction_forces(self, self.s.target, self.p.laser_range/1.5)
+            self.force_x += dx
+            self.force_y += dy
 
         # Avoidance of Non Targets
-        if self.squad.stance in ['defensive', 'protect']:
-            for ship in self.s.non_targets:
-                if self.distance_to(ship) < self.p.keep_range:
-                    delta = self.position_delta((ship.x, ship.y), .001)
-                    self.force_x -= delta[0]
-                    self.force_y -= delta[1]
+        # This will be different for healer/miners
+        for other_ship in self.s.non_targets:
+            (dx, dy), (_, _) = force_utils.repulsion_forces(self, other_ship, rest_distance=self.p.keep_range)
+            self.force_x += dx * 10.0
+            self.force_y += dy * 10.0
 
         # Now actually call the move command (which uses force/mass calc)
         self.move()
@@ -127,7 +126,7 @@ class Ship(entity.Entity):
 
     def draw_laser(self):
         """Draw the laser"""
-        if self.s.target and self.distance_to(self.s.target) < self.p.laser_range:
+        if self.s.target and force_utils.distance_between(self, self.s.target) < self.p.laser_range:
             self.game_engine.draw_line(self.p.color, (self.x, self.y), (self.s.target.x, self.s.target.y), width=self.p.laser_width)
             self.s.target.damage(self.p.laser_damage)
 
@@ -156,14 +155,20 @@ def test():
     # Give the universe the game engine
     my_universe.set_game_engine(my_game_engine)
 
-    # Create our ship
-    my_ship = Ship(my_game_engine, 100, 100, ship_type='shielder')
-    my_universe.add_entity(my_ship)
+    # Create two ships (one more massive than another
+    heavy_ship = Ship(my_game_engine, 100, 100, ship_type='shielder')
+    light_ship = Ship(my_game_engine, 100, 200, ship_type='healer')
+    my_universe.add_ship(heavy_ship)
+    my_universe.add_ship(light_ship)
 
     # Give the ship a push and do some damage
-    my_ship.force_x = 1000
-    my_ship.force_y = 500
-    my_ship.damage(270)
+    heavy_ship.force_x = 1000
+    heavy_ship.force_y = 500
+    heavy_ship.damage(500)
+
+    # Give the healer a push (should move further)
+    light_ship.force_x = 1000
+    light_ship.force_y = 500
 
     # Invoke the event loop
     my_game_engine.event_loop()

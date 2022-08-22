@@ -1,6 +1,9 @@
 """Universe: Class that contains all the stuff"""
 from random import randint
 
+# Local Imports
+from space_bots import force_utils
+
 
 class Universe:
     """Universe: Class that contains all the stuff"""
@@ -30,9 +33,6 @@ class Universe:
         # We need a list of individual ships for collision detections
         squad_ships = [ship for _squad in self.squads for ship in _squad.ships]
         self.all_ships = self.individual_ships + squad_ships
-
-        # Make sure Ship don't overlap each other
-        self._space_out_ships()
 
         # All entities are collected into one big list
         self.all_entities = self.planets + self.squads + self.individual_ships + self.individual_entities
@@ -97,31 +97,40 @@ class Universe:
     def collision_detection(self):
         """Detect if any entity is colliding with another entity"""
 
-        # First ships against planets
-        for _ship in self.all_ships:
-            for _planet in self.planets:
-                if _ship.collides(_planet):
-                    delta = _ship.pos_delta(_planet, 3.0)
-                    _ship.force_x -= delta[0]
-                    _ship.force_y -= delta[1]
+        # Test for collisions between all entities in the Universe
+        # Note: This has lots of room for improvement (spacial hierarchies/etc)
 
-        # Second ships against ships
-        for _ship in self.all_ships:
-            for co_ship in self.all_ships:
-                if _ship == co_ship:
-                    continue
-                if _ship.collides(co_ship):
-                    delta = _ship.pos_delta(co_ship, 0.5)
-                    _ship.force_x -= delta[0]
-                    _ship.force_y -= delta[1]
+        # First: Ships vs Ships
+        for index, ship in enumerate(self.all_ships):
+            for co_ship in self.all_ships[index+1:]:
 
-        # Last ships against boundaries
+                # Compute any collision forces
+                (dx, dy), (co_dx, co_dy) = force_utils.repulsion_forces(ship, co_ship)
+                ship.force_x += dx
+                ship.force_y += dy
+                co_ship.force_x += co_dx
+                co_ship.force_y += co_dy
+
+        # Next: Ships vs Planet
+        for ship in self.all_ships:
+            for planet in self.planets:
+
+                # Compute any collision forces
+                (dx, dy), (p_dx, p_dy) = force_utils.repulsion_forces(ship, planet)
+                ship.force_x += dx
+                ship.force_y += dy
+                planet.force_x += p_dx
+                planet.force_y += p_dy
+
+        # Last: Ships against boundaries
+        # FIXME
+        # Note: We're not setting force here as this is a 'hard' boundary
         for _ship in self.all_ships:
             _ship.x = min(max(_ship.x, self.pad/4), self.width-self.pad/4)
             _ship.y = min(max(_ship.y, self.pad/4), self.height-self.pad/4)
 
     def closest_planet(self, ship):
-        planet_distance = [(p, ship.distance_to(p)) for p in self.planets]
+        planet_distance = [(p, force_utils.distance_between(ship, p)) for p in self.planets]
         planet_distance.sort(key=lambda tup: tup[1])
         return [p[0] for p in planet_distance][0]
 
@@ -134,32 +143,15 @@ class Universe:
                     if _planet == co_planet:
                         continue
                     # Move if too close
-                    if _planet.distance_to(co_planet) < 350:
-                        delta = _planet.pos_delta(co_planet)
-                        _planet.x -= delta[0] / 10.0
-                        _planet.y -= delta[1] / 10.0
+                    if force_utils.distance_between(_planet, co_planet) < 350:
+                        (dx, dy), (co_dx, co_dy) = force_utils.normalized_distance_vectors(_planet, co_planet)
+                        _planet.x -= dx * 5
+                        _planet.y -= dy * 5
+                        co_planet.x -= co_dx * 5
+                        co_planet.y -= co_dy * 5
                     # Boundaries
                     _planet.x = max(min(_planet.x, self.width-self.pad), self.pad)
                     _planet.y = max(min(_planet.y, self.height-self.pad), self.pad)
-
-    def _space_out_ships(self):
-        """Make sure ship don't overlap"""
-        for _ in range(50):
-            for _ship in self.all_ships:
-                for co_ship in self.all_ships:
-                    # Skip self
-                    if _ship == co_ship:
-                        continue
-                    # Move if too close
-                    if _ship.distance_to(co_ship) < 20:
-                        _ship.x += randint(-5, 5)
-                        _ship.y += randint(-5, 5)
-                        delta = _ship.pos_delta(co_ship)
-                        _ship.x -= delta[0]
-                        _ship.y -= delta[1]
-                    # Boundaries
-                    _ship.x = max(min(_ship.x, self.width-self.pad), self.pad)
-                    _ship.y = max(min(_ship.y, self.height-self.pad), self.pad)
 
 
 # Simple test of the Universe functionality
@@ -196,15 +188,21 @@ def test():
     my_squad.add_ship(fighter)
 
     # Create a Pirate Squad (who doesn't want to be a pirate?)
-    pirate_squad = Squad(team='pirate', target_strategy='nearest', stance='offensive')
+    pirate_squad = Squad(team='pirate', target_strategy='threat', stance='offensive')
     healer = Ship(my_game_engine, 150, 100, ship_type='shaman')
     pirate_squad.add_ship(healer)
     healer = Ship(my_game_engine, 150, 100, ship_type='shaman')
     pirate_squad.add_ship(healer)
-    shielder = Ship(my_game_engine, 200, 100, ship_type='berserker')
-    pirate_squad.add_ship(shielder)
-    shielder = Ship(my_game_engine, 200, 100, ship_type='berserker')
-    pirate_squad.add_ship(shielder)
+    fighter = Ship(my_game_engine, 200, 100, ship_type='berserker')
+    pirate_squad.add_ship(fighter)
+    fighter = Ship(my_game_engine, 200, 100, ship_type='berserker')
+    pirate_squad.add_ship(fighter)
+    fighter = Ship(my_game_engine, 250, 100, ship_type='berserker')
+    pirate_squad.add_ship(fighter)
+    fighter = Ship(my_game_engine, 200, 100, ship_type='berserker')
+    pirate_squad.add_ship(fighter)
+    fighter = Ship(my_game_engine, 200, 100, ship_type='berserker')
+    pirate_squad.add_ship(fighter)
     fighter = Ship(my_game_engine, 250, 100, ship_type='berserker')
     pirate_squad.add_ship(fighter)
 
@@ -218,7 +216,7 @@ def test():
 
     # Add some planets
     for _ in range(8):
-        my_planet = Planet(my_game_engine, x=randint(500, 550), y=randint(500, 550))
+        my_planet = Planet(my_game_engine, x=randint(800, 850), y=randint(500, 550))
         my_universe.add_planet(my_planet)
 
     # Add Protection Orders

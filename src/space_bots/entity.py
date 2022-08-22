@@ -1,6 +1,8 @@
 """Entity: Abstract Base Class for all object (ships, planets, etc)"""
 from abc import ABC, abstractmethod
-import math
+
+# Local Imports
+from space_bots import force_utils
 
 
 class Entity(ABC):
@@ -14,7 +16,7 @@ class Entity(ABC):
         self.collision_radius = collision_radius
         self.force_x = 0
         self.force_y = 0
-        self.force_damp = 0.99
+        self.force_damp = 0.995
 
     @abstractmethod
     def communicate(self):
@@ -28,35 +30,9 @@ class Entity(ABC):
     def draw(self):
         pass
 
-    def collides(self, target):
-        if self.distance_to(target) < (self.collision_radius + target.collision_radius):
-            return True
-        return False
-
-    def distance_to(self, target):
-        dx = target.x - self.x
-        dy = target.y - self.y
-        return math.sqrt(dx ** 2 + dy ** 2)
-
-    def force_delta(self, target):
-        # Force delta is based on mass of the source and target
-        dx, dy = self.pos_delta(target)
-        mass_ratio = target.mass/self.mass
-        dx *= mass_ratio
-        dy *= mass_ratio
-        return dx, dy
-
-    def pos_delta(self, target, factor=1.0):
-        return (target.x - self.x)*factor, (target.y - self.y)*factor
-
     def move(self):
         """Move the Entity based on the current set of forces and mass"""
-        delta_x = self.force_x / self.mass
-        delta_y = self.force_y / self.mass
-        delta_x = max(min(delta_x, self.speed), -self.speed)
-        delta_y = max(min(delta_y, self.speed), -self.speed)
-        self.x += delta_x
-        self.y += delta_y
+        force_utils.force_based_movement(self, self.speed)
 
         # Damping the force for next time
         self.force_x *= self.force_damp
