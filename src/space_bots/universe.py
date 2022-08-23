@@ -214,7 +214,7 @@ def test():
 
     # Add a zerg
     zerg_squad = Squad(team='pirate', squad_name='zerg', target_strategy='low_health', stance='offensive')
-    for _ in range(20):
+    for _ in range(30):
         zerg_squad.add_ship(Ship(my_game_engine, x=randint(200, 320), y=randint(800, 900), ship_type='scout'))
 
     # Give our Squads the Battle State (universal in this case)
