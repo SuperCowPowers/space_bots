@@ -19,7 +19,6 @@ The whole point of the game is to mine resources and protect the miner. The more
 - Miner = Yellow
 
 Narration:
-- The Zerg enemy comes in, tank takes position up front. The miner is trying to get his job done (with extra hazard pay). The healer stays protected and heals from the back. At some point the tanks almost dies, throws a protective shield on himself. The healer tries to keep up with the damage but eventually we lose the tank. But the miner is safe so we live for the next wave...
+- The Zerg enemy comes in, tank takes position up front. The miner is trying to get his job done (with extra hazard pay). The healer stays protected and heals from the back. At some point the tanks almost dies, throws a protective shield on himself. The healer changes targets and manages to keep the entire team up so we're safe.. at least until the next wave... :)
 
-https://user-images.githubusercontent.com/4806709/186267346-2d81aa5f-42f6-4da1-8d6b-2cbaca48e93e.mov
-
+https://user-images.githubusercontent.com/4806709/186274285-343cacce-38cd-498c-b67c-7bf9d460af58.mov
