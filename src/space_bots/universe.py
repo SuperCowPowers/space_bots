@@ -204,6 +204,15 @@ def test():
     my_squad.add_ship(fighter)
     fighter = Ship(my_game_engine, 900, 600, ship_type='fighter')
     my_squad.add_ship(fighter)
+    """
+    for _ in range(5):
+        my_tank = tank.Tank(my_game_engine, 950, 600)
+        my_squad.add_ship(my_tank)
+        # my_healer = healer.Healer(my_game_engine, 950, 600)
+        # my_squad.add_ship(my_healer)
+        # fighter = Ship(my_game_engine, 950, 500, ship_type='fighter')
+        # my_squad.add_ship(fighter)
+    """
 
     # Create a Pirate Squad (who doesn't want to be a pirate?)
     pirate_squad = Squad(team='pirate', squad_name='xenos', target_strategy='nearest', stance='offensive')
@@ -218,8 +227,6 @@ def test():
     fighter = Ship(my_game_engine, 200, 200, ship_type='berserker')
     pirate_squad.add_ship(fighter)
     fighter = Ship(my_game_engine, 200, 200, ship_type='berserker')
-    pirate_squad.add_ship(fighter)
-    fighter = Ship(my_game_engine, 250, 200, ship_type='berserker')
     pirate_squad.add_ship(fighter)
     fighter = Ship(my_game_engine, 250, 200, ship_type='berserker')
     pirate_squad.add_ship(fighter)
