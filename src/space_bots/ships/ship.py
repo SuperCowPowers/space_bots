@@ -121,8 +121,8 @@ class Ship(entity.Entity):
         # This will be different for healer/miners
         for other_ship in self.s.non_targets:
             (dx, dy), (_, _) = force_utils.repulsion_forces(self, other_ship, rest_distance=self.p.keep_range)
-            self.force_x += dx * 10.0
-            self.force_y += dy * 10.0
+            self.force_x += dx
+            self.force_y += dy
 
         # Now actually call the move command (which uses force/mass calc)
         self.move()
@@ -139,10 +139,12 @@ class Ship(entity.Entity):
         hull_color = (self.p.color[0] * hull_health, self.p.color[1] * hull_health, self.p.color[2] * hull_health)
         self.game_engine.draw_circle((30, 30, 30), (self.x, self.y), self.p.radius, width=0)
         self.game_engine.draw_circle(hull_color, (self.x, self.y), self.p.radius, width=self.p.ship_width)
+
+        width = 1 if self.ship_type == 'scout' else 0
         if self.low_health():
-            self.game_engine.draw_circle((200, 200, 0), (self.x, self.y), 3)
+            self.game_engine.draw_circle((200, 200, 0), (self.x, self.y), 6, width=width)
         if self.critical_health():
-            self.game_engine.draw_circle((240, 0, 0), (self.x, self.y), 3)
+            self.game_engine.draw_circle((240, 0, 0), (self.x, self.y), 6, width=width)
 
     def draw_dead(self):
         """Draw the Dead Ship Icon"""
@@ -158,7 +160,7 @@ class Ship(entity.Entity):
         """Draw the Shield"""
         shield_health = 220 * self.s.shield / self.p.shield + 35
         if self.team == 'pirate':
-            shield_color = (shield_health/4, shield_health/4, shield_health/4)
+            shield_color = (shield_health/1.5, shield_health/1.5, shield_health/1.5)
         else:
             shield_color = (shield_health, shield_health, shield_health)
         self.game_engine.draw_circle(shield_color, (self.x, self.y), self.p.shield_radius, width=self.p.shield_width)

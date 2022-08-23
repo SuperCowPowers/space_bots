@@ -29,8 +29,8 @@ class Healer(ship.Ship):
         adversaries = self.squad.adversaries if self.squad else []
         for other_ship in adversaries:
             (dx, dy), (_, _) = force_utils.repulsion_forces(self, other_ship, rest_distance=self.p.keep_range)
-            self.force_x += dx * 10.0
-            self.force_y += dy * 10.0
+            self.force_x += dx
+            self.force_y += dy
 
         # Get the lowest health TeamMate and move towards them
         self.healing_target = self.battle_state.lowest_health_teammate(self)
@@ -64,7 +64,7 @@ class Healer(ship.Ship):
         if self.healing_target and force_utils.distance_between(self, self.healing_target) < self.p.laser_range:
 
             # Does my target need healing
-            if self.healing_target.health_percent() < .95:
+            if self.healing_target.health_percent() < .9:
                 self.game_engine.draw_line(self.p.color, (self.x, self.y), (self.healing_target.x, self.healing_target.y),
                                            width=self.p.laser_width)
                 self.healing_target.heal(self.p.laser_damage)

@@ -74,13 +74,13 @@ ship_specs = {
          'threat': 50
          },
     'berserker':
-        {'color': (255, 40, 40),
+        {'color': (180, 80, 80),
          'mass': 40,
          'speed': 0.2,
          'radius': 16,
          'hp': 200,
          'shield': 150,
-         'laser_range': 140,
+         'laser_range': 120,
          'laser_damage': 0.15,
          'laser_width': 4,
          'capacitor': 30,
@@ -88,7 +88,7 @@ ship_specs = {
          'shield_width': 2,
          'shield_recharge': 0.005,
          'hull_recharge': 0.005,
-         'keep_range': 80,
+         'keep_range': 100,
          'threat': 50
          },
     'shadow':
