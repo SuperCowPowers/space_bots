@@ -15,7 +15,7 @@ class Tank(ship.Ship):
         # Tank specific stuff
         self.protect_target = None
         self.p.damage_modifier = 0.80  # 20% reduction
-        self.collision_radius = self.p.shield_radius * 3  # Tanks need space
+        self.collision_radius = self.p.shield_radius * 2  # Tanks need space
         self.shield_thrown = False
 
     def communicate(self):

@@ -206,12 +206,12 @@ def test():
     my_squad.add_ship(fighter)
     """
     for _ in range(5):
-        my_tank = tank.Tank(my_game_engine, 950, 600)
-        my_squad.add_ship(my_tank)
+        # my_tank = tank.Tank(my_game_engine, 950, 600)
+        # my_squad.add_ship(my_tank)
         # my_healer = healer.Healer(my_game_engine, 950, 600)
         # my_squad.add_ship(my_healer)
-        # fighter = Ship(my_game_engine, 950, 500, ship_type='fighter')
-        # my_squad.add_ship(fighter)
+        my_fighter = Ship(my_game_engine, 950, 500, ship_type='fighter')
+        my_squad.add_ship(my_fighter)
     """
 
     # Create a Pirate Squad (who doesn't want to be a pirate?)
