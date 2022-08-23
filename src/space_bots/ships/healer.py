@@ -26,6 +26,7 @@ class Healer(ship.Ship):
         self.general_ship_updates()
 
         # Avoidance of Adversaries
+        # FIXME: This needs to take into account ship damage
         adversaries = self.squad.adversaries if self.squad else []
         for other_ship in adversaries:
             (dx, dy), (_, _) = force_utils.repulsion_forces(self, other_ship, rest_distance=self.p.keep_range)

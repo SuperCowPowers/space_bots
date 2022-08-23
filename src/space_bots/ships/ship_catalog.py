@@ -34,7 +34,7 @@ ship_specs = {
          'shield_width': 2,
          'shield_recharge': 0.0025,
          'hull_recharge': 0.0025,
-         'keep_range': 400,
+         'keep_range': 300,
          'threat': 100
          },
     'shaman':
