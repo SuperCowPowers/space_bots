@@ -51,6 +51,9 @@ class Ship(entity.Entity):
         self.in_combat = True
         self.combat_timer = 100
 
+        # Damage modifiers
+        points *= self.p.damage_modifier
+
         # Shield Damage
         if points < self.s.shield:
             self.s.shield -= points
@@ -111,12 +114,8 @@ class Ship(entity.Entity):
             self.combat_timer = 0
             self.in_combat = False
 
-    def update(self):
-        """Update the Ship"""
-
-        # General updates
-        self.general_ship_updates()
-
+    def general_targeting(self):
+        """Targeting logic that's useful for most ships"""
         # Choose the main target if it's within range, otherwise ask for secondary target
         if self.squad:
             if self.squad.main_target and self.within_range(self.squad.main_target):
@@ -137,12 +136,23 @@ class Ship(entity.Entity):
             self.force_x += dx
             self.force_y += dy
 
+    def general_avoidance(self):
+        """Avoidance logic that's useful for most ships"""
+
         # Avoidance of Non Targets
-        # This will be different for healer/miners
-        for other_ship in self.s.non_targets:
+        avoid_ships = self.squad.adversaries
+        for other_ship in avoid_ships:
             (dx, dy), (_, _) = force_utils.repulsion_forces(self, other_ship, rest_distance=self.p.keep_range)
             self.force_x += dx
             self.force_y += dy
+
+    def update(self):
+        """Update the Ship"""
+
+        # General updates
+        self.general_ship_updates()
+        self.general_targeting()
+        self.general_avoidance()
 
         # Now actually call the move command (which uses force/mass calc)
         self.move()
@@ -163,9 +173,9 @@ class Ship(entity.Entity):
         # FIXME
         width = 1 if self.ship_type == 'scout' else 0
         if self.low_health():
-            self.game_engine.draw_circle((200, 200, 0), (self.x, self.y), 6, width=width)
+            self.game_engine.draw_circle((200, 200, 0), (self.x, self.y), 5, width=width)
         if self.critical_health():
-            self.game_engine.draw_circle((240, 0, 0), (self.x, self.y), 6, width=width)
+            self.game_engine.draw_circle((240, 0, 0), (self.x, self.y), 5, width=width)
 
     def draw_dead(self):
         """Draw the Dead Ship Icon"""

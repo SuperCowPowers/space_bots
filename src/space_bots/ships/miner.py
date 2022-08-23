@@ -14,6 +14,7 @@ class Miner(ship.Ship):
 
         # Miner specific stuff
         self.mining_planet = None
+        self.collision_radius = self.p.shield_radius * 2  # Miners need their space
         # self.mining_hardpoint_offsets = [(self.p.radius, 0), (0, 0), (0, self.p.radius)]
 
     def communicate(self):
@@ -25,13 +26,7 @@ class Miner(ship.Ship):
 
         # General updates
         self.general_ship_updates()
-
-        # Avoidance of Adversaries
-        adversaries = self.squad.adversaries if self.squad else []
-        for other_ship in adversaries:
-            (dx, dy), (_, _) = force_utils.repulsion_forces(self, other_ship, rest_distance=self.p.keep_range)
-            self.force_x += dx
-            self.force_y += dy
+        self.general_avoidance()
 
         # Get my closest Planet and go mine it
         # FIXME self.mining_planet = self.battle_state.closest_planet(self)
@@ -57,9 +52,9 @@ class Miner(ship.Ship):
         self.game_engine.draw_circle((30, 30, 30), (self.x, self.y), self.p.radius, width=0)
         self.game_engine.draw_circle(hull_color, (self.x, self.y), self.p.radius, width=self.p.ship_width)
         if self.low_health():
-            self.game_engine.draw_circle((200, 200, 0), (self.x, self.y), 3)
+            self.game_engine.draw_circle((200, 200, 0), (self.x, self.y), 5, width=0)
         if self.critical_health():
-            self.game_engine.draw_circle((240, 0, 0), (self.x, self.y), 3)
+            self.game_engine.draw_circle((240, 0, 0), (self.x, self.y), 5, width=0)
 
     def draw_mining_laser(self):
         """Draw the mining lasers"""

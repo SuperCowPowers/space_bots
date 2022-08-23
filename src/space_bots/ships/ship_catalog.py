@@ -1,7 +1,7 @@
 """ShipCatalog: Class for the Getting Ship Specs"""
 
 ship_specs = {
-    'shielder':
+    'tank':
         {'color': (100, 100, 220),
          'mass': 60,
          'speed': 0.1,
@@ -45,7 +45,7 @@ ship_specs = {
          'hp': 150,
          'shield': 100,
          'laser_range': 80,
-         'laser_damage': 0.1,
+         'laser_damage': 0.15,
          'laser_width': 4,
          'capacitor': 20,
          'ship_width': 5,
@@ -63,7 +63,7 @@ ship_specs = {
          'hp': 200,
          'shield': 150,
          'laser_range': 120,
-         'laser_damage': 0.15,
+         'laser_damage': 0.2,
          'laser_width': 4,
          'capacitor': 30,
          'ship_width': 5,
@@ -81,7 +81,7 @@ ship_specs = {
          'hp': 200,
          'shield': 150,
          'laser_range': 120,
-         'laser_damage': 0.15,
+         'laser_damage': 0.25,
          'laser_width': 4,
          'capacitor': 30,
          'ship_width': 5,

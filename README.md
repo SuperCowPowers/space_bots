@@ -1,7 +1,7 @@
 <img align="right" style="padding:0px" src="docs/images/big_spider.png" width="320">
 
 # Space Mining Robots
-An AutoChess (Battler) where you compete with Space Mining Robots.
+An AutoChess (Battler) where you compete with Space Mining Robots. This is a game about programming (Python) a set of 'bots' with simple behaviours and then just letting them go. It's a bit like Conway's game of life on zoomies (https://playgameoflife.com/). Anyway we just started.. hopefull will be kewl...
     
 ## Installation
 ```

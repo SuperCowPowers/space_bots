@@ -1,4 +1,5 @@
 """Universe: Class that contains all the stuff"""
+import time
 from random import randint
 
 # Local Imports
@@ -23,6 +24,8 @@ class Universe:
         self.all_entities = []
         self.individual_entities = []
         self.is_finalized = False
+        self.time_slow = 0.05
+        self.initial_count_down = True
 
     def finalize(self):
         """Tasks to do after initial universe setup"""
@@ -89,6 +92,11 @@ class Universe:
         for entity in self.all_entities:
             entity.update()
 
+        # Time Slow
+        if any([s.in_combat for s in self.squads]):
+            time.sleep(self.time_slow)
+            self.time_slow *= .99
+
     def draw(self):
         """Let all the entities in the Universe draw themselves"""
 
@@ -99,6 +107,11 @@ class Universe:
         # Planets next
         for planet in self.planets:
             planet.draw()
+
+        # Countdown timer
+        if self.initial_count_down:
+            time.sleep(5)
+            self.initial_count_down = False
 
     def collision_detection(self):
         """Detect if any entity is colliding with another entity"""
@@ -112,10 +125,10 @@ class Universe:
 
                 # Compute any collision forces
                 (dx, dy), (co_dx, co_dy) = force_utils.repulsion_forces(ship, co_ship)
-                ship.force_x += dx
-                ship.force_y += dy
-                co_ship.force_x += co_dx
-                co_ship.force_y += co_dy
+                ship.force_x += dx * 2
+                ship.force_y += dy * 2
+                co_ship.force_x += co_dx * 2
+                co_ship.force_y += co_dy * 2
 
         # Next: Ships vs Planet
         for ship in self.all_ships:
@@ -163,8 +176,7 @@ def test():
     from space_bots import game_engine_adapter, battle_state
     from space_bots.squad import Squad
     from space_bots.ships.ship import Ship
-    from space_bots.ships.miner import Miner
-    from space_bots.ships.healer import Healer
+    from space_bots.ships import miner, healer, tank
     from space_bots.planet import Planet
 
     """Test for Universe Class"""
@@ -180,12 +192,12 @@ def test():
 
     # Create our Squad
     my_squad = Squad(team='good guys', squad_name='roughnecks', target_strategy='threat', stance='defensive')
-    miner = Miner(my_game_engine, 1000, 600)
+    miner = miner.Miner(my_game_engine, 1000, 600)
     my_squad.add_ship(miner)
-    healer = Healer(my_game_engine, 950, 600)
+    healer = healer.Healer(my_game_engine, 950, 600)
     my_squad.add_ship(healer)
-    shielder = Ship(my_game_engine, 900, 500, ship_type='shielder')
-    my_squad.add_ship(shielder)
+    tank = tank.Tank(my_game_engine, 950, 600)
+    my_squad.add_ship(tank)
     fighter = Ship(my_game_engine, 950, 500, ship_type='fighter')
     my_squad.add_ship(fighter)
     fighter = Ship(my_game_engine, 980, 680, ship_type='fighter')
