@@ -148,7 +148,7 @@ ship_specs = {
     'scout':
         {'color': (200, 150, 100),
          'mass': 20,
-         'speed': 1.0,
+         'speed': 0.8,
          'radius': 6,
          'hp': 50,
          'shield': 30,

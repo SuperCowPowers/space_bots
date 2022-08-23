@@ -36,7 +36,7 @@ class Healer(ship.Ship):
         self.healing_target = self.battle_state.lowest_health_teammate(self)
         if self.healing_target and self.healing_target != self:
             # Rush
-            rush = 3 if self.healing_target.health_percent() < .3 else 1
+            rush = 3 if self.healing_target.health_percent() < .5 else 1
             (_, _), (dx, dy) = force_utils.attraction_forces(self.healing_target, self, self.p.laser_range - 10)
             self.force_x += dx * rush
             self.force_y += dy * rush
