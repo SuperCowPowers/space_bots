@@ -34,10 +34,12 @@ class Healer(ship.Ship):
 
         # Get the lowest health TeamMate and move towards them
         self.healing_target = self.battle_state.lowest_health_teammate(self)
-        if self.healing_target:
+        if self.healing_target and self.healing_target != self:
+            # Rush
+            rush = 3 if self.healing_target.health_percent() < .3 else 1
             (_, _), (dx, dy) = force_utils.attraction_forces(self.healing_target, self, self.p.laser_range - 10)
-            self.force_x += dx
-            self.force_y += dy
+            self.force_x += dx * rush
+            self.force_y += dy * rush
 
         # Now actually call the move command (which uses force/mass calc)
         self.move()
@@ -64,10 +66,13 @@ class Healer(ship.Ship):
         if self.healing_target and force_utils.distance_between(self, self.healing_target) < self.p.laser_range:
 
             # Does my target need healing
-            if self.healing_target.health_percent() < .9:
+            if self.healing_target.health_percent() < .95:
                 self.game_engine.draw_line(self.p.color, (self.x, self.y), (self.healing_target.x, self.healing_target.y),
                                            width=self.p.laser_width)
-                self.healing_target.heal(self.p.laser_damage)
+
+                # Out of combat heal buff
+                healing_power = 10 if not self.squad_in_combat() else 1
+                self.healing_target.heal(self.p.laser_damage * healing_power)
 
 
 # Simple test of the Healer functionality

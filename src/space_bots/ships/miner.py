@@ -30,18 +30,16 @@ class Miner(ship.Ship):
         adversaries = self.squad.adversaries if self.squad else []
         for other_ship in adversaries:
             (dx, dy), (_, _) = force_utils.repulsion_forces(self, other_ship, rest_distance=self.p.keep_range)
-            self.force_x += dx * 10.0
-            self.force_y += dy * 10.0
-
-        # Get my closest Planet and go mine it
-        self.mining_planet = self.battle_state.closest_planet(self)
-        if self.mining_planet:
-            (_, _), (dx, dy) = force_utils.attraction_forces(self.mining_planet, self, 80)
             self.force_x += dx
             self.force_y += dy
-            (_, _), (dx, dy) = force_utils.repulsion_forces(self.mining_planet, self, 70)
-            self.force_x += dx * 4
-            self.force_y += dy * 4
+
+        # Get my closest Planet and go mine it
+        # FIXME self.mining_planet = self.battle_state.closest_planet(self)
+        self.mining_planet = self.squad.protection_asset
+        if self.mining_planet:
+            (_, _), (dx, dy) = force_utils.attraction_forces(self.mining_planet, self, self.p.laser_range-10)
+            self.force_x += dx * 2
+            self.force_y += dy * 2
 
         # Now actually call the move command (which uses force/mass calc)
         self.move()

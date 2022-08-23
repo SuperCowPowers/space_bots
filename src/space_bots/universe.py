@@ -179,7 +179,7 @@ def test():
     my_universe.set_game_engine(my_game_engine)
 
     # Create our Squad
-    my_squad = Squad(team='player', target_strategy='threat', stance='defensive')
+    my_squad = Squad(team='good guys', squad_name='roughnecks', target_strategy='threat', stance='defensive')
     miner = Miner(my_game_engine, 1000, 600)
     my_squad.add_ship(miner)
     healer = Healer(my_game_engine, 950, 600)
@@ -194,7 +194,9 @@ def test():
     my_squad.add_ship(fighter)
 
     # Create a Pirate Squad (who doesn't want to be a pirate?)
-    pirate_squad = Squad(team='pirate', target_strategy='nearest', stance='offensive')
+    pirate_squad = Squad(team='pirate', squad_name='xenos', target_strategy='nearest', stance='offensive')
+    healer = Ship(my_game_engine, 150, 100, ship_type='shaman')
+    pirate_squad.add_ship(healer)
     healer = Ship(my_game_engine, 150, 100, ship_type='shaman')
     pirate_squad.add_ship(healer)
     healer = Ship(my_game_engine, 150, 100, ship_type='shaman')
@@ -202,10 +204,6 @@ def test():
     healer = Ship(my_game_engine, 150, 100, ship_type='shaman')
     pirate_squad.add_ship(healer)
     fighter = Ship(my_game_engine, 200, 100, ship_type='berserker')
-    pirate_squad.add_ship(fighter)
-    fighter = Ship(my_game_engine, 200, 100, ship_type='berserker')
-    pirate_squad.add_ship(fighter)
-    fighter = Ship(my_game_engine, 250, 100, ship_type='berserker')
     pirate_squad.add_ship(fighter)
     fighter = Ship(my_game_engine, 200, 100, ship_type='berserker')
     pirate_squad.add_ship(fighter)
@@ -213,15 +211,18 @@ def test():
     pirate_squad.add_ship(fighter)
 
     # Add a zerg
-    for _ in range(20):
-        pirate_squad.add_ship(Ship(my_game_engine, 200, 100, ship_type='scout'))
+    zerg_squad = Squad(team='pirate', squad_name='zerg', target_strategy='low_health', stance='offensive')
+    for _ in range(30):
+        zerg_squad.add_ship(Ship(my_game_engine, x=randint(160, 240), y=randint(160, 240), ship_type='scout'))
 
     # Give our Squads the Battle State (universal in this case)
     my_battle_state = battle_state.BattleState(my_universe)
     my_squad.set_battle_state(my_battle_state)
     pirate_squad.set_battle_state(my_battle_state)
+    zerg_squad.set_battle_state(my_battle_state)
 
     # Add both Squads to the Universe
+    my_universe.add_squad(zerg_squad)
     my_universe.add_squad(pirate_squad)
     my_universe.add_squad(my_squad)
 

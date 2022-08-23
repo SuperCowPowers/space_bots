@@ -15,10 +15,11 @@ from space_bots import force_utils, battle_state
 
 class Squad:
     """Squad: Class for the Squads in Space Bots"""
-    def __init__(self, team='player', target_strategy='nearest', stance='defensive'):
+    def __init__(self, team, squad_name, target_strategy='nearest', stance='defensive'):
 
         # Set my attributes
         self.team = team
+        self.squad_name = squad_name
         self.adversaries = None
         self.target_strategy = target_strategy
         self.main_target = None
@@ -46,6 +47,9 @@ class Squad:
 
         # Battle State/Reconnaissance
         self.battle_state = None
+        self.in_combat = False
+        self.combat_timer = 0
+        self.combat_status_change = False
 
     def add_ship(self, ship):
         """Add a Ship to this Squad"""
@@ -58,6 +62,24 @@ class Squad:
         for ship in self.ships:
             ship.set_battle_state(battle_state)
 
+    def set_combat_status(self, combat):
+
+        # FIXME: We should have 'lag' vars in a utility class
+        if combat == self.in_combat:
+            self.combat_status_change = False
+            return
+        else:
+            # Change in state, lets set the timer
+            if combat:
+                self.combat_timer = 300
+                self.combat_status_change = True
+                self.in_combat = True
+            else:
+                self.combat_timer -= 1
+                if self.combat_timer == 0:
+                    self.combat_status_change = True
+                    self.in_combat = False
+
     def protect(self, asset):
         """Tell the Squad to protect a planet, squad or ship (asset)"""
         self.stance = 'protect'
@@ -65,13 +87,22 @@ class Squad:
 
     def communicate(self):
         """Squad Communication"""
-        pass
+        if not self.ships:
+            return
+        if self.combat_status_change:
+            if self.in_combat:
+                print(f'{self.team}:{self.squad_name}: Get Pumped...')
+            else:
+                print(f'{self.team}:{self.squad_name}: Whew, out of combat...')
 
     def update(self):
         """Update the Squad"""
 
         # Remove any dead ships
         self.ships = [s for s in self.ships if not s.is_dead()]
+
+        # Are any of my ships in combat?
+        self.set_combat_status(any([s.in_combat for s in self.ships]))
 
         # Get my adversaries
         self.adversaries = self.battle_state.adversary_ships(self)
@@ -214,7 +245,7 @@ def test():
     my_universe.set_game_engine(my_game_engine)
 
     # Create our Squad
-    my_squad = Squad(team='player', target_strategy='threat')
+    my_squad = Squad(team='player', squad_name='roughnecks', target_strategy='threat')
     healer = healer.Healer(my_game_engine, 200, 200)
     my_squad.add_ship(healer)
     shielder = ship.Ship(my_game_engine, 300, 300, ship_type='shielder')
@@ -225,7 +256,7 @@ def test():
     my_squad.add_ship(miner)
 
     # Create a Pirate Squad (who doesn't want to be a pirate?)
-    pirate_squad = Squad(team='pirate')
+    pirate_squad = Squad(team='pirate', squad_name='xenos')
     healer = ship.Ship(my_game_engine, 600, 600, ship_type='healer')
     pirate_squad.add_ship(healer)
     shielder = ship.Ship(my_game_engine, 700, 700, ship_type='shielder')

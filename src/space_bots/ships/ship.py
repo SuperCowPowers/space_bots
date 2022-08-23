@@ -21,6 +21,11 @@ class Ship(entity.Entity):
         # Battle State/Reconnaissance
         self.battle_state = None
 
+        # In combat indicator
+        self.in_combat = False
+        self.combat_timer = 0
+        self.dead = False
+
         # Call SuperClass (Entity) Initialization
         super().__init__(game_engine, x, y, mass=self.p.mass, speed=self.p.speed,
                          collision_radius=self.p.collision_radius)
@@ -32,12 +37,19 @@ class Ship(entity.Entity):
     def set_battle_state(self, battle_state):
         self.battle_state = battle_state
 
+    def squad_in_combat(self):
+        return self.squad.in_combat if self.squad else False
+
     def within_range(self, target):
         """Is this target within weapons range"""
         return force_utils.distance_between(self, target) < self.p.laser_range
 
     def damage(self, points):
         """Inflict damage on this ship"""
+
+        # You're in combat
+        self.in_combat = True
+        self.combat_timer = 100
 
         # Shield Damage
         if points < self.s.shield:
@@ -47,7 +59,9 @@ class Ship(entity.Entity):
         else:
             points -= self.s.shield
             self.s.shield = 0
-            self.s.hp = max(self.s.hp - points, 0)
+            self.s.hp -= points
+            if self.s.hp <= 0:
+                self.dead = True
 
     def heal(self, points):
         """Heal any damage on this ship"""
@@ -75,7 +89,7 @@ class Ship(entity.Entity):
         return self.health_percent() < 0.2
 
     def is_dead(self):
-        return self.s.hp == 0
+        return self.dead
 
     def communicate(self):
         """Communicate with Squad or Team"""
@@ -90,6 +104,12 @@ class Ship(entity.Entity):
         # Hull recharge
         self.s.hp += self.p.hull_recharge
         self.s.hp = min(self.s.hp, self.p.hp)
+
+        # Combat logic
+        self.combat_timer -= 1
+        if self.combat_timer < 0:
+            self.combat_timer = 0
+            self.in_combat = False
 
     def update(self):
         """Update the Ship"""
@@ -140,6 +160,7 @@ class Ship(entity.Entity):
         self.game_engine.draw_circle((30, 30, 30), (self.x, self.y), self.p.radius, width=0)
         self.game_engine.draw_circle(hull_color, (self.x, self.y), self.p.radius, width=self.p.ship_width)
 
+        # FIXME
         width = 1 if self.ship_type == 'scout' else 0
         if self.low_health():
             self.game_engine.draw_circle((200, 200, 0), (self.x, self.y), 6, width=width)

@@ -27,7 +27,7 @@ def repulsion_forces(source, target, rest_distance=None):
 
     # Default for rest distance is the combination of collision radi
     if rest_distance is None:
-        rest_distance = (source.collision_radius + target.collision_radius) * 1.2
+        rest_distance = (source.collision_radius + target.collision_radius)
 
     # If my current distance > rest_distance then 'rest'
     cur_distance = distance_between(source, target)

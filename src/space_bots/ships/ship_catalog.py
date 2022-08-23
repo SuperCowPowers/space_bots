@@ -52,7 +52,7 @@ ship_specs = {
          'shield_width': 2,
          'shield_recharge': 0.0025,
          'hull_recharge': 0.0025,
-         'keep_range': 300,
+         'keep_range': 400,
          'threat': 80
          },
     'fighter':
@@ -116,7 +116,7 @@ ship_specs = {
          'radius': 12,
          'hp': 200,
          'shield': 150,
-         'laser_range': 120,
+         'laser_range': 100,
          'laser_damage': 0.15,
          'laser_width': 8,
          'capacitor': 30,
@@ -124,7 +124,7 @@ ship_specs = {
          'shield_width': 2,
          'shield_recharge': 0.005,
          'hull_recharge': 0.005,
-         'keep_range': 300,
+         'keep_range': 400,
          'threat': 30
          },
     'starbase':
