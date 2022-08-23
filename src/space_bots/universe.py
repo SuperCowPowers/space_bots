@@ -25,7 +25,7 @@ class Universe:
         self.individual_entities = []
         self.is_finalized = False
         self.time_slow = 0.05
-        self.initial_count_down = True
+        self.initial_count_down = False
 
     def finalize(self):
         """Tasks to do after initial universe setup"""

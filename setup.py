@@ -18,7 +18,7 @@ def get_files(dir_name):
 setup(
     name='space_bots',
     # use_scm_version=True,
-    version='0.1.1',
+    version='0.1.3',
     description='An AutoChess (Battler) where you compete with Space Mining Robots',
     long_description=readme,
     long_description_content_type='text/markdown',
