@@ -12,5 +12,14 @@ pip install space_bots
 <img style="padding:0px" src="docs/images/screen_shot_1.png">
 
 ## Videos
-https://user-images.githubusercontent.com/4806709/186265111-fd741980-5783-4323-8c9e-0461132d48c4.mov
+The whole point of the game is to mine resources and protect the miner. The more Z-Nite (future mineral) you mine the more ships/upgrades you can make. To protect the miner you have a 'dungeon group' and yes classes matter.. a group of DPS would get wiped quickly.
+- Healer = Green
+- Tank = Blue
+- DPS = Fuchsia
+- Miner = Yellow
+
+Narration:
+- The Zerg enemy comes in, tank takes position up front. The miner is trying to get his job done (with extra hazard pay). The healer stays protected and heals from the back. At some point the tanks almost dies, throws a protective shield on himself. The healer tries to keep up with the damage but eventually we lose the tank. But the miner is safe so we live for the next wave...
+
+https://user-images.githubusercontent.com/4806709/186267346-2d81aa5f-42f6-4da1-8d6b-2cbaca48e93e.mov
 
