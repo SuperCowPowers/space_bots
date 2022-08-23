@@ -91,8 +91,14 @@ class Universe:
 
     def draw(self):
         """Let all the entities in the Universe draw themselves"""
-        for entity in self.all_entities:
-            entity.draw()
+
+        # Ships first
+        for ship in self.all_ships:
+            ship.draw()
+
+        # Planets next
+        for planet in self.planets:
+            planet.draw()
 
     def collision_detection(self):
         """Detect if any entity is colliding with another entity"""
@@ -117,10 +123,8 @@ class Universe:
 
                 # Compute any collision forces
                 (dx, dy), (p_dx, p_dy) = force_utils.repulsion_forces(ship, planet)
-                ship.force_x += dx
-                ship.force_y += dy
-                planet.force_x += p_dx
-                planet.force_y += p_dy
+                ship.force_x += dx * 10
+                ship.force_y += dy * 10
 
         # Last: Ships against boundaries
         # FIXME
@@ -129,13 +133,13 @@ class Universe:
             _ship.x = min(max(_ship.x, self.pad/4), self.width-self.pad/4)
             _ship.y = min(max(_ship.y, self.pad/4), self.height-self.pad/4)
 
-    def closest_planet(self, ship):
-        planet_distance = [(p, force_utils.distance_between(ship, p)) for p in self.planets]
-        planet_distance.sort(key=lambda tup: tup[1])
-        return [p[0] for p in planet_distance][0]
-
     def _space_out_planets(self):
         """Make sure planets don't overlap"""
+
+        # First resolve any coincident planets
+        force_utils.resolve_coincident(self.planets)
+
+        # Now Space out the planets
         for _ in range(50):
             for _planet in self.planets:
                 for co_planet in self.planets:
@@ -156,9 +160,11 @@ class Universe:
 
 # Simple test of the Universe functionality
 def test():
-    from space_bots import game_engine_adapter
+    from space_bots import game_engine_adapter, battle_state
     from space_bots.squad import Squad
     from space_bots.ships.ship import Ship
+    from space_bots.ships.miner import Miner
+    from space_bots.ships.healer import Healer
     from space_bots.planet import Planet
 
     """Test for Universe Class"""
@@ -173,32 +179,26 @@ def test():
     my_universe.set_game_engine(my_game_engine)
 
     # Create our Squad
-    my_squad = Squad(team='player', target_strategy='nearest', stance='defensive')
-    miner = Ship(my_game_engine, 900, 600, ship_type='miner')
+    my_squad = Squad(team='player', target_strategy='threat', stance='defensive')
+    miner = Miner(my_game_engine, 1000, 600)
     my_squad.add_ship(miner)
-    healer = Ship(my_game_engine, 650, 600, ship_type='healer')
+    healer = Healer(my_game_engine, 950, 600)
     my_squad.add_ship(healer)
-    shielder = Ship(my_game_engine, 700, 500, ship_type='shielder')
+    shielder = Ship(my_game_engine, 900, 500, ship_type='shielder')
     my_squad.add_ship(shielder)
-    fighter = Ship(my_game_engine, 850, 500, ship_type='fighter')
+    fighter = Ship(my_game_engine, 950, 500, ship_type='fighter')
     my_squad.add_ship(fighter)
-    fighter = Ship(my_game_engine, 680, 680, ship_type='fighter')
+    fighter = Ship(my_game_engine, 980, 680, ship_type='fighter')
     my_squad.add_ship(fighter)
-    fighter = Ship(my_game_engine, 600, 600, ship_type='fighter')
+    fighter = Ship(my_game_engine, 900, 600, ship_type='fighter')
     my_squad.add_ship(fighter)
 
     # Create a Pirate Squad (who doesn't want to be a pirate?)
-    pirate_squad = Squad(team='pirate', target_strategy='threat', stance='offensive')
+    pirate_squad = Squad(team='pirate', target_strategy='nearest', stance='offensive')
     healer = Ship(my_game_engine, 150, 100, ship_type='shaman')
     pirate_squad.add_ship(healer)
     healer = Ship(my_game_engine, 150, 100, ship_type='shaman')
     pirate_squad.add_ship(healer)
-    fighter = Ship(my_game_engine, 200, 100, ship_type='berserker')
-    pirate_squad.add_ship(fighter)
-    fighter = Ship(my_game_engine, 200, 100, ship_type='berserker')
-    pirate_squad.add_ship(fighter)
-    fighter = Ship(my_game_engine, 250, 100, ship_type='berserker')
-    pirate_squad.add_ship(fighter)
     fighter = Ship(my_game_engine, 200, 100, ship_type='berserker')
     pirate_squad.add_ship(fighter)
     fighter = Ship(my_game_engine, 200, 100, ship_type='berserker')
@@ -206,9 +206,14 @@ def test():
     fighter = Ship(my_game_engine, 250, 100, ship_type='berserker')
     pirate_squad.add_ship(fighter)
 
+    # Add a zerg
+    for _ in range(20):
+        pirate_squad.add_ship(Ship(my_game_engine, 200, 100, ship_type='scout'))
+
     # Give our Squads the Battle State (universal in this case)
-    my_squad.give_battle_state(my_universe)
-    pirate_squad.give_battle_state(my_universe)
+    my_battle_state = battle_state.BattleState(my_universe)
+    my_squad.set_battle_state(my_battle_state)
+    pirate_squad.set_battle_state(my_battle_state)
 
     # Add both Squads to the Universe
     my_universe.add_squad(my_squad)
@@ -220,7 +225,7 @@ def test():
         my_universe.add_planet(my_planet)
 
     # Add Protection Orders
-    my_squad.protect(my_universe.closest_planet(my_squad.ships[0]))
+    my_squad.protect(my_battle_state.closest_planet(my_squad.ships[0]))
 
     # Invoke the event loop
     my_game_engine.event_loop()

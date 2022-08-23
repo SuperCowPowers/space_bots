@@ -1,4 +1,5 @@
 """Planet: Class for the Planets in Space Bots"""
+import os
 
 # Local Imports
 from space_bots import entity
@@ -11,13 +12,14 @@ class Planet(entity.Entity):
 
         # Set my attributes
         self.radius = 35  # Hard coded for now
-        self.collision_radius = self.radius
+        self.collision_radius = self.radius + 10
 
         # Call SuperClass (Entity) Initialization
         super().__init__(game_engine, x, y, mass=1000, collision_radius=self.collision_radius)
 
         # Grab our planet image
-        self.planet_image = game_engine.image_load('images/planet_brown.png', 80, 80)
+        image_path = os.path.join(os.path.dirname(__file__), 'images/planet_brown.png')
+        self.planet_image = game_engine.image_load(image_path, 80, 80)
         self.image_x = self.x - self.radius - 5
         self.image_y = self.y - self.radius - 5
 

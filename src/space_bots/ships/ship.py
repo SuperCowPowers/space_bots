@@ -18,9 +18,19 @@ class Ship(entity.Entity):
         self.p = ship_parameters.ShipParameters(ship_type)
         self.s = ship_state.ShipState(ship_type)
 
+        # Battle State/Reconnaissance
+        self.battle_state = None
+
         # Call SuperClass (Entity) Initialization
         super().__init__(game_engine, x, y, mass=self.p.mass, speed=self.p.speed,
                          collision_radius=self.p.collision_radius)
+
+        # Hack
+        if ship_type == 'scout':
+            self.force_damp = 0.999
+
+    def set_battle_state(self, battle_state):
+        self.battle_state = battle_state
 
     def within_range(self, target):
         """Is this target within weapons range"""
@@ -39,6 +49,19 @@ class Ship(entity.Entity):
             self.s.shield = 0
             self.s.hp = max(self.s.hp - points, 0)
 
+    def heal(self, points):
+        """Heal any damage on this ship"""
+
+        # Heal might cover some hull and some shield
+        hull_damage = self.p.hp - self.s.hp
+        if hull_damage:
+            self.s.hp = min(self.s.hp + points, self.p.hp)
+            points -= hull_damage
+
+        # Now Shield
+        if points > 0:
+            self.s.shield = min(self.s.shield + points, self.p.shield)
+
     def health(self):
         return self.s.hp + self.s.shield
 
@@ -54,18 +77,12 @@ class Ship(entity.Entity):
     def is_dead(self):
         return self.s.hp == 0
 
-    def position_delta(self, target, fraction=1.0):
-        dx = (target[0] - self.x) * fraction
-        dy = (target[1] - self.y) * fraction
-        return dx, dy
-
     def communicate(self):
         """Communicate with Squad or Team"""
         pass
 
-    def update(self):
-        """Update the Ship"""
-
+    def general_ship_updates(self):
+        """Update the general things associated with all ships"""
         # Shield recharge
         self.s.shield += self.p.shield_recharge
         self.s.shield = min(self.s.shield, self.p.shield)
@@ -74,8 +91,14 @@ class Ship(entity.Entity):
         self.s.hp += self.p.hull_recharge
         self.s.hp = min(self.s.hp, self.p.hp)
 
+    def update(self):
+        """Update the Ship"""
+
+        # General updates
+        self.general_ship_updates()
+
         # Choose the main target if it's within range, otherwise ask for secondary target
-        if self.squad and self.ship_type not in ['healer', 'miner']:
+        if self.squad:
             if self.squad.main_target and self.within_range(self.squad.main_target):
                 self.s.target = self.squad.main_target
             else:

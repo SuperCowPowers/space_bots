@@ -25,6 +25,6 @@ class ShipParameters:
         self.shield_width = ship_specs[ship_type]['shield_width']
         self.keep_range = ship_specs[ship_type]['keep_range']
         self.threat = ship_specs[ship_type]['threat']
-        self.shield_radius = self.radius + self.shield_width + 1
-        self.collision_radius = self.shield_radius
+        self.shield_radius = self.radius + self.shield_width
+        self.collision_radius = self.shield_radius * 1.1
         self.total_health = self.hp + self.shield

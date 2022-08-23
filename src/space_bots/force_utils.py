@@ -36,7 +36,6 @@ def repulsion_forces(source, target, rest_distance=None):
 
     # Are we coincident?
     if cur_distance < 0.001:
-        print('<<< COINCIDENT >>>')
         # Force a position change (just source is fine)
         source.x += uniform(-10, 10)
         source.y += uniform(-10, 10)
@@ -85,6 +84,20 @@ def force_based_movement(entity, limit=None):
         delta_y = max(min(delta_y, limit), -limit)
     entity.x += delta_x
     entity.y += delta_y
+
+
+def resolve_coincident(entity_list):
+    """Make sure that all entities do not coincide"""
+
+    for e1 in entity_list:
+        for e2 in entity_list:
+            cur_distance = distance_between(e1, e2)
+
+            # Are we coincident?
+            if cur_distance < 0.001:
+                # Force a position change (just e1 is fine)
+                e1.x += uniform(-10, 10)
+                e1.y += uniform(-10, 10)
 
 
 # Simple test of the ForceUtils functionality

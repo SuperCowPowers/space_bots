@@ -10,7 +10,7 @@ import statistics
 import math
 
 # Local Imports
-from space_bots import force_utils
+from space_bots import force_utils, battle_state
 
 
 class Squad:
@@ -53,12 +53,10 @@ class Squad:
         ship.squad = self
         self.ships.append(ship)
 
-    def give_battle_state(self, battle_state):
+    def set_battle_state(self, battle_state):
         self.battle_state = battle_state
-
-    def adversary_ships(self):
-        """Ask the battle state for ships not on my team"""
-        return [s for s in self.battle_state.all_ships if s.team != self.team]
+        for ship in self.ships:
+            ship.set_battle_state(battle_state)
 
     def protect(self, asset):
         """Tell the Squad to protect a planet, squad or ship (asset)"""
@@ -76,7 +74,7 @@ class Squad:
         self.ships = [s for s in self.ships if not s.is_dead()]
 
         # Get my adversaries
-        self.adversaries = self.adversary_ships()
+        self.adversaries = self.battle_state.adversary_ships(self)
 
         # Compute health, mass, and threat (mass*1/distance)
         self.ship_health = self.lowest_health()
@@ -203,7 +201,7 @@ class Squad:
 def test():
     """Test for Squad Class"""
     from space_bots import game_engine_adapter
-    from space_bots.ships import ship
+    from space_bots.ships import ship, miner, healer
     from space_bots.universe import Universe
 
     # Create a universe
@@ -217,19 +215,17 @@ def test():
 
     # Create our Squad
     my_squad = Squad(team='player', target_strategy='threat')
-    miner = ship.Ship(my_game_engine, 100, 100, ship_type='miner')
-    my_squad.add_ship(miner)
-    healer = ship.Ship(my_game_engine, 200, 200, ship_type='healer')
+    healer = healer.Healer(my_game_engine, 200, 200)
     my_squad.add_ship(healer)
     shielder = ship.Ship(my_game_engine, 300, 300, ship_type='shielder')
     my_squad.add_ship(shielder)
     fighter = ship.Ship(my_game_engine, 100, 300, ship_type='fighter')
     my_squad.add_ship(fighter)
+    miner = miner.Miner(my_game_engine, 100, 100)
+    my_squad.add_ship(miner)
 
     # Create a Pirate Squad (who doesn't want to be a pirate?)
     pirate_squad = Squad(team='pirate')
-    miner = ship.Ship(my_game_engine, 500, 500, ship_type='miner')
-    pirate_squad.add_ship(miner)
     healer = ship.Ship(my_game_engine, 600, 600, ship_type='healer')
     pirate_squad.add_ship(healer)
     shielder = ship.Ship(my_game_engine, 700, 700, ship_type='shielder')
@@ -238,8 +234,9 @@ def test():
     pirate_squad.add_ship(fighter)
 
     # Give our Squads the Battle State (universal in this case)
-    my_squad.give_battle_state(my_universe)
-    pirate_squad.give_battle_state(my_universe)
+    my_battle_state = battle_state.BattleState(my_universe)
+    my_squad.set_battle_state(my_battle_state)
+    pirate_squad.set_battle_state(my_battle_state)
 
     # Add both Squads to the Universe
     my_universe.add_squad(my_squad)
