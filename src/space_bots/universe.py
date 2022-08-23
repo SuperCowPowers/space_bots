@@ -199,7 +199,13 @@ def test():
     pirate_squad.add_ship(healer)
     healer = Ship(my_game_engine, 150, 100, ship_type='shaman')
     pirate_squad.add_ship(healer)
+    healer = Ship(my_game_engine, 150, 100, ship_type='shaman')
+    pirate_squad.add_ship(healer)
     fighter = Ship(my_game_engine, 200, 100, ship_type='berserker')
+    pirate_squad.add_ship(fighter)
+    fighter = Ship(my_game_engine, 200, 100, ship_type='berserker')
+    pirate_squad.add_ship(fighter)
+    fighter = Ship(my_game_engine, 250, 100, ship_type='berserker')
     pirate_squad.add_ship(fighter)
     fighter = Ship(my_game_engine, 200, 100, ship_type='berserker')
     pirate_squad.add_ship(fighter)
@@ -216,8 +222,8 @@ def test():
     pirate_squad.set_battle_state(my_battle_state)
 
     # Add both Squads to the Universe
-    my_universe.add_squad(my_squad)
     my_universe.add_squad(pirate_squad)
+    my_universe.add_squad(my_squad)
 
     # Add some planets
     for _ in range(8):
