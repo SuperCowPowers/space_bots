@@ -13,7 +13,7 @@ class Ship(entity.Entity):
         self.squad = None
         self.team = None
 
-        # Set my Ship Parameters and State
+        # Set my Ship Parameters, State, and Buffs
         self.ship_type = ship_type
         self.p = ship_parameters.ShipParameters(ship_type)
         self.s = ship_state.ShipState(ship_type)
@@ -31,7 +31,7 @@ class Ship(entity.Entity):
                          collision_radius=self.p.collision_radius)
 
         # Hack
-        if ship_type == 'scout':
+        if ship_type in ['scout', 'zergling']:
             self.force_damp = 0.999
 
     def set_battle_state(self, battle_state):
@@ -52,19 +52,31 @@ class Ship(entity.Entity):
         self.combat_timer = 100
 
         # Damage modifiers
-        points *= self.p.damage_modifier
+        points *= self.p.damage_modifier  # FIXME should be state
+
+        # Extra Shield Damage
+        if points < self.s.extra_shield:
+            self.s.extra_shield -= points
+            return
+
+        # We're into Shield (so explicitly set extra shield to 0)
+        points -= self.s.extra_shield
+        self.s.extra_shield = 0
 
         # Shield Damage
         if points < self.s.shield:
             self.s.shield -= points
+            return
 
-        # Shield and Hull Damage
-        else:
-            points -= self.s.shield
-            self.s.shield = 0
-            self.s.hp -= points
-            if self.s.hp <= 0:
-                self.dead = True
+        # We're into Hull/HP (so explicitly set shield to 0)
+        points -= self.s.shield
+        self.s.shield = 0
+
+        # Hull Damage
+        self.s.hp -= points
+        if self.s.hp <= 0:
+            self.s.hp = 0
+            self.dead = True
 
     def heal(self, points):
         """Heal any damage on this ship"""
@@ -80,7 +92,7 @@ class Ship(entity.Entity):
             self.s.shield = min(self.s.shield + points, self.p.shield)
 
     def health(self):
-        return self.s.hp + self.s.shield
+        return self.s.hp + self.s.shield  # Not counting self.s.extra_shield for now
 
     def health_percent(self):
         return self.health()/self.p.total_health
@@ -123,28 +135,18 @@ class Ship(entity.Entity):
             else:
                 self.s.target = self.squad.secondary_target(self)
 
-        # Compute my non targets
-        self.s.non_targets = self.squad.adversaries.copy() if self.squad else []
-
-        # Compute target logic only if I have a target
-        if self.s.target:
-            # Remove target from the non targets list
-            self.s.non_targets.remove(self.s.target)
-
-            # Move Towards (Attack)
-            (dx, dy), (_, _) = force_utils.attraction_forces(self, self.s.target, self.p.laser_range/1.5)
+        # Move towards primary target (even if it's not my current target)
+        if self.squad.main_target:
+            (dx, dy), (_, _) = force_utils.attraction_forces(self, self.squad.main_target, self.p.laser_range/1.2)
             self.force_x += dx
             self.force_y += dy
 
-    def general_avoidance(self):
+    def general_avoidance(self, factor=0.5):
         """Avoidance logic that's useful for most ships"""
-
-        # Avoidance of Non Targets
-        avoid_ships = self.squad.adversaries
-        for other_ship in avoid_ships:
-            (dx, dy), (_, _) = force_utils.repulsion_forces(self, other_ship, rest_distance=self.p.keep_range)
-            self.force_x += dx
-            self.force_y += dy
+        for enemy_ship in self.squad.adversaries:
+            (dx, dy), (_, _) = force_utils.repulsion_forces(self, enemy_ship, rest_distance=self.p.keep_range)
+            self.force_x += dx * factor
+            self.force_y += dy * factor
 
     def update(self):
         """Update the Ship"""
@@ -162,6 +164,7 @@ class Ship(entity.Entity):
         self.draw_laser()
         self.draw_ship()
         self.draw_shield()
+        self.draw_buffs()
 
     def draw_ship(self):
         """Draw the Ship Icon"""
@@ -171,7 +174,7 @@ class Ship(entity.Entity):
         self.game_engine.draw_circle(hull_color, (self.x, self.y), self.p.radius, width=self.p.ship_width)
 
         # FIXME
-        width = 1 if self.ship_type == 'scout' else 0
+        width = 1 if self.ship_type in ['scout', 'zergling'] else 0
         if self.low_health():
             self.game_engine.draw_circle((200, 200, 0), (self.x, self.y), 5, width=width)
         if self.critical_health():
@@ -195,6 +198,34 @@ class Ship(entity.Entity):
         else:
             shield_color = (shield_health, shield_health, shield_health)
         self.game_engine.draw_circle(shield_color, (self.x, self.y), self.p.shield_radius, width=self.p.shield_width)
+
+        # Do we have an extra shield?
+        if self.s.extra_shield > 0:
+            shield_health = 220 * self.s.extra_shield / 800 + 35  # FIXME: Hardcode
+            shield_color = (shield_health/2, shield_health/2, shield_health)
+            self.game_engine.draw_circle(shield_color, (self.x, self.y), self.p.shield_radius+4, width=3)
+
+    def add_buff(self, buff):
+        """Add a buff to this ship"""
+        self.s.buffs.add(buff)
+
+        # Buff effects
+        effects = self.s.buff_info[buff]['effects']
+        for attribute, value in effects.items():
+            setattr(self.s, attribute, value)
+
+        # FIXME: Do something with the timers
+
+    def draw_buffs(self):
+        """Draw any buffs we might have"""
+        # Each buff gets a +2 radius :)
+        buff_pos = self.p.shield_radius+8 if self.s.extra_shield else self.p.shield_radius+4
+        for buff in self.s.buffs:
+            # Is it a buff that we display?
+            if self.s.buff_info[buff]['display']:
+                color = self.s.buff_info[buff]['color']
+                self.game_engine.draw_circle(color, (self.x, self.y), buff_pos, width=2)
+                buff_pos += 2
 
 
 # Simple test of the Ship functionality

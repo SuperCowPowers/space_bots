@@ -1,6 +1,6 @@
 """ForceUtils: A set of Operations to compute forces on space_bot Entities"""
 import math
-from random import uniform
+from random import gauss
 
 
 def distance_between(source, target):
@@ -37,8 +37,8 @@ def repulsion_forces(source, target, rest_distance=None):
     # Are we coincident?
     if cur_distance < 0.001:
         # Force a position change (just source is fine)
-        source.x += uniform(-10, 10)
-        source.y += uniform(-10, 10)
+        source.x += gauss(0, 30)
+        source.y += gauss(0, 30)
         return (0, 0), (0, 0)
 
     # Okay the repulsion will be greater the closer we are
@@ -48,9 +48,15 @@ def repulsion_forces(source, target, rest_distance=None):
     # Compute normalized distance vectors
     norm_st, norm_ts = normalized_distance_vectors(source, target)
 
-    # Final Repulsion Calculation
+    # Repulsion Calculation
     source_repulsion = (-norm_st[0] * repulsion_factor, -norm_st[1] * repulsion_factor)
     target_repulsion = (-source_repulsion[0], -source_repulsion[1])  # Opposite
+
+    # Mass ratio (do we want this?)
+    t_s_ratio = target.mass/source.mass
+    s_t_ratio = source.mass/target.mass
+    source_repulsion = (source_repulsion[0]*t_s_ratio, source_repulsion[1]*t_s_ratio)
+    source_repulsion = (source_repulsion[0] * s_t_ratio, source_repulsion[1] * s_t_ratio)
     return source_repulsion, target_repulsion
 
 
@@ -96,8 +102,8 @@ def resolve_coincident(entity_list):
             # Are we coincident?
             if cur_distance < 0.001:
                 # Force a position change (just e1 is fine)
-                e1.x += uniform(-10, 10)
-                e1.y += uniform(-10, 10)
+                e1.x += gauss(0, 50)
+                e1.y += gauss(0, 50)
 
 
 # Simple test of the ForceUtils functionality

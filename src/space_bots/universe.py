@@ -24,7 +24,7 @@ class Universe:
         self.all_entities = []
         self.individual_entities = []
         self.is_finalized = False
-        self.time_slow = 0.05
+        self.time_slow = 0.01
         self.initial_count_down = False
 
     def finalize(self):
@@ -191,7 +191,7 @@ def test():
     my_universe.set_game_engine(my_game_engine)
 
     # Create our Squad
-    my_squad = Squad(team='good guys', squad_name='roughnecks', target_strategy='threat', stance='defensive')
+    my_squad = Squad(team='earth', squad_name='roughnecks', target_strategy='threat', stance='defensive')
     miner = miner.Miner(my_game_engine, 1000, 600)
     my_squad.add_ship(miner)
     healer = healer.Healer(my_game_engine, 950, 600)
@@ -204,6 +204,11 @@ def test():
     my_squad.add_ship(fighter)
     fighter = Ship(my_game_engine, 900, 600, ship_type='fighter')
     my_squad.add_ship(fighter)
+
+    # Add a scout squad
+    scout_squad = Squad(team='earth', squad_name='scouts', target_strategy='low_health', stance='offensive')
+    for _ in range(10):
+        scout_squad.add_ship(Ship(my_game_engine, 800, 850, ship_type='scout'))
     """
     for _ in range(5):
         # my_tank = tank.Tank(my_game_engine, 950, 600)
@@ -215,36 +220,32 @@ def test():
     """
 
     # Create a Pirate Squad (who doesn't want to be a pirate?)
-    pirate_squad = Squad(team='pirate', squad_name='xenos', target_strategy='nearest', stance='offensive')
-    healer = Ship(my_game_engine, 200, 200, ship_type='shaman')
-    pirate_squad.add_ship(healer)
-    healer = Ship(my_game_engine, 200, 200, ship_type='shaman')
-    pirate_squad.add_ship(healer)
-    healer = Ship(my_game_engine, 200, 200, ship_type='shaman')
-    pirate_squad.add_ship(healer)
-    healer = Ship(my_game_engine, 200, 200, ship_type='shaman')
-    pirate_squad.add_ship(healer)
-    fighter = Ship(my_game_engine, 200, 200, ship_type='berserker')
-    pirate_squad.add_ship(fighter)
-    fighter = Ship(my_game_engine, 200, 200, ship_type='berserker')
-    pirate_squad.add_ship(fighter)
-    fighter = Ship(my_game_engine, 250, 200, ship_type='berserker')
-    pirate_squad.add_ship(fighter)
+    pirate_squad = Squad(team='xenos', squad_name='pirates', target_strategy='nearest', stance='offensive')
+    pirate_squad.add_ship(Ship(my_game_engine, 200, 200, ship_type='spitter'))
+    pirate_squad.add_ship(Ship(my_game_engine, 200, 200, ship_type='spitter'))
+    pirate_squad.add_ship(Ship(my_game_engine, 200, 200, ship_type='spitter'))
+    pirate_squad.add_ship(Ship(my_game_engine, 200, 200, ship_type='spitter'))
+    pirate_squad.add_ship(Ship(my_game_engine, 200, 200, ship_type='berserker'))
+    pirate_squad.add_ship(Ship(my_game_engine, 200, 200, ship_type='berserker'))
+    pirate_squad.add_ship(Ship(my_game_engine, 200, 200, ship_type='berserker'))
+    pirate_squad.add_ship(Ship(my_game_engine, 200, 200, ship_type='berserker'))
 
-    # Add a zerg
-    zerg_squad = Squad(team='pirate', squad_name='zerg', target_strategy='low_health', stance='offensive')
-    for _ in range(30):
-        zerg_squad.add_ship(Ship(my_game_engine, x=randint(200, 320), y=randint(800, 900), ship_type='scout'))
+    # Add a zerg squad
+    zerg_squad = Squad(team='xenos', squad_name='zerg', target_strategy='low_health', stance='offensive')
+    for _ in range(20):
+        zerg_squad.add_ship(Ship(my_game_engine, 200, 850, ship_type='zergling'))
 
     # Give our Squads the Battle State (universal in this case)
     my_battle_state = battle_state.BattleState(my_universe)
     my_squad.set_battle_state(my_battle_state)
+    scout_squad.set_battle_state(my_battle_state)
     pirate_squad.set_battle_state(my_battle_state)
     zerg_squad.set_battle_state(my_battle_state)
 
     # Add both Squads to the Universe
     my_universe.add_squad(zerg_squad)
     my_universe.add_squad(pirate_squad)
+    # my_universe.add_squad(scout_squad)
     my_universe.add_squad(my_squad)
 
     # Add some planets

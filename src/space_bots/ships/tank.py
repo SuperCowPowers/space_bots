@@ -15,7 +15,7 @@ class Tank(ship.Ship):
         # Tank specific stuff
         self.protect_target = None
         self.p.damage_modifier = 0.80  # 20% reduction
-        self.collision_radius = self.p.shield_radius * 2  # Tanks need space
+        self.collision_radius = self.p.shield_radius * 1.5  # Tanks need space
         self.shield_thrown = False
 
     def communicate(self):
@@ -33,11 +33,17 @@ class Tank(ship.Ship):
         # Tank specific stuff
         self.shield_thrown = False if not self.squad_in_combat() else self.shield_thrown
 
+        # Move towards primary target (Tanks need to 'get in there')
+        if self.squad.main_target:
+            (dx, dy), (_, _) = force_utils.attraction_forces(self, self.squad.main_target, self.p.laser_range/1.2)
+            self.force_x += dx
+            self.force_y += dy
+
         # Track the lowest health TeamMate
         self.protect_target = self.battle_state.lowest_health_teammate(self)
         if not self.shield_thrown and self.protect_target.health_percent() < .1:
             print('Tank: Take the Pain!')
-            self.protect_target.s.shield = self.protect_target.p.shield
+            self.protect_target.add_buff('take_the_pain')
             self.shield_thrown = True
 
         # Now actually call the move command (which uses force/mass calc)

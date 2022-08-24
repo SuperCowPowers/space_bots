@@ -159,12 +159,12 @@ class Squad:
 
     def highest_mass(self):
         ship_mass = [(s, s.mass) for s in self.adversaries]
-        ship_mass.sort(key=lambda tup: -tup[1])
+        ship_mass.sort(key=lambda tup: tup[1], reverse=True)
         return [s[0] for s in ship_mass]
 
     def highest_threat(self):
         ship_threat = [(s, s.p.threat) for s in self.adversaries]
-        ship_threat.sort(key=lambda tup: -tup[1])
+        ship_threat.sort(key=lambda tup: tup[1], reverse=True)
         return [s[0] for s in ship_threat]
 
     def distance_from_squad(self):
@@ -232,7 +232,7 @@ class Squad:
 def test():
     """Test for Squad Class"""
     from space_bots import game_engine_adapter
-    from space_bots.ships import ship, miner, healer
+    from space_bots.ships import ship, miner, healer, tank
     from space_bots.universe import Universe
 
     # Create a universe
@@ -245,33 +245,34 @@ def test():
     my_universe.set_game_engine(my_game_engine)
 
     # Create our Squad
-    my_squad = Squad(team='player', squad_name='roughnecks', target_strategy='threat')
-    healer = healer.Healer(my_game_engine, 200, 200)
-    my_squad.add_ship(healer)
-    shielder = ship.Ship(my_game_engine, 300, 300, ship_type='shielder')
-    my_squad.add_ship(shielder)
-    fighter = ship.Ship(my_game_engine, 100, 300, ship_type='fighter')
-    my_squad.add_ship(fighter)
-    miner = miner.Miner(my_game_engine, 100, 100)
-    my_squad.add_ship(miner)
+    my_squad = Squad(team='earth', squad_name='roughnecks', target_strategy='threat')
+    my_squad.add_ship(healer.Healer(my_game_engine, 600, 400))
+    my_squad.add_ship(tank.Tank(my_game_engine, 600, 400))
+    my_squad.add_ship(ship.Ship(my_game_engine, 600, 400, ship_type='fighter'))
+    my_squad.add_ship(miner.Miner(my_game_engine, 600, 400))
 
     # Create a Pirate Squad (who doesn't want to be a pirate?)
-    pirate_squad = Squad(team='pirate', squad_name='xenos')
-    healer = ship.Ship(my_game_engine, 600, 600, ship_type='healer')
-    pirate_squad.add_ship(healer)
-    shielder = ship.Ship(my_game_engine, 700, 700, ship_type='shielder')
-    pirate_squad.add_ship(shielder)
-    fighter = ship.Ship(my_game_engine, 700, 700, ship_type='fighter')
-    pirate_squad.add_ship(fighter)
+    pirate_squad = Squad(team='xenos', squad_name='pirates', target_strategy='nearest')
+    pirate_squad.add_ship(ship.Ship(my_game_engine, 1200, 700, ship_type='spitter'))
+    pirate_squad.add_ship(ship.Ship(my_game_engine, 1200, 700, ship_type='berserker'))
+    pirate_squad.add_ship(ship.Ship(my_game_engine, 1200, 700, ship_type='berserker'))
+    pirate_squad.add_ship(ship.Ship(my_game_engine, 1200, 700, ship_type='berserker'))
+
+    # Add a Zerg squad
+    zerg_squad = Squad(team='xenos', squad_name='zerg me', target_strategy='low_health', stance='offensive')
+    for _ in range(10):
+        zerg_squad.add_ship(ship.Ship(my_game_engine, 1200, 700, ship_type='zergling'))
 
     # Give our Squads the Battle State (universal in this case)
     my_battle_state = battle_state.BattleState(my_universe)
     my_squad.set_battle_state(my_battle_state)
     pirate_squad.set_battle_state(my_battle_state)
+    zerg_squad.set_battle_state(my_battle_state)
 
-    # Add both Squads to the Universe
-    my_universe.add_squad(my_squad)
+    # Add all Squads to the Universe
+    my_universe.add_squad(zerg_squad)
     my_universe.add_squad(pirate_squad)
+    my_universe.add_squad(my_squad)
 
     # Invoke the event loop
     my_game_engine.event_loop()
