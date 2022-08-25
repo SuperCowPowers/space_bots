@@ -29,6 +29,4 @@ Remember that the action in the video below are Python Classes (robots) with sim
 
 **NOTE: Turn on Sound for the Auto Announcers!**
 
-
-https://user-images.githubusercontent.com/4806709/186768241-fcf83559-4980-4977-8c05-31e7bdc52d23.mov
-
+https://user-images.githubusercontent.com/4806709/186773673-04d0f0f0-8b47-45e7-9c96-8ed00113af87.mov
