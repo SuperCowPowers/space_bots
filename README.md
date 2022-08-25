@@ -11,6 +11,10 @@ pip install space_bots
 ## New Stuff
 - Auto Annoucers: The current wave/match gets annouced automatically as part of the game. See the video below for an 'auto annouced' match. :)
 
+## Help Wanted
+- Looking for some pygame programmers to help out on the project to make it great!
+- If interested please contact briford@supercowpowers.com
+
 ## Screen Shots
 <img style="padding:0px" src="docs/images/screen_shot_1.png">
 
