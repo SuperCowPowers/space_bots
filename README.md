@@ -25,9 +25,10 @@ The whole point of the game is to mine resources and protect the miner. The more
 - DPS = Fuchsia
 - Miner = Yellow
 
-Remember that the action in the video below are Python Classes (robots) with simple behaviors, the action organically emerges from dropping the robots into the Universe and watching what happens.
+Remember that the action in the video below are Python Classes (robots) with simple behaviors, the action emerges organically from dropping the robots into the Universe and watching what happens.
 
-NOTE:Turn on Sound for the Auto Announcers!
+**NOTE: Turn on Sound for the Auto Announcers!**
 
-https://user-images.githubusercontent.com/4806709/186735688-316cd2ac-1000-427f-b1f5-00944b112141.mov
+
+https://user-images.githubusercontent.com/4806709/186768241-fcf83559-4980-4977-8c05-31e7bdc52d23.mov
 
