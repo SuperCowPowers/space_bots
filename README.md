@@ -8,6 +8,9 @@ An AutoChess (Battler) where you compete with Space Mining Robots. This is a gam
 pip install space_bots
 ```
 
+## New Stuff
+- Auto Annoucers: The current wave/match gets annouced automatically as part of the game. See the video below for an 'auto annouced' match. :)
+
 ## Screen Shots
 <img style="padding:0px" src="docs/images/screen_shot_1.png">
 
@@ -18,9 +21,7 @@ The whole point of the game is to mine resources and protect the miner. The more
 - DPS = Fuchsia
 - Miner = Yellow
 
-Narration:
-- The Zerg enemy comes in, tank takes position up front. The miner is trying to get his job done (with extra hazard pay). The healer stays protected and heals from the back. At some point the tanks almost dies, throws a protective shield on himself. The healer changes targets and manages to keep the entire team up so we're safe.. at least until the next wave... :)
-
 Remember that the action in the video below are Python Classes (robots) with simple behaviors, the action organically emerges from dropping the robots into the Universe and watching what happens.
 
-https://user-images.githubusercontent.com/4806709/186274285-343cacce-38cd-498c-b67c-7bf9d460af58.mov
+https://user-images.githubusercontent.com/4806709/186735688-316cd2ac-1000-427f-b1f5-00944b112141.mov
+
