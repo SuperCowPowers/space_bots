@@ -19,7 +19,7 @@ pip install space_bots
 <img style="padding:0px" src="docs/images/screen_shot_1.png">
 
 ## Videos
-The whole point of the game is to mine resources and protect the miner. The more Z-Nite (future mineral) you mine the more ships/upgrades you can make. To protect the miner you have a 'dungeon group' and yes classes matter.. a group of DPS would get wiped quickly.
+The whole point of the game is to mine resources and protect the miner. The more ZeNite (future mineral) you mine the more ships/upgrades you can make. To protect the miner you have a 'dungeon group' and yes classes matter.. a group of DPS would get wiped quickly.
 - Healer = Green
 - Tank = Blue
 - DPS = Fuchsia
@@ -29,4 +29,4 @@ Remember that the action in the video below are Python Classes (robots) with sim
 
 **NOTE: Turn on Sound for the Auto Announcers!**
 
-https://user-images.githubusercontent.com/4806709/186773673-04d0f0f0-8b47-45e7-9c96-8ed00113af87.mov
+https://user-images.githubusercontent.com/4806709/186977989-a61fa502-8e12-457c-8ed6-17f6f6345adc.mov
