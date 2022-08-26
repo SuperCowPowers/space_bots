@@ -1,7 +1,10 @@
 <img align="right" style="padding:0px" src="docs/images/big_spider.png" width="320">
 
 # Space Mining Robots
-An AutoChess (Battler) where you compete with Space Mining Robots. This is a game about programming (Python) a set of 'bots' with simple behaviors and then just letting them go. It's a bit like Conway's game of life on zoomies (https://playgameoflife.com/). Anyway we just started.. hopefull will be kewl...
+An AutoChess (Battler) where you compete with Space Mining Robots. This is a game about programming (Python) a set of 'bots' with simple behaviors and then just letting them go. It's a bit like Conway's game of life on zoomies (https://playgameoflife.com/).
+
+## GigaVerse Mining
+The game is about 'Bob' starting a new job at GigaVerse Mining. He has no idea what he's getting himself into. GigaVerse has a reputation for mining in the most hostile places in the Universe and you're in the middle of Zerg territory. You play as 'Bob the Miner' and you'll start with just yourself and after advancing in the campaign you'll assemble a team to protect you while your mining. If you die, you'll lose the resources and GigaVerse won't be happy.
     
 ## Installation
 ```
