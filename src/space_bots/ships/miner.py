@@ -30,11 +30,6 @@ class Miner(ship.Ship):
         # Now let my super class do any communication
         super().communicate(comms)
 
-        # Update mining yield
-        # FIXME: Hack
-        if self.mining_yield > 10:
-            self.game_engine.universe.current_text = f'ZeNite: {self.squad.total_zenite:.1f}'
-
     def update(self):
         """Update the Miner"""
 
@@ -43,12 +38,14 @@ class Miner(ship.Ship):
         self.general_avoidance()
 
         # Get my closest Planet and go mine it
-        # FIXME self.mining_planet = self.battle_state.closest_planet(self)
         self.mining_planet = self.squad.protection_asset
         if self.mining_planet:
             (_, _), (dx, dy) = force_utils.attraction_forces(self.mining_planet, self, self.p.laser_range-10)
             self.force_x += dx * 3
             self.force_y += dy * 3
+
+        # Let Squad know my Zenite Yield
+        self.squad.total_zenite += self.mining_yield
 
         # Now actually call the move command (which uses force/mass calc)
         self.move()

@@ -58,6 +58,7 @@ class Squad:
         self.combat_timer = 0
         self.combat_status_change = False
         self.total_zenite = 0
+        self.total_damage = 0
 
     def add_ship(self, ship):
         """Add a Ship to this Squad"""
@@ -97,11 +98,27 @@ class Squad:
     def communicate(self, comms):
         """Squad Communication"""
 
+        # FIXME:
+        if self.team != 'earth':
+            return
+
         # Squad level communication
         if self.combat_status_change:
             if self.in_combat and self.first_combat and self.squad_name == 'roughnecks':
                 comms.announce('lets_rock', 'squad_leader_1')
                 self.first_combat = False
+
+        # Squad Zenite Extracted and Damage Taken
+        zenite_market_price = 100
+        repair_unit_cost = 50
+        zenite_worth = self.total_zenite*zenite_market_price / 1000.0
+        repair_cost = self.total_damage*repair_unit_cost / 1000.0
+        zenite = f'ZeNite@Market: ${zenite_worth:.1f}k'
+        repairs = f' - Repair Cost: ${repair_cost:.1f}k'
+        net = zenite_worth - repair_cost
+        total = f' = ${net:.1f}k'
+        display_text = zenite + repairs + total
+        comms.display('mission_info', display_text)
 
         # Also communicate any queued announcer messages
         while not self.announcer_messages.empty():
@@ -150,8 +167,9 @@ class Squad:
         for _ship in self.ships:
             _ship.update()
 
-        # Last but NOT least how much ZeNite does the squad have
+        # How ZeNite extracted and Damage Taken (Repairs)
         self.total_zenite = sum([m.mining_yield for m in self.ships if m.ship_type == 'miner'])
+        self.total_damage = sum([s.damage_taken for s in self.ships])
 
     def draw(self):
         """Draw the entire squad"""

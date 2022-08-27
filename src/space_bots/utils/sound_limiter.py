@@ -20,7 +20,6 @@ class SoundLimiter:
                sound_name: The name of the sound
                seconds: How many seconds the sound should be limited for (can be fractional)
         """
-        print(f'Adding Limit for {sound_name} : {seconds}')
         expire = time.time() + seconds
         self._store[sound_name] = (expire, seconds)
 

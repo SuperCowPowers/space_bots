@@ -2,6 +2,9 @@
 import queue
 from collections import defaultdict
 
+# Local imports
+from space_bots.utils.sound_limiter import SoundLimiter
+
 
 class Comms:
     """Comms: Class for managing communications in Space Bots"""
@@ -12,6 +15,10 @@ class Comms:
         # Someone can post/pus to a new channel and then a SINGLE consumer can pick
         # up on the communications queue. Fancier 'broadcast' support/etc later
         self.channels = defaultdict(queue.SimpleQueue)
+
+        # Limiter (yes we're using the sound limiter :)
+        self.limiter = SoundLimiter()
+        self.limiter.add_limit('display', 0.5)
 
     def get_messages(self, channel):
         """Get the next message on this channel"""
@@ -31,6 +38,11 @@ class Comms:
     def play_sound(self, sound_name):
         """Post a message to the announcements channel"""
         self.put_message('sounds', sound_name)
+
+    def display(self, display_type, display_info):
+        """Post a message to the display channel"""
+        if not self.limiter.is_limited('display'):
+            self.put_message('display', display_info)
 
 
 # Simple test of the Comms functionality

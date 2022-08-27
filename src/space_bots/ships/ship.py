@@ -30,6 +30,7 @@ class Ship(entity.Entity):
         self.low_health_announced = False
         self.death_announced = False
         self.damage_done = 0
+        self.damage_taken = 0
         self.current_laser_target = None
         self.new_laser_target = False
 
@@ -55,10 +56,11 @@ class Ship(entity.Entity):
 
         # You're in combat
         self.in_combat = True
-        self.combat_timer = 100
+        self.combat_timer = 200
 
         # Damage modifiers
         points *= self.p.damage_modifier  # FIXME should be state
+        self.damage_taken += points
 
         # Extra Shield Damage
         if points < self.s.extra_shield:

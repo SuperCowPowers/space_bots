@@ -102,6 +102,10 @@ class Universe:
         for sound_name in self.comms.get_messages('sounds'):
             self.game_engine.restricted_play_sound(sound_name)
 
+        # Display info/stats
+        for display_text in self.comms.get_messages('display'):
+            self.game_engine.universe.current_text = display_text
+
         # Give the sound queue some cycles
         self.game_engine.play_sound_queue()
 
@@ -269,6 +273,7 @@ def test():
     earth_squad = Squad(team='earth', squad_name='roughnecks', target_strategy='threat', stance='defensive')
     my_miner = miner.Miner(my_game_engine, 850, 700, level=level)
     earth_squad.add_ship(my_miner)
+    earth_squad.add_ship(miner.Miner(my_game_engine, 850, 700, level=level))
     earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=1))
     earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=1))
     earth_squad.add_ship(tank.Tank(my_game_engine, 850, 700, level=2))

@@ -27,7 +27,7 @@ class GameEngineAdapter:
         self.collision_detection = None
 
         # Get a random font
-        self.font = pygame.font.SysFont('chalkduster.ttf', 72)
+        self.font = pygame.font.SysFont('calibri', 36, italic=True)
 
         # Sound Classes
         self.sound_player = SoundPlayer()
@@ -88,9 +88,9 @@ class GameEngineAdapter:
     def draw_polygon(self, color, points, width=3):
         pygame.draw.polygon(self.screen, color, points, width)
 
-    def draw_text(self, text, color=(250, 250, 250)):
+    def draw_text(self, text, color=(220, 220, 220)):
         img = self.font.render(text, True, color)
-        self.screen.blit(img, (self.width - 500, self.height - 50))
+        self.screen.blit(img, (300, self.height-40))
 
     @staticmethod
     def image_load(image_file, x_size=0, y_size=0):
