@@ -33,9 +33,9 @@ class SoundLimiter:
                If the return is 'False' then we update the sounds_name expiration
                with the assumption that the sound is going to be played right now
         """
-        # Do we have a timer for this sound? If not add one with default 5 second limit
+        # Do we have a timer for this sound? If not add one with default 3 second limit
         if self._store.get(sound_name) is None:
-            self.add_limit(sound_name, 5.0)
+            self.add_limit(sound_name, 3.0)
             return False
 
         # Now we test if the sound

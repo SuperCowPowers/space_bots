@@ -271,11 +271,10 @@ def test():
     # Create our Squad
     level = 2
     earth_squad = Squad(team='earth', squad_name='roughnecks', target_strategy='threat', stance='defensive')
-    my_miner = miner.Miner(my_game_engine, 850, 700, level=level)
+    my_miner = miner.Miner(my_game_engine, 850, 700, level=1)
     earth_squad.add_ship(my_miner)
-    earth_squad.add_ship(miner.Miner(my_game_engine, 850, 700, level=level))
-    earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=1))
-    earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=1))
+    earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=2))
+    earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=2))
     earth_squad.add_ship(tank.Tank(my_game_engine, 850, 700, level=2))
     for _ in range(2):
         earth_squad.add_ship(fighter.Fighter(my_game_engine, 850, 700, level=level))
@@ -284,7 +283,7 @@ def test():
 
     drone_squad = Squad(team='earth', squad_name='drones', target_strategy='nearest', stance='defensive')
     for _ in range(2):
-        drone_squad.add_ship(drone.Drone(my_game_engine, 850, 700, level=2))
+        drone_squad.add_ship(drone.Drone(my_game_engine, 850, 700, level=1))
     drone_squad.set_battle_state(my_battle_state)
     my_universe.add_squad(drone_squad)
 
