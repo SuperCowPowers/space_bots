@@ -27,6 +27,9 @@ class Miner(ship.Ship):
             comms.announce('mining_zenite', voice='male')
             self.mining_announced = True
 
+        # Now let my super class do any communication
+        super().communicate(comms)
+
         # Update mining yield
         # FIXME: Hack
         if self.mining_yield > 10:
