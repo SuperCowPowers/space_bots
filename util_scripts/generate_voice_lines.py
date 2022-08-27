@@ -56,14 +56,13 @@ def test():
         'healer_cast_salvation': "Healer casts Salvation!"
     }
     # Announcers
-    """
     for voice in ['male', 'female']:
         for tag, line in voice_lines.items():
             gen_lines.save_voice_line(tag, voice, line)
     gen_lines.run()
-    """
 
     # Squad Leaders
+    """
     voice_lines = {
         'lets_rock': "Let's Rock!",
         'yee_haw': "Yee Haw!"
@@ -72,7 +71,7 @@ def test():
         for tag, line in voice_lines.items():
             gen_lines.save_voice_line(tag, voice, line)
     gen_lines.run()
-
+    """
 
 
 if __name__ == "__main__":
