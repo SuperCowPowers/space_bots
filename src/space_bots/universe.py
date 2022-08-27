@@ -221,7 +221,7 @@ class Universe:
 def test():
     from space_bots import game_engine_adapter, battle_state
     from space_bots.squad import Squad
-    from space_bots.ships import ship, miner, healer, tank, fighter, helper_drone, zergling
+    from space_bots.ships import ship, miner, healer, tank, fighter, drone, zergling
     from space_bots.planet import Planet
 
     """Test for Universe Class"""
@@ -270,16 +270,16 @@ def test():
     my_miner = miner.Miner(my_game_engine, 850, 700, level=level)
     earth_squad.add_ship(my_miner)
     earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=1))
-    # earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=1))
+    earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=1))
     earth_squad.add_ship(tank.Tank(my_game_engine, 850, 700, level=2))
     for _ in range(2):
         earth_squad.add_ship(fighter.Fighter(my_game_engine, 850, 700, level=level))
     earth_squad.set_battle_state(my_battle_state)
     my_universe.add_squad(earth_squad)
 
-    drone_squad = Squad(team='earth', squad_name='helper_drones', target_strategy='nearest', stance='defensive')
+    drone_squad = Squad(team='earth', squad_name='drones', target_strategy='nearest', stance='defensive')
     for _ in range(2):
-        drone_squad.add_ship(helper_drone.HelperDrone(my_game_engine, 850, 700, level=2))
+        drone_squad.add_ship(drone.Drone(my_game_engine, 850, 700, level=2))
     drone_squad.set_battle_state(my_battle_state)
     my_universe.add_squad(drone_squad)
 

@@ -48,6 +48,10 @@ def test():
         'healer_down': "Healer Down!",
         'miner_low': "Miner Low!",
         'miner_down': "Miner Down!",
+        'fighter_low': "Fighter Low!",
+        'fighter_down': "Fighter Down!",
+        'drone_low': "Drone Low",
+        'drone_down': "Drone Down",
         'tank_cast_pain': "Tank casts 'Take the Pain'!",
         'healer_cast_salvation': "Healer casts Salvation!"
     }

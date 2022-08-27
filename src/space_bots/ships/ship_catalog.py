@@ -73,7 +73,7 @@ ship_specs = {
          'keep_range': 400,
          'threat': 30
          },
-    'helper_drone':
+    'drone':
         {'color': (180, 200, 100),
          'mass': 40,  # A bit high, so they don't get bounced around too much
          'speed': 0.6,

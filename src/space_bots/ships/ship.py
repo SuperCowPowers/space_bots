@@ -207,6 +207,8 @@ class Ship(entity.Entity):
             self.game_engine.draw_circle((220, 110, 20), (self.x, self.y), health_indicator_radius, width=width)
         elif self.medium_health():
             self.game_engine.draw_circle((200, 200, 20), (self.x, self.y), health_indicator_radius, width=width)
+        elif self.health_percent() < 0.7:
+            self.game_engine.draw_circle((100, 100, 10), (self.x, self.y), health_indicator_radius, width=width)
 
         # Level Pips
         pip_y = self.y-self.p.radius

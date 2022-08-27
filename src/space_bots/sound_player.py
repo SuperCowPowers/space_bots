@@ -41,6 +41,9 @@ class SoundPlayer:
         # Load up our voice-over files
         sound_location = path.join(path.dirname(__file__), 'sounds/voice_overs/')
         for sound_file in next(walk(sound_location), (None, None, []))[2]:
+            # Ignore
+            if sound_file == '.DS_Store':
+                continue
             clip_tag = path.splitext(sound_file)[0]
             self.sound_clips[clip_tag] = self.mixer.Sound(path.join(sound_location, sound_file))
             self.sound_clips[clip_tag].set_volume(1.0)
