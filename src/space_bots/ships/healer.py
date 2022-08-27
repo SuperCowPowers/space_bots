@@ -41,7 +41,7 @@ class Healer(ship.Ship):
 
             # Cast Salvation
             if self.healing_target.health_percent() < .05 and not self.salvation_thrown:
-                self.game_engine.announce('healer_cast_salvation')
+                self.announcer_messages.put('healer_cast_salvation')
                 self.healing_target.add_buff('salvation')
                 self.salvation_thrown = True
 

@@ -28,7 +28,7 @@ class SoundPlayer:
         # Randomly pick one
         self.current_background_track = choice(list(self.music_tracks.keys()))
         self.mixer.music.load(self.music_tracks[self.current_background_track])
-        self.mixer.music.set_volume(0.2)  # Background should be a bit lower volume
+        self.mixer.music.set_volume(0.3)  # Background should be a bit lower volume
 
         # Load up our sound files
         sound_location = path.join(path.dirname(__file__), 'sounds/interactive_sounds/')
@@ -43,11 +43,11 @@ class SoundPlayer:
         for sound_file in next(walk(sound_location), (None, None, []))[2]:
             clip_tag = path.splitext(sound_file)[0]
             self.sound_clips[clip_tag] = self.mixer.Sound(path.join(sound_location, sound_file))
-            self.sound_clips[clip_tag].set_volume(0.5)
+            self.sound_clips[clip_tag].set_volume(1.0)
 
         # FIXME: Hardcoded limits for now
         self.sound_limiter.add_limit('laser', 0.01)
-        self.sound_limiter.add_limit('explosion', 3)
+        self.sound_limiter.add_limit('explosion', 1)
 
     def play_background_music(self, mix='default'):
         """Play some Background Music"""

@@ -15,7 +15,7 @@ class Tank(ship.Ship):
         # Tank specific stuff
         self.protect_target = None
         self.p.damage_modifier = 0.75  # 25% reduction
-        self.collision_radius = self.p.shield_radius * 2  # Tanks need their space
+        self.collision_radius = self.p.shield_radius * 1.5  # Tanks need their space
         self.shield_thrown = False
 
         # Tank Level adjustments
@@ -45,7 +45,7 @@ class Tank(ship.Ship):
         self.protect_target = self.battle_state.lowest_health_teammate(self)
         if not self.shield_thrown and self.protect_target.health_percent() < .1:
             print('Tank: Take the Pain!')
-            self.game_engine.announce('tank_cast_pain')
+            self.announcer_messages.put('tank_cast_pain')
             self.protect_target.add_buff('take_the_pain')
             self.shield_thrown = True
 

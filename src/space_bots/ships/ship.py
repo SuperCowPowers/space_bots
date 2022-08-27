@@ -1,4 +1,5 @@
 """Ship: Class for the ships in Space Bots"""
+from queue import SimpleQueue
 
 # Local Imports
 from space_bots import entity, force_utils
@@ -31,6 +32,9 @@ class Ship(entity.Entity):
         self.damage_done = 0
         self.current_laser_target = None
         self.new_laser_target = False
+
+        # Communications Message Queues
+        self.announcer_messages = SimpleQueue()
 
         # Call SuperClass (Entity) Initialization
         super().__init__(game_engine, x, y, mass=self.p.mass, speed=self.p.speed,
@@ -111,20 +115,24 @@ class Ship(entity.Entity):
     def is_dead(self):
         return self.dead
 
-    def communicate(self):
+    def communicate(self, comms):
         """Communicate with Squad or Team"""
-        # Only earth does the low_health/dead announcements
+        # Only earth does all this communication
         if self.team == 'earth':
             if self.health_percent() < 0.5 and not self.low_health_announced:
-                self.game_engine.announce(f"{self.ship_type}_low")
+                comms.announce(f"{self.ship_type}_low")
                 self.low_health_announced = True
             if self.is_dead() and not self.death_announced:
-                self.game_engine.announce(f"{self.ship_type}_down")
-                self.game_engine.play_sound('explosion')
+                comms.announce(f"{self.ship_type}_down")
+                comms.play_sound('explosion')
                 self.death_announced = True
             if self.current_laser_target and self.new_laser_target:
-                self.game_engine.play_sound('laser')
+                comms.play_sound('laser')
                 self.new_laser_target = False
+
+        # Also communicate any queued announcer messages
+        while not self.announcer_messages.empty():
+            comms.announce(self.announcer_messages.get())
 
     def general_ship_updates(self):
         """Update the general things associated with all ships"""

@@ -19,7 +19,7 @@ class Entity(ABC):
         self.force_damp = 0.99
 
     @abstractmethod
-    def communicate(self):
+    def communicate(self, comms):
         pass
 
     @abstractmethod
@@ -56,7 +56,7 @@ def test():
 
     # Create an example Entity Class (needs communicate(), update() and draw() methods)
     class SimpleEntity(Entity):
-        def communicate(self):
+        def communicate(self, comms):
             pass
 
         def update(self):

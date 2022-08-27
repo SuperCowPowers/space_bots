@@ -23,7 +23,7 @@ class Planet(entity.Entity):
         self.image_x = self.x - self.radius - 5
         self.image_y = self.y - self.radius - 5
 
-    def communicate(self):
+    def communicate(self, comms):
         """The Planet can communicate to what?"""
         pass
 

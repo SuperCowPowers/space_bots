@@ -8,6 +8,7 @@
 from random import choice
 import statistics
 import math
+from queue import SimpleQueue
 
 # Local Imports
 from space_bots import force_utils, battle_state
@@ -40,6 +41,9 @@ class Squad:
         self.ship_mass = None
         self.ship_threat = None
 
+        # Communications Message Queues
+        self.announcer_messages = SimpleQueue()
+
         # Capture Sticky Targets
         self.sticky_targets = {}
 
@@ -50,7 +54,7 @@ class Squad:
         # Battle State/Reconnaissance
         self.battle_state = None
         self.in_combat = False
-        self.seen_combat = False
+        self.first_combat = True
         self.combat_timer = 0
         self.combat_status_change = False
         self.total_zenite = 0
@@ -78,7 +82,6 @@ class Squad:
                 self.combat_timer = 200
                 self.combat_status_change = True
                 self.in_combat = True
-                self.seen_combat = True
             else:
                 self.combat_timer -= 1
                 if self.combat_timer == 0:
@@ -86,24 +89,27 @@ class Squad:
                     self.in_combat = False
 
     def protect(self, asset, distance=150):
-        """Tell the Squad to protect a planet, squad or ship (asset)"""
+        """Tell the Squad to protect a planet, squad or a ship (asset)"""
         self.stance = 'protect'
         self.protection_asset = asset
         self.protection_distance = distance
 
-    def communicate(self):
+    def communicate(self, comms):
         """Squad Communication"""
 
         # Squad level communication
         if self.combat_status_change:
-            if self.in_combat:
-                print(f'{self.team}:{self.squad_name}: Get Pumped...')
-            else:
-                print(f'{self.team}:{self.squad_name}: Whew, out of combat...')
+            if self.in_combat and self.first_combat and self.squad_name == 'roughnecks':
+                comms.announce('lets_rock', 'squad_leader_1')
+                self.first_combat = False
+
+        # Also communicate any queued announcer messages
+        while not self.announcer_messages.empty():
+            comms.announce(self.announcer_messages.get())
 
         # Let each ship communicate
         for ship in self.ships:
-            ship.communicate()
+            ship.communicate(comms)
 
     def update(self):
         """Update the Squad"""

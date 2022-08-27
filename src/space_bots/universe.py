@@ -27,7 +27,6 @@ class Universe:
         self.individual_entities = []
         self.is_finalized = False
         self.time_slow = 0.0
-        self.intro_done = False
         self.initial_count_down = False
         self.wave_over = False
         self.current_text = None
@@ -52,8 +51,9 @@ class Universe:
         # Start up the background music
         self.game_engine.play_background_music()
 
-        # Put an announcement into the comms
-        self.comms.put_message('announcements', {'voice': 'male', 'message': 'lets_rumble'})
+        # Put a couple of announcements into the comms
+        self.comms.announce('lets_rumble', voice='male')
+        self.comms.announce('great_match', voice='female')
 
         # All done setting up
         self.is_finalized = True
@@ -87,19 +87,27 @@ class Universe:
         self.individual_ships.remove(ship)
         self.all_ships.remove(ship)
 
+    def in_combat(self):
+        return any([s.in_combat for s in self.squads])
+
     def communicate(self):
         """Let all the entities in the Universe communicate"""
 
-        # Any announcements
+        # Play announcements
         for info in self.comms.get_messages('announcements'):
-            self.game_engine.announce(info['message'], info['voice'])
+            self.time_slow = 0.1
+            self.game_engine.restricted_announce(info['voice_line'], info['voice'])
 
-        # Give the sound queue some love
+        # Play sounds
+        for sound_name in self.comms.get_messages('sounds'):
+            self.game_engine.restricted_play_sound(sound_name)
+
+        # Give the sound queue some cycles
         self.game_engine.play_sound_queue()
 
         # Have all the entities communicate
         for entity in self.all_entities:
-            entity.communicate()
+            entity.communicate(self.comms)
 
     def update(self):
         """Let all the entities in the Universe update themselves"""
@@ -118,11 +126,6 @@ class Universe:
         for entity in self.all_entities:
             entity.update()
 
-        # Second Intro
-        if any([s.in_combat for s in self.squads]) and not self.intro_done:
-            self.comms.put_message('announcements', {'message': 'great_match', 'voice': 'female'})
-            self.intro_done = True
-
         # Time Slow
         time.sleep(self.time_slow)
         self.time_slow *= .95
@@ -132,9 +135,9 @@ class Universe:
         if len(team_counts.keys()) == 1 and not self.wave_over:
             self.wave_over = True
             if 'earth' in team_counts:
-                self.comms.put_message('announcements', {'message': 'won_match', 'voice': 'random'})
+                self.comms.announce('won_match')
             else:
-                self.comms.put_message('announcements', {'message': 'lost_match', 'voice': 'random'})
+                self.comms.announce('lost_match')
 
     def draw(self):
         """Let all the entities in the Universe draw themselves"""
@@ -267,7 +270,7 @@ def test():
     my_miner = miner.Miner(my_game_engine, 850, 700, level=level)
     earth_squad.add_ship(my_miner)
     earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=1))
-    earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=1))
+    # earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=1))
     earth_squad.add_ship(tank.Tank(my_game_engine, 850, 700, level=2))
     for _ in range(2):
         earth_squad.add_ship(fighter.Fighter(my_game_engine, 850, 700, level=level))

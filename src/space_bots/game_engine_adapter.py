@@ -43,15 +43,15 @@ class GameEngineAdapter:
         """Play the background music mix"""
         self.sound_player.play_background_music()
 
-    def play_sound(self, sound_name):
-        """This adds the sound to the current play queue"""
-        self.sound_player.add_sound_to_queue(sound_name)
-
     def play_sound_queue(self):
         """Play the sound with the given sound name"""
         self.sound_player.play_queue()
 
-    def announce(self, sound_name, voice='random'):
+    def restricted_play_sound(self, sound_name):
+        """This adds the sound to the current play queue"""
+        self.sound_player.add_sound_to_queue(sound_name)
+
+    def restricted_announce(self, sound_name, voice='random'):
         """Play the sound with the given sound name"""
         self.sound_player.announce(sound_name, voice)
 

@@ -22,6 +22,16 @@ class Comms:
         """Put a new message onto this channel"""
         self.channels[channel].put(message)
 
+    def announce(self, voice_line, voice='random'):
+        """Post a message to the announcements channel"""
+        # Announcements have additional data sent with them
+        info = {'voice': voice, 'voice_line': voice_line}
+        self.put_message('announcements', info)
+
+    def play_sound(self, sound_name):
+        """Post a message to the announcements channel"""
+        self.put_message('sounds', sound_name)
+
 
 # Simple test of the Comms functionality
 def test():
@@ -49,9 +59,9 @@ def test():
     for message in my_comms.get_messages('squad:smellys'):
         print(message)
 
-    # Put and get a 'data' message
-    my_comms.put_message('announcer', {'voice': 'male', 'message': "lets_rumble"})
-    for message in my_comms.get_messages('announcer'):
+    # Put out an announcement
+    my_comms.announce('lets_rumble', 'male')
+    for message in my_comms.get_messages('announcements'):
         print(message)
 
 

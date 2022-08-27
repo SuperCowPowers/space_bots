@@ -21,19 +21,16 @@ class Miner(ship.Ship):
         self.level = level
         self.p.laser_damage *= self.level
 
-    def communicate(self):
+    def communicate(self, comms):
         """Communicate with Squad or Team"""
         if self.mining_yield > 10 and not self.mining_announced:
-            self.game_engine.announce('mining_zenite', voice='male')
+            comms.announce('mining_zenite', voice='male')
             self.mining_announced = True
 
         # Update mining yield
         # FIXME: Hack
         if self.mining_yield > 10:
             self.game_engine.universe.current_text = f'ZeNite: {self.squad.total_zenite:.1f}'
-
-        # Call super communicate
-        super().communicate()
 
     def update(self):
         """Update the Miner"""

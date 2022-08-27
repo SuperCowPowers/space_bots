@@ -1,5 +1,4 @@
 """GenerateVoiceLines: Utility Class for Space Bot Voice Line Generation (using text to speech)"""
-import time
 import pyttsx3
 
 
@@ -12,7 +11,7 @@ class GenerateVoiceLines:
         self.engine = pyttsx3.init()
         voices = self.engine.getProperty('voices')
         # Note: Might also use 17 for female
-        self.voice_info = {'male': voices[7].id, 'female': voices[28].id}
+        self.voice_info = {'male': voices[7].id, 'female': voices[28].id, "squad_leader_1": voices[18].id}
 
     def save_voice_line(self, tag, voice, line):
         """Have the GenerateVoiceLines say some stuff"""
@@ -52,10 +51,24 @@ def test():
         'tank_cast_pain': "Tank casts 'Take the Pain'!",
         'healer_cast_salvation': "Healer casts Salvation!"
     }
+    # Announcers
+    """
     for voice in ['male', 'female']:
         for tag, line in voice_lines.items():
             gen_lines.save_voice_line(tag, voice, line)
     gen_lines.run()
+    """
+
+    # Squad Leaders
+    voice_lines = {
+        'lets_rock': "Let's Rock!",
+        'yee_haw': "Yee Haw!"
+    }
+    for voice in ['squad_leader_1']:
+        for tag, line in voice_lines.items():
+            gen_lines.save_voice_line(tag, voice, line)
+    gen_lines.run()
+
 
 
 if __name__ == "__main__":
