@@ -1,7 +1,7 @@
 """Miner: A Miner ship in Space Bots"""
 
 # Local Imports
-from space_bots import force_utils
+from space_bots.utils import force_utils
 from space_bots.ships import ship
 
 

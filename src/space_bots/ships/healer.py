@@ -1,7 +1,7 @@
 """Healer: A Healer ship in Space Bots"""
 
 # Local Imports
-from space_bots import force_utils
+from space_bots.utils import force_utils
 from space_bots.ships import ship
 
 
@@ -40,7 +40,7 @@ class Healer(ship.Ship):
             self.force_y += dy * rush
 
             # Cast Salvation
-            if self.healing_target.health_percent() < .05 and not self.salvation_thrown:
+            if self.healing_target.health_percent() < .07 and not self.salvation_thrown:
                 self.announcer_messages.put('healer_cast_salvation')
                 self.healing_target.add_buff('salvation')
                 self.salvation_thrown = True

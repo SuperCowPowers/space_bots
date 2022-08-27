@@ -2,7 +2,8 @@
 from queue import SimpleQueue
 
 # Local Imports
-from space_bots import entity, force_utils
+from space_bots import entity
+from space_bots.utils import force_utils
 from space_bots.ships import ship_parameters, ship_state
 
 
@@ -19,6 +20,9 @@ class Ship(entity.Entity):
         self.p = ship_parameters.ShipParameters(ship_type)
         self.s = ship_state.ShipState(ship_type)
         self.level = level
+
+        # General ship adjustments
+        self.p.laser_damage *= self.level
 
         # Battle State/Reconnaissance
         self.battle_state = None
@@ -164,8 +168,8 @@ class Ship(entity.Entity):
         # Move towards primary target (even if it's not my current target)
         if self.squad.main_target:
             (dx, dy), (_, _) = force_utils.attraction_forces(self, self.squad.main_target, self.p.laser_range/1.2)
-            self.force_x += dx
-            self.force_y += dy
+            self.force_x += dx * 0.5
+            self.force_y += dy * 0.5
 
     def general_avoidance(self, factor=0.5):
         """Avoidance logic that's useful for most ships"""

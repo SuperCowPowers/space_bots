@@ -75,7 +75,7 @@ ship_specs = {
          },
     'drone':
         {'color': (180, 200, 100),
-         'mass': 40,  # A bit high, so they don't get bounced around too much
+         'mass': 20,
          'speed': 0.6,
          'radius': 7,
          'hp': 60,
@@ -86,8 +86,8 @@ ship_specs = {
          'capacitor': 10,
          'ship_width': 3,
          'shield_width': 1,
-         'shield_recharge': 0.005,
-         'hull_recharge': 0.005,
+         'shield_recharge': 0.05,
+         'hull_recharge': 0.05,
          'keep_range': 40,
          'threat': 20
          },
@@ -162,5 +162,23 @@ ship_specs = {
          'hull_recharge': 0.005,
          'keep_range': 0,
          'threat': 50
+         },
+    'mega_bug':
+        {'color': (160, 60, 80),
+         'mass': 25,  # FIXME
+         'speed': 1.0,
+         'radius': 20,
+         'hp': 800,
+         'shield': 500,
+         'laser_range': 120,
+         'laser_damage': 0.35,
+         'laser_width': 5,
+         'capacitor': 100,
+         'ship_width': 7,
+         'shield_width': 2,
+         'shield_recharge': 0.005,
+         'hull_recharge': 0.005,
+         'keep_range': 0,
+         'threat': 400
          }
 }

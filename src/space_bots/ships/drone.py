@@ -1,7 +1,7 @@
 """Drone: A Drone ship in Space Bots"""
 
 # Local Imports
-from space_bots import force_utils
+from space_bots.utils import force_utils
 from space_bots.ships import ship
 
 
@@ -14,10 +14,11 @@ class Drone(ship.Ship):
 
         # Drone specific stuff
         self.protect_asset = None
-        self.p.damage_modifier = 0.2  # 80% reduction (cause science)
+        self.p.damage_modifier = 0.5  # 50% reduction (cause science)
 
         # Drone Level adjustments
         self.level = level
+
         # Drones get a buff when there's more of them (real implementation TBD)
         self.p.laser_damage *= self.level*self.level  # Hee Hee
 

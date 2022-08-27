@@ -4,7 +4,8 @@ from random import randint
 from collections import Counter
 
 # Local Imports
-from space_bots import force_utils, comms
+from space_bots import comms
+from space_bots.utils import force_utils
 
 
 class Universe:
@@ -245,10 +246,10 @@ def test():
     # Create two Pirate Squads (who doesn't want to be a pirate?)
     xpos = 300
     ypos = 850
-    for squad_name in ['berserker', 'spitter']:
+    for squad_name in ['berserker', 'spitter', 'mega_bug']:
         my_squad = Squad(team='xenos', squad_name=squad_name, target_strategy='nearest', stance='offensive')
-        for _ in range(6):
-            my_squad.add_ship(ship.Ship(my_game_engine, xpos, ypos, ship_type=squad_name))
+        for _ in range(2):
+            my_squad.add_ship(ship.Ship(my_game_engine, xpos, ypos, ship_type=squad_name, level=2))
         # Give Squad Battle State and Add to the Universe
         my_squad.set_battle_state(my_battle_state)
         my_universe.add_squad(my_squad)
@@ -260,7 +261,7 @@ def test():
     ypos = 200
     for squad_name in ['zerg1', 'zerg2']:
         zerg_squad = Squad(team='xenos', squad_name=squad_name, target_strategy='nearest', stance='offensive')
-        for _ in range(20):
+        for _ in range(25):
             zerg_squad.add_ship(zergling.Zergling(my_game_engine, xpos, ypos))
         # Give Squad Battle State and Add to the Universe
         zerg_squad.set_battle_state(my_battle_state)
@@ -269,15 +270,14 @@ def test():
         ypos = 900
 
     # Create our Squad
-    level = 2
     earth_squad = Squad(team='earth', squad_name='roughnecks', target_strategy='threat', stance='defensive')
-    my_miner = miner.Miner(my_game_engine, 850, 700, level=1)
+    my_miner = miner.Miner(my_game_engine, 850, 700, level=2)
     earth_squad.add_ship(my_miner)
     earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=2))
     earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=2))
     earth_squad.add_ship(tank.Tank(my_game_engine, 850, 700, level=2))
     for _ in range(2):
-        earth_squad.add_ship(fighter.Fighter(my_game_engine, 850, 700, level=level))
+        earth_squad.add_ship(fighter.Fighter(my_game_engine, 850, 700, level=2))
     earth_squad.set_battle_state(my_battle_state)
     my_universe.add_squad(earth_squad)
 
@@ -298,12 +298,12 @@ def test():
     # Position
     class pos:
         pass
-    pos.x = 1400
-    pos.y = 800
+    pos.x = 1200
+    pos.y = 500
 
     # Add Protection Orders
     earth_squad.protect(my_battle_state.closest_planet(pos))
-    drone_squad.protect(my_miner, 20)
+    drone_squad.protect(my_miner, 25)
 
     # Invoke the event loop
     my_game_engine.event_loop()

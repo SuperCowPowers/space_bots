@@ -11,7 +11,8 @@ import math
 from queue import SimpleQueue
 
 # Local Imports
-from space_bots import force_utils, battle_state
+from space_bots import battle_state
+from space_bots.utils import force_utils
 
 
 class Squad:

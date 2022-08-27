@@ -1,7 +1,7 @@
 """Tank: A Tank ship in Space Bots"""
 
 # Local Imports
-from space_bots import force_utils
+from space_bots.utils import force_utils
 from space_bots.ships import ship
 
 
@@ -15,14 +15,17 @@ class Tank(ship.Ship):
         # Tank specific stuff
         self.protect_target = None
         self.p.damage_modifier = 0.75  # 25% reduction
-        self.collision_radius = self.p.shield_radius * 1.5  # Tanks need their space
+        self.collision_radius = self.p.shield_radius * 2  # Tanks need their space
         self.shield_thrown = False
 
         # Tank Level adjustments
         self.level = level
         self.p.hp *= self.level
+        self.s.hp = self.p.hp
         self.p.shield *= self.level
         self.s.shield = self.p.shield
+        self.p.shield_recharge *= self.level
+        self.p.hull_recharge *= self.level
 
     def update(self):
         """Update the Tank"""
@@ -35,11 +38,11 @@ class Tank(ship.Ship):
         # Tank specific stuff
         self.shield_thrown = False if not self.squad_in_combat() else self.shield_thrown
 
-        # Move towards primary target (Tanks need to 'get in there')
+        # Move towards squads primary target (Tanks need to 'get in there')
         if self.squad.main_target:
-            (dx, dy), (_, _) = force_utils.attraction_forces(self, self.squad.main_target, self.p.laser_range/1.2)
-            self.force_x += dx
-            self.force_y += dy
+            (dx, dy), (_, _) = force_utils.attraction_forces(self, self.squad.main_target, self.p.laser_range/4.0)
+            self.force_x += dx * 2
+            self.force_y += dy * 2
 
         # Track the lowest health TeamMate
         self.protect_target = self.battle_state.lowest_health_teammate(self)

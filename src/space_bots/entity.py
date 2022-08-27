@@ -2,7 +2,7 @@
 from abc import ABC, abstractmethod
 
 # Local Imports
-from space_bots import force_utils
+from space_bots.utils import force_utils
 
 
 class Entity(ABC):

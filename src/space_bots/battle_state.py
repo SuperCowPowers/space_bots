@@ -1,7 +1,7 @@
 """BattleState: Class stores all the battle state (ship, planets, etc) for Space Bots"""
 
 # Local imports
-from space_bots import force_utils
+from space_bots.utils import force_utils
 
 
 class BattleState:
