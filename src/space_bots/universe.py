@@ -1,13 +1,15 @@
 """Universe: Class that contains all the stuff"""
 import time
 from random import randint
+from collections import Counter
 
 # Local Imports
-from space_bots import force_utils
+from space_bots import force_utils, comms
 
 
 class Universe:
     """Universe: Class that contains all the stuff"""
+
     # Note: Maybe refactor/rethink how this class should be used later
     #      - Collision Detection should be a separate class
 
@@ -24,28 +26,44 @@ class Universe:
         self.all_entities = []
         self.individual_entities = []
         self.is_finalized = False
-        self.time_slow = 0.01
+        self.time_slow = 0.0
+        self.intro_done = False
         self.initial_count_down = False
+        self.wave_over = False
+        self.current_text = None
+
+        # Communication Channels
+        self.comms = comms.Comms()
 
     def finalize(self):
         """Tasks to do after initial universe setup"""
         print('Universe Finalize...')
-        # Space Planets Apart from each other
-        self._space_out_planets()
 
         # We need a list of individual ships for collision detections
         squad_ships = [ship for _squad in self.squads for ship in _squad.ships]
         self.all_ships = self.individual_ships + squad_ships
 
         # All entities are collected into one big list
-        self.all_entities = self.planets + self.squads + self.individual_ships + self.individual_entities
+        self.all_entities = self.planets + self.squads
 
-        # All done
+        # Initial Text
+        self.current_text = 'Wave Incoming!'
+
+        # Start up the background music
+        self.game_engine.play_background_music()
+
+        # Put an announcement into the comms
+        self.comms.put_message('announcements', {'voice': 'male', 'message': 'lets_rumble'})
+
+        # All done setting up
         self.is_finalized = True
 
     def set_game_engine(self, game_engine):
         print('Universe: set_game_engine...')
         self.game_engine = game_engine
+
+    def get_comms(self):
+        return self.comms
 
     def add_entity(self, entity):
         """Add a Planet to the Universe"""
@@ -58,6 +76,7 @@ class Universe:
     def add_squad(self, squad):
         """Add a Squad to the Universe"""
         self.squads.append(squad)
+        squad.game_engine = self.game_engine
 
     def add_ship(self, ship):
         """Add a Ship to the Universe"""
@@ -71,9 +90,12 @@ class Universe:
     def communicate(self):
         """Let all the entities in the Universe communicate"""
 
-        # No one is going to remember to call finalize
-        if not self.is_finalized:
-            self.finalize()
+        # Any announcements
+        for info in self.comms.get_messages('announcements'):
+            self.game_engine.announce(info['message'], info['voice'])
+
+        # Give the sound queue some love
+        self.game_engine.play_sound_queue()
 
         # Have all the entities communicate
         for entity in self.all_entities:
@@ -81,6 +103,10 @@ class Universe:
 
     def update(self):
         """Let all the entities in the Universe update themselves"""
+
+        # No one is going to remember to call finalize, so call it here
+        if not self.is_finalized:
+            self.finalize()
 
         # First lets remove any dead ships
         self.all_ships = [s for s in self.all_ships if not s.is_dead()]
@@ -92,10 +118,23 @@ class Universe:
         for entity in self.all_entities:
             entity.update()
 
+        # Second Intro
+        if any([s.in_combat for s in self.squads]) and not self.intro_done:
+            self.comms.put_message('announcements', {'message': 'great_match', 'voice': 'female'})
+            self.intro_done = True
+
         # Time Slow
-        if any([s.in_combat for s in self.squads]):
-            time.sleep(self.time_slow)
-            self.time_slow *= .99
+        time.sleep(self.time_slow)
+        self.time_slow *= .95
+
+        # Do we only have one team left?
+        team_counts = Counter([s.team for s in self.all_ships])
+        if len(team_counts.keys()) == 1 and not self.wave_over:
+            self.wave_over = True
+            if 'earth' in team_counts:
+                self.comms.put_message('announcements', {'message': 'won_match', 'voice': 'random'})
+            else:
+                self.comms.put_message('announcements', {'message': 'lost_match', 'voice': 'random'})
 
     def draw(self):
         """Let all the entities in the Universe draw themselves"""
@@ -107,6 +146,10 @@ class Universe:
         # Planets next
         for planet in self.planets:
             planet.draw()
+
+        # Draw Text
+        if self.current_text:
+            self.game_engine.draw_text(self.current_text)
 
         # Countdown timer
         if self.initial_count_down:
@@ -125,10 +168,10 @@ class Universe:
 
                 # Compute any collision forces
                 (dx, dy), (co_dx, co_dy) = force_utils.repulsion_forces(ship, co_ship)
-                ship.force_x += dx * 2
-                ship.force_y += dy * 2
-                co_ship.force_x += co_dx * 2
-                co_ship.force_y += co_dy * 2
+                ship.force_x += dx * co_ship.mass/ship.mass
+                ship.force_y += dy * co_ship.mass/ship.mass
+                co_ship.force_x += co_dx * ship.mass/ship.mass
+                co_ship.force_y += co_dy * ship.mass/ship.mass
 
         # Next: Ships vs Planet
         for ship in self.all_ships:
@@ -141,7 +184,7 @@ class Universe:
 
         # Last: Ships against boundaries
         # FIXME
-        # Note: We're not setting force here as this is a 'hard' boundary
+        # Note: This is a 'hard' boundary
         for _ship in self.all_ships:
             _ship.x = min(max(_ship.x, self.pad/4), self.width-self.pad/4)
             _ship.y = min(max(_ship.y, self.pad/4), self.height-self.pad/4)
@@ -175,8 +218,7 @@ class Universe:
 def test():
     from space_bots import game_engine_adapter, battle_state
     from space_bots.squad import Squad
-    from space_bots.ships.ship import Ship
-    from space_bots.ships import miner, healer, tank
+    from space_bots.ships import ship, miner, healer, tank, fighter, helper_drone, zergling
     from space_bots.planet import Planet
 
     """Test for Universe Class"""
@@ -190,71 +232,71 @@ def test():
     # Give the universe the game engine
     my_universe.set_game_engine(my_game_engine)
 
-    # Create our Squad
-    my_squad = Squad(team='earth', squad_name='roughnecks', target_strategy='threat', stance='defensive')
-    miner = miner.Miner(my_game_engine, 1000, 600)
-    my_squad.add_ship(miner)
-    healer = healer.Healer(my_game_engine, 950, 600)
-    my_squad.add_ship(healer)
-    tank = tank.Tank(my_game_engine, 950, 600)
-    my_squad.add_ship(tank)
-    fighter = Ship(my_game_engine, 950, 500, ship_type='fighter')
-    my_squad.add_ship(fighter)
-    fighter = Ship(my_game_engine, 980, 680, ship_type='fighter')
-    my_squad.add_ship(fighter)
-    fighter = Ship(my_game_engine, 900, 600, ship_type='fighter')
-    my_squad.add_ship(fighter)
-
-    # Add a scout squad
-    scout_squad = Squad(team='earth', squad_name='scouts', target_strategy='low_health', stance='offensive')
-    for _ in range(10):
-        scout_squad.add_ship(Ship(my_game_engine, 800, 850, ship_type='scout'))
-    """
-    for _ in range(5):
-        # my_tank = tank.Tank(my_game_engine, 950, 600)
-        # my_squad.add_ship(my_tank)
-        # my_healer = healer.Healer(my_game_engine, 950, 600)
-        # my_squad.add_ship(my_healer)
-        my_fighter = Ship(my_game_engine, 950, 500, ship_type='fighter')
-        my_squad.add_ship(my_fighter)
-    """
-
-    # Create a Pirate Squad (who doesn't want to be a pirate?)
-    pirate_squad = Squad(team='xenos', squad_name='pirates', target_strategy='nearest', stance='offensive')
-    pirate_squad.add_ship(Ship(my_game_engine, 200, 200, ship_type='spitter'))
-    pirate_squad.add_ship(Ship(my_game_engine, 200, 200, ship_type='spitter'))
-    pirate_squad.add_ship(Ship(my_game_engine, 200, 200, ship_type='spitter'))
-    pirate_squad.add_ship(Ship(my_game_engine, 200, 200, ship_type='spitter'))
-    pirate_squad.add_ship(Ship(my_game_engine, 200, 200, ship_type='berserker'))
-    pirate_squad.add_ship(Ship(my_game_engine, 200, 200, ship_type='berserker'))
-    pirate_squad.add_ship(Ship(my_game_engine, 200, 200, ship_type='berserker'))
-    pirate_squad.add_ship(Ship(my_game_engine, 200, 200, ship_type='berserker'))
-
-    # Add a zerg squad
-    zerg_squad = Squad(team='xenos', squad_name='zerg', target_strategy='low_health', stance='offensive')
-    for _ in range(20):
-        zerg_squad.add_ship(Ship(my_game_engine, 200, 850, ship_type='zergling'))
-
-    # Give our Squads the Battle State (universal in this case)
+    # Create our Battle State (universal in this case)
     my_battle_state = battle_state.BattleState(my_universe)
-    my_squad.set_battle_state(my_battle_state)
-    scout_squad.set_battle_state(my_battle_state)
-    pirate_squad.set_battle_state(my_battle_state)
-    zerg_squad.set_battle_state(my_battle_state)
 
-    # Add both Squads to the Universe
-    my_universe.add_squad(zerg_squad)
-    my_universe.add_squad(pirate_squad)
-    # my_universe.add_squad(scout_squad)
-    my_universe.add_squad(my_squad)
+    # Create two Pirate Squads (who doesn't want to be a pirate?)
+    xpos = 300
+    ypos = 850
+    for squad_name in ['berserker', 'spitter']:
+        my_squad = Squad(team='xenos', squad_name=squad_name, target_strategy='nearest', stance='offensive')
+        for _ in range(6):
+            my_squad.add_ship(ship.Ship(my_game_engine, xpos, ypos, ship_type=squad_name))
+        # Give Squad Battle State and Add to the Universe
+        my_squad.set_battle_state(my_battle_state)
+        my_universe.add_squad(my_squad)
+        xpos = 300
+        ypos = 300
+
+    # Add two zerg squads
+    xpos = 700
+    ypos = 200
+    for squad_name in ['zerg1', 'zerg2']:
+        zerg_squad = Squad(team='xenos', squad_name=squad_name, target_strategy='nearest', stance='offensive')
+        for _ in range(20):
+            zerg_squad.add_ship(zergling.Zergling(my_game_engine, xpos, ypos))
+        # Give Squad Battle State and Add to the Universe
+        zerg_squad.set_battle_state(my_battle_state)
+        my_universe.add_squad(zerg_squad)
+        xpos = 300
+        ypos = 900
+
+    # Create our Squad
+    level = 2
+    earth_squad = Squad(team='earth', squad_name='roughnecks', target_strategy='threat', stance='defensive')
+    my_miner = miner.Miner(my_game_engine, 850, 700, level=level)
+    earth_squad.add_ship(my_miner)
+    earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=1))
+    earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=1))
+    earth_squad.add_ship(tank.Tank(my_game_engine, 850, 700, level=2))
+    for _ in range(2):
+        earth_squad.add_ship(fighter.Fighter(my_game_engine, 850, 700, level=level))
+    earth_squad.set_battle_state(my_battle_state)
+    my_universe.add_squad(earth_squad)
+
+    drone_squad = Squad(team='earth', squad_name='helper_drones', target_strategy='nearest', stance='defensive')
+    for _ in range(2):
+        drone_squad.add_ship(helper_drone.HelperDrone(my_game_engine, 850, 700, level=2))
+    drone_squad.set_battle_state(my_battle_state)
+    my_universe.add_squad(drone_squad)
 
     # Add some planets
     for _ in range(8):
         my_planet = Planet(my_game_engine, x=randint(800, 850), y=randint(500, 550))
         my_universe.add_planet(my_planet)
 
+    # Space them out
+    my_universe._space_out_planets()
+
+    # Position
+    class pos:
+        pass
+    pos.x = 1400
+    pos.y = 800
+
     # Add Protection Orders
-    my_squad.protect(my_battle_state.closest_planet(my_squad.ships[0]))
+    earth_squad.protect(my_battle_state.closest_planet(pos))
+    drone_squad.protect(my_miner, 20)
 
     # Invoke the event loop
     my_game_engine.event_loop()

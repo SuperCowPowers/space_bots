@@ -1,13 +1,16 @@
-"""GameEngineAdapter: Class that handles display stuff"""
+"""GameEngineAdapter: Class that handles display and sound stuff"""
 
 # Note: This class should be refactored to handle additional backends at some point
 #       Right now it's pygame specific, but later we'll have more options
 
 import pygame
 
+# Local imports
+from space_bots.sound_player import SoundPlayer
 
-class GameEngineAdapter():
-    """GameEngineAdapter: Class that contains all the stuff"""
+
+class GameEngineAdapter:
+    """GameEngineAdapter: Class that handles display and sound stuff"""
 
     def __init__(self, universe, width=1600, height=1000):
         """Initialize the GameEngineAdapter class"""
@@ -23,12 +26,34 @@ class GameEngineAdapter():
         self.background_color = (20, 20, 30)
         self.collision_detection = None
 
+        # Get a random font
+        self.font = pygame.font.SysFont('chalkduster.ttf', 72)
+
+        # Sound Classes
+        self.sound_player = SoundPlayer()
+
         # Universe has 3 callbacks (communicate(), update() and draw()
         self.universe = universe
 
     def get_surface(self):
         """Return the drawable surface (display screen)"""
         return self.screen
+
+    def play_background_music(self):
+        """Play the background music mix"""
+        self.sound_player.play_background_music()
+
+    def play_sound(self, sound_name):
+        """This adds the sound to the current play queue"""
+        self.sound_player.add_sound_to_queue(sound_name)
+
+    def play_sound_queue(self):
+        """Play the sound with the given sound name"""
+        self.sound_player.play_queue()
+
+    def announce(self, sound_name, voice='random'):
+        """Play the sound with the given sound name"""
+        self.sound_player.announce(sound_name, voice)
 
     def set_background_color(self, color):
         self.background_color = color
@@ -62,6 +87,10 @@ class GameEngineAdapter():
 
     def draw_polygon(self, color, points, width=3):
         pygame.draw.polygon(self.screen, color, points, width)
+
+    def draw_text(self, text, color=(250, 250, 250)):
+        img = self.font.render(text, True, color)
+        self.screen.blit(img, (self.width - 500, self.height - 50))
 
     @staticmethod
     def image_load(image_file, x_size=0, y_size=0):

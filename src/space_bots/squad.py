@@ -18,6 +18,7 @@ class Squad:
     def __init__(self, team, squad_name, target_strategy='nearest', stance='defensive'):
 
         # Set my attributes
+        self.game_engine = None
         self.team = team
         self.squad_name = squad_name
         self.adversaries = None
@@ -44,12 +45,15 @@ class Squad:
 
         # Protection Asset
         self.protection_asset = None
+        self.protection_distance = 150
 
         # Battle State/Reconnaissance
         self.battle_state = None
         self.in_combat = False
+        self.seen_combat = False
         self.combat_timer = 0
         self.combat_status_change = False
+        self.total_zenite = 0
 
     def add_ship(self, ship):
         """Add a Ship to this Squad"""
@@ -71,29 +75,35 @@ class Squad:
         else:
             # Change in state, lets set the timer
             if combat:
-                self.combat_timer = 300
+                self.combat_timer = 200
                 self.combat_status_change = True
                 self.in_combat = True
+                self.seen_combat = True
             else:
                 self.combat_timer -= 1
                 if self.combat_timer == 0:
                     self.combat_status_change = True
                     self.in_combat = False
 
-    def protect(self, asset):
+    def protect(self, asset, distance=150):
         """Tell the Squad to protect a planet, squad or ship (asset)"""
         self.stance = 'protect'
         self.protection_asset = asset
+        self.protection_distance = distance
 
     def communicate(self):
         """Squad Communication"""
-        if not self.ships:
-            return
+
+        # Squad level communication
         if self.combat_status_change:
             if self.in_combat:
                 print(f'{self.team}:{self.squad_name}: Get Pumped...')
             else:
                 print(f'{self.team}:{self.squad_name}: Whew, out of combat...')
+
+        # Let each ship communicate
+        for ship in self.ships:
+            ship.communicate()
 
     def update(self):
         """Update the Squad"""
@@ -126,13 +136,16 @@ class Squad:
         # Protect Stance
         if self.stance == 'protect':
             for _ship in self.ships:
-                (_, _), (dx, dy) = force_utils.attraction_forces(self.protection_asset, _ship, 150)
+                (_, _), (dx, dy) = force_utils.attraction_forces(self.protection_asset, _ship, self.protection_distance)
                 _ship.force_x += dx
                 _ship.force_y += dy
 
         # Update each ship
         for _ship in self.ships:
             _ship.update()
+
+        # Last but NOT least how much ZeNite does the squad have
+        self.total_zenite = sum([m.mining_yield for m in self.ships if m.ship_type == 'miner'])
 
     def draw(self):
         """Draw the entire squad"""

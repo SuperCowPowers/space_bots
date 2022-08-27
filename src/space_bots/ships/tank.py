@@ -7,20 +7,22 @@ from space_bots.ships import ship
 
 class Tank(ship.Ship):
     """Tank: A Tank ship in Space Bots"""
-    def __init__(self, game_engine, x=100, y=100):
+    def __init__(self, game_engine, x=100, y=100, level=1):
 
         # Call SuperClass (Entity) Initialization
         super().__init__(game_engine, x, y, ship_type='tank')
 
         # Tank specific stuff
         self.protect_target = None
-        self.p.damage_modifier = 0.80  # 20% reduction
-        self.collision_radius = self.p.shield_radius * 1.5  # Tanks need space
+        self.p.damage_modifier = 0.75  # 25% reduction
+        self.collision_radius = self.p.shield_radius * 2  # Tanks need their space
         self.shield_thrown = False
 
-    def communicate(self):
-        """Communicate with Squad or Team"""
-        pass
+        # Tank Level adjustments
+        self.level = level
+        self.p.hp *= self.level
+        self.p.shield *= self.level
+        self.s.shield = self.p.shield
 
     def update(self):
         """Update the Tank"""
@@ -43,6 +45,7 @@ class Tank(ship.Ship):
         self.protect_target = self.battle_state.lowest_health_teammate(self)
         if not self.shield_thrown and self.protect_target.health_percent() < .1:
             print('Tank: Take the Pain!')
+            self.game_engine.announce('tank_cast_pain')
             self.protect_target.add_buff('take_the_pain')
             self.shield_thrown = True
 
@@ -54,30 +57,6 @@ class Tank(ship.Ship):
         self.draw_laser()
         self.draw_ship()
         self.draw_shield()
-
-    def draw_ship(self):
-        """Draw the Tank Icon"""
-        hull_health = min(self.s.hp / self.p.hp + 0.6, 1.0)
-        hull_color = (self.p.color[0] * hull_health, self.p.color[1] * hull_health, self.p.color[2] * hull_health)
-        self.game_engine.draw_circle((30, 30, 30), (self.x, self.y), self.p.radius, width=0)
-        self.game_engine.draw_circle(hull_color, (self.x, self.y), self.p.radius, width=self.p.ship_width)
-        if self.low_health():
-            self.game_engine.draw_circle((200, 200, 0), (self.x, self.y), 6, width=0)
-        if self.critical_health():
-            self.game_engine.draw_circle((240, 0, 0), (self.x, self.y), 6, width=0)
-
-    def draw_healing_laser(self):
-        """Draw the mining lasers"""
-        if self.healing_target and force_utils.distance_between(self, self.healing_target) < self.p.laser_range:
-
-            # Does my target need healing
-            if self.healing_target.health_percent() < .95:
-                self.game_engine.draw_line(self.p.color, (self.x, self.y), (self.healing_target.x, self.healing_target.y),
-                                           width=self.p.laser_width)
-
-                # Out of combat heal buff
-                healing_power = 10 if not self.squad_in_combat() else 1
-                self.healing_target.heal(self.p.laser_damage * healing_power)
 
 
 # Simple test of the Tank functionality

@@ -7,17 +7,18 @@ from space_bots.ships import ship
 
 class Healer(ship.Ship):
     """Healer: A Healer ship in Space Bots"""
-    def __init__(self, game_engine, x=100, y=100):
+    def __init__(self, game_engine, x=100, y=100, level=1):
 
         # Call SuperClass (Entity) Initialization
         super().__init__(game_engine, x, y, ship_type='healer')
 
         # Healer specific stuff
         self.healing_target = None
+        self.salvation_thrown = False
 
-    def communicate(self):
-        """Communicate with Squad or Team"""
-        pass
+        # Healing Level adjustments
+        self.level = level
+        self.p.laser_damage *= self.level
 
     def update(self):
         """Update the Healer"""
@@ -25,6 +26,9 @@ class Healer(ship.Ship):
         # General updates
         self.general_ship_updates()
         self.general_avoidance()
+
+        # Healer specific stuff
+        self.salvation_thrown = False if not self.squad_in_combat() else self.salvation_thrown
 
         # Get the lowest health TeamMate and move towards them
         self.healing_target = self.battle_state.lowest_health_teammate(self)
@@ -35,6 +39,12 @@ class Healer(ship.Ship):
             self.force_x += dx * rush
             self.force_y += dy * rush
 
+            # Cast Salvation
+            if self.healing_target.health_percent() < .05 and not self.salvation_thrown:
+                self.game_engine.announce('healer_cast_salvation')
+                self.healing_target.add_buff('salvation')
+                self.salvation_thrown = True
+
         # Now actually call the move command (which uses force/mass calc)
         self.move()
 
@@ -43,26 +53,16 @@ class Healer(ship.Ship):
         self.draw_healing_laser()
         self.draw_ship()
         self.draw_shield()
-
-    def draw_ship(self):
-        """Draw the Healer Icon"""
-        hull_health = min(self.s.hp / self.p.hp + 0.6, 1.0)
-        hull_color = (self.p.color[0] * hull_health, self.p.color[1] * hull_health, self.p.color[2] * hull_health)
-        self.game_engine.draw_circle((30, 30, 30), (self.x, self.y), self.p.radius, width=0)
-        self.game_engine.draw_circle(hull_color, (self.x, self.y), self.p.radius, width=self.p.ship_width)
-        if self.low_health():
-            self.game_engine.draw_circle((200, 200, 0), (self.x, self.y), 5, width=0)
-        if self.critical_health():
-            self.game_engine.draw_circle((240, 0, 0), (self.x, self.y), 5, width=0)
+        self.draw_buffs()
 
     def draw_healing_laser(self):
         """Draw the mining lasers"""
         if self.healing_target and force_utils.distance_between(self, self.healing_target) < self.p.laser_range:
 
             # Does my target need healing
-            if self.healing_target.health_percent() < .9:
+            if self.healing_target.health_percent() < .97:
                 self.game_engine.draw_line(self.p.color, (self.x, self.y), (self.healing_target.x, self.healing_target.y),
-                                           width=self.p.laser_width)
+                                           width=self.p.laser_width + self.level)
 
                 # Out of combat heal buff
                 healing_power = 10 if not self.squad_in_combat() else 1
