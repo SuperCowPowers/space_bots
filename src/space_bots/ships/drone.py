@@ -14,7 +14,7 @@ class Drone(ship.Ship):
 
         # Drone specific stuff
         self.protect_asset = None
-        self.p.damage_modifier = 0.5  # 50% reduction (cause science)
+        self.p.damage_modifier = 0.25  # 75% reduction (cause science)
 
         # Drone Level adjustments
         self.level = level

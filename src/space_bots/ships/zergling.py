@@ -13,7 +13,7 @@ class Zergling(ship.Ship):
 
         # Zergling specific stuff
         self.protect_asset = None
-        self.p.damage_modifier = 0.9  # 90% reduction (cause they are slippery)
+        self.p.damage_modifier = 0.5  # 50% reduction (cause they are slippery)
 
         # Zergling Level adjustments
         self.level = level

@@ -178,8 +178,8 @@ class Universe:
                 (dx, dy), (co_dx, co_dy) = force_utils.repulsion_forces(ship, co_ship)
                 ship.force_x += dx * co_ship.mass/ship.mass
                 ship.force_y += dy * co_ship.mass/ship.mass
-                co_ship.force_x += co_dx * ship.mass/ship.mass
-                co_ship.force_y += co_dy * ship.mass/ship.mass
+                co_ship.force_x += co_dx * ship.mass/co_ship.mass
+                co_ship.force_y += co_dy * ship.mass/co_ship.mass
 
         # Next: Ships vs Planet
         for ship in self.all_ships:
@@ -194,8 +194,9 @@ class Universe:
         # FIXME
         # Note: This is a 'hard' boundary
         for _ship in self.all_ships:
-            _ship.x = min(max(_ship.x, self.pad/4), self.width-self.pad/4)
-            _ship.y = min(max(_ship.y, self.pad/4), self.height-self.pad/4)
+            ship_pad = self.pad/4
+            _ship.x = min(max(_ship.x, ship_pad), self.width-ship_pad)
+            _ship.y = min(max(_ship.y, ship_pad), self.height-ship_pad)
 
     def _space_out_planets(self):
         """Make sure planets don't overlap"""
@@ -261,7 +262,7 @@ def test():
     ypos = 200
     for squad_name in ['zerg1', 'zerg2']:
         zerg_squad = Squad(team='xenos', squad_name=squad_name, target_strategy='nearest', stance='offensive')
-        for _ in range(25):
+        for _ in range(15):
             zerg_squad.add_ship(zergling.Zergling(my_game_engine, xpos, ypos))
         # Give Squad Battle State and Add to the Universe
         zerg_squad.set_battle_state(my_battle_state)
@@ -270,11 +271,12 @@ def test():
         ypos = 900
 
     # Create our Squad
+    level = 1
     earth_squad = Squad(team='earth', squad_name='roughnecks', target_strategy='threat', stance='defensive')
-    my_miner = miner.Miner(my_game_engine, 850, 700, level=2)
+    my_miner = miner.Miner(my_game_engine, 850, 700, level=level)
     earth_squad.add_ship(my_miner)
-    earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=2))
-    earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=2))
+    earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=level))
+    earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=level))
     earth_squad.add_ship(tank.Tank(my_game_engine, 850, 700, level=2))
     for _ in range(2):
         earth_squad.add_ship(fighter.Fighter(my_game_engine, 850, 700, level=2))
@@ -283,7 +285,7 @@ def test():
 
     drone_squad = Squad(team='earth', squad_name='drones', target_strategy='nearest', stance='defensive')
     for _ in range(2):
-        drone_squad.add_ship(drone.Drone(my_game_engine, 850, 700, level=1))
+        drone_squad.add_ship(drone.Drone(my_game_engine, 850, 700, level=level))
     drone_squad.set_battle_state(my_battle_state)
     my_universe.add_squad(drone_squad)
 
@@ -303,7 +305,7 @@ def test():
 
     # Add Protection Orders
     earth_squad.protect(my_battle_state.closest_planet(pos))
-    drone_squad.protect(my_miner, 25)
+    drone_squad.protect(my_miner, 20)
 
     # Invoke the event loop
     my_game_engine.event_loop()

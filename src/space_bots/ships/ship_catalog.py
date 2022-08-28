@@ -57,7 +57,7 @@ ship_specs = {
          },
     'miner':
         {'color': (180, 160, 60),
-         'mass': 40,
+         'mass': 50,
          'speed': 0.25,
          'radius': 12,
          'hp': 200,
@@ -75,7 +75,7 @@ ship_specs = {
          },
     'drone':
         {'color': (180, 200, 100),
-         'mass': 20,
+         'mass': 15,
          'speed': 0.6,
          'radius': 7,
          'hp': 60,

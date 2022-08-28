@@ -104,10 +104,10 @@ class Ship(entity.Entity):
             self.s.shield = min(self.s.shield + points, self.p.shield)
 
     def health(self):
-        return self.s.hp + self.s.shield  # Not counting self.s.extra_shield for now
+        return self.s.hp+self.s.shield+self.s.extra_shield
 
     def health_percent(self):
-        return self.health()/(self.p.hp+self.p.shield)
+        return self.health()/(self.p.hp+self.p.shield+self.s.extra_shield)
 
     def medium_health(self):
         return self.health_percent() < 0.5
