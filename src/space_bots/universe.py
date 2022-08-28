@@ -1,10 +1,12 @@
 """Universe: Class that contains all the stuff"""
 import time
-from random import randint
+import string
+from random import randint, choice
 from collections import Counter
 
 # Local Imports
-from space_bots import comms
+from space_bots import comms, battle_state
+from space_bots.squad import Squad
 from space_bots.utils import force_utils
 
 
@@ -32,6 +34,9 @@ class Universe:
         self.wave_over = False
         self.current_text = None
 
+        # Universal Battle Info
+        self.battle_info = battle_state.BattleState(self)
+
         # Communication Channels
         self.comms = comms.Comms()
 
@@ -40,8 +45,7 @@ class Universe:
         print('Universe Finalize...')
 
         # We need a list of individual ships for collision detections
-        squad_ships = [ship for _squad in self.squads for ship in _squad.ships]
-        self.all_ships = self.individual_ships + squad_ships
+        self.all_ships = [ship for _squad in self.squads for ship in _squad.ships]
 
         # All entities are collected into one big list
         self.all_entities = self.planets + self.squads
@@ -76,12 +80,21 @@ class Universe:
 
     def add_squad(self, squad):
         """Add a Squad to the Universe"""
-        self.squads.append(squad)
         squad.game_engine = self.game_engine
+        squad.set_battle_info(self.battle_info)
+        self.squads.append(squad)
 
-    def add_ship(self, ship):
-        """Add a Ship to the Universe"""
-        self.individual_ships.append(ship)
+    @staticmethod
+    def gen_squad_name():
+        return 'solo_' + ''.join([choice(string.ascii_letters) for _ in range(4)])
+
+    def add_ship(self, ship, team):
+        """Add an Individual Ship to the Universe"""
+        # Note: Design Choice to Make ALL ships be in squad
+        #       Good? Bad? Not sure but it simplifies code
+        squad = Squad(team=team, squad_name=self.gen_squad_name(), target_strategy='nearest')
+        squad.add_ship(ship)
+        self.add_squad(squad)
 
     def remove_ship(self, ship):
         """Remove a Ship from the Universe"""
@@ -225,7 +238,7 @@ class Universe:
 
 # Simple test of the Universe functionality
 def test():
-    from space_bots import game_engine_adapter, battle_state
+    from space_bots import game_engine_adapter
     from space_bots.squad import Squad
     from space_bots.ships import ship, miner, healer, tank, fighter, drone, zergling
     from space_bots.planet import Planet
@@ -241,18 +254,13 @@ def test():
     # Give the universe the game engine
     my_universe.set_game_engine(my_game_engine)
 
-    # Create our Battle State (universal in this case)
-    my_battle_state = battle_state.BattleState(my_universe)
-
     # Create two Pirate Squads (who doesn't want to be a pirate?)
     xpos = 300
     ypos = 850
     for squad_name in ['berserker', 'spitter', 'mega_bug']:
-        my_squad = Squad(team='xenos', squad_name=squad_name, target_strategy='nearest', stance='offensive')
+        my_squad = Squad(team='xenos', squad_name=squad_name, target_strategy='nearest')
         for _ in range(2):
             my_squad.add_ship(ship.Ship(my_game_engine, xpos, ypos, ship_type=squad_name, level=2))
-        # Give Squad Battle State and Add to the Universe
-        my_squad.set_battle_state(my_battle_state)
         my_universe.add_squad(my_squad)
         xpos = 300
         ypos = 300
@@ -261,18 +269,16 @@ def test():
     xpos = 700
     ypos = 200
     for squad_name in ['zerg1', 'zerg2']:
-        zerg_squad = Squad(team='xenos', squad_name=squad_name, target_strategy='nearest', stance='offensive')
+        zerg_squad = Squad(team='xenos', squad_name=squad_name, target_strategy='nearest')
         for _ in range(15):
             zerg_squad.add_ship(zergling.Zergling(my_game_engine, xpos, ypos))
-        # Give Squad Battle State and Add to the Universe
-        zerg_squad.set_battle_state(my_battle_state)
         my_universe.add_squad(zerg_squad)
         xpos = 300
         ypos = 900
 
     # Create our Squad
     level = 1
-    earth_squad = Squad(team='earth', squad_name='roughnecks', target_strategy='threat', stance='defensive')
+    earth_squad = Squad(team='earth', squad_name='roughnecks', target_strategy='threat')
     my_miner = miner.Miner(my_game_engine, 850, 700, level=level)
     earth_squad.add_ship(my_miner)
     earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=level))
@@ -280,13 +286,11 @@ def test():
     earth_squad.add_ship(tank.Tank(my_game_engine, 850, 700, level=2))
     for _ in range(2):
         earth_squad.add_ship(fighter.Fighter(my_game_engine, 850, 700, level=2))
-    earth_squad.set_battle_state(my_battle_state)
     my_universe.add_squad(earth_squad)
 
-    drone_squad = Squad(team='earth', squad_name='drones', target_strategy='nearest', stance='defensive')
+    drone_squad = Squad(team='earth', squad_name='drones', target_strategy='nearest')
     for _ in range(2):
         drone_squad.add_ship(drone.Drone(my_game_engine, 850, 700, level=level))
-    drone_squad.set_battle_state(my_battle_state)
     my_universe.add_squad(drone_squad)
 
     # Add some planets
@@ -304,7 +308,7 @@ def test():
     pos.y = 500
 
     # Add Protection Orders
-    earth_squad.protect(my_battle_state.closest_planet(pos))
+    earth_squad.protect(my_universe.battle_info.closest_planet(pos))
     drone_squad.protect(my_miner, 20)
 
     # Invoke the event loop

@@ -45,7 +45,7 @@ class Tank(ship.Ship):
             self.force_y += dy * 2
 
         # Track the lowest health TeamMate
-        self.protect_target = self.battle_state.lowest_health_teammate(self)
+        self.protect_target = self.battle_info.lowest_health_teammate(self)
         if not self.shield_thrown and self.protect_target.health_percent() < .1:
             print('Tank: Take the Pain!')
             self.announcer_messages.put('tank_cast_pain')

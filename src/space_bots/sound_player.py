@@ -36,7 +36,7 @@ class SoundPlayer:
         for sound_file in next(walk(sound_location), (None, None, []))[2]:
             clip_tag = path.splitext(sound_file)[0]
             self.sound_clips[clip_tag] = self.mixer.Sound(path.join(sound_location, sound_file))
-            self.sound_clips[clip_tag].set_volume(0.3)
+            self.sound_clips[clip_tag].set_volume(0.1)
 
         # Load up our voice-over files
         sound_location = path.join(path.dirname(__file__), 'sounds/voice_overs/')

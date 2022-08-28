@@ -11,13 +11,12 @@ import math
 from queue import SimpleQueue
 
 # Local Imports
-from space_bots import battle_state
 from space_bots.utils import force_utils
 
 
 class Squad:
     """Squad: Class for the Squads in Space Bots"""
-    def __init__(self, team, squad_name, target_strategy='nearest', stance='defensive'):
+    def __init__(self, team, squad_name, target_strategy='nearest'):
 
         # Set my attributes
         self.game_engine = None
@@ -26,7 +25,6 @@ class Squad:
         self.adversaries = None
         self.target_strategy = target_strategy
         self.main_target = None
-        self.stance = stance
 
         # Squad position will be centroid of the Squad
         self.x = 0
@@ -53,7 +51,7 @@ class Squad:
         self.protection_distance = 150
 
         # Battle State/Reconnaissance
-        self.battle_state = None
+        self.battle_info = None
         self.in_combat = False
         self.first_combat = True
         self.combat_timer = 0
@@ -65,12 +63,13 @@ class Squad:
         """Add a Ship to this Squad"""
         ship.team = self.team
         ship.squad = self
+        ship.battle_info = self.battle_info
         self.ships.append(ship)
 
-    def set_battle_state(self, battle_state):
-        self.battle_state = battle_state
+    def set_battle_info(self, battle_info):
+        self.battle_info = battle_info
         for ship in self.ships:
-            ship.set_battle_state(battle_state)
+            ship.set_battle_info(battle_info)
 
     def set_combat_status(self, combat):
 
@@ -92,7 +91,6 @@ class Squad:
 
     def protect(self, asset, distance=150):
         """Tell the Squad to protect a planet, squad or a ship (asset)"""
-        self.stance = 'protect'
         self.protection_asset = asset
         self.protection_distance = distance
 
@@ -139,7 +137,7 @@ class Squad:
         self.set_combat_status(any([s.in_combat for s in self.ships]))
 
         # Get my adversaries
-        self.adversaries = self.battle_state.adversary_ships(self)
+        self.adversaries = self.battle_info.adversary_ships(self)
 
         # Compute health, mass, and threat (mass*1/distance)
         self.ship_health = self.lowest_health()
@@ -157,8 +155,8 @@ class Squad:
             _ship.force_x += dx
             _ship.force_y += dy
 
-        # Protect Stance
-        if self.stance == 'protect':
+        # Protecting an Asset
+        if self.protection_asset:
             for _ship in self.ships:
                 (_, _), (dx, dy) = force_utils.attraction_forces(self.protection_asset, _ship, self.protection_distance)
                 _ship.force_x += dx
@@ -283,29 +281,23 @@ def test():
     my_universe.set_game_engine(my_game_engine)
 
     # Create our Squad
-    my_squad = Squad(team='earth', squad_name='roughnecks', target_strategy='threat')
+    my_squad = Squad('earth', 'roughnecks', target_strategy='threat')
     my_squad.add_ship(healer.Healer(my_game_engine, 600, 400))
     my_squad.add_ship(tank.Tank(my_game_engine, 600, 400))
     my_squad.add_ship(ship.Ship(my_game_engine, 600, 400, ship_type='fighter'))
     my_squad.add_ship(miner.Miner(my_game_engine, 600, 400))
 
     # Create a Pirate Squad (who doesn't want to be a pirate?)
-    pirate_squad = Squad(team='xenos', squad_name='pirates', target_strategy='nearest')
+    pirate_squad = Squad('xenos', 'pirates', target_strategy='nearest')
     pirate_squad.add_ship(ship.Ship(my_game_engine, 1200, 700, ship_type='spitter'))
     pirate_squad.add_ship(ship.Ship(my_game_engine, 1200, 700, ship_type='berserker'))
     pirate_squad.add_ship(ship.Ship(my_game_engine, 1200, 700, ship_type='berserker'))
     pirate_squad.add_ship(ship.Ship(my_game_engine, 1200, 700, ship_type='berserker'))
 
     # Add a Zerg squad
-    zerg_squad = Squad(team='xenos', squad_name='zerg me', target_strategy='low_health', stance='offensive')
+    zerg_squad = Squad('xenos', 'zerg me', target_strategy='low_health')
     for _ in range(10):
         zerg_squad.add_ship(ship.Ship(my_game_engine, 1200, 700, ship_type='zergling'))
-
-    # Give our Squads the Battle State (universal in this case)
-    my_battle_state = battle_state.BattleState(my_universe)
-    my_squad.set_battle_state(my_battle_state)
-    pirate_squad.set_battle_state(my_battle_state)
-    zerg_squad.set_battle_state(my_battle_state)
 
     # Add all Squads to the Universe
     my_universe.add_squad(zerg_squad)

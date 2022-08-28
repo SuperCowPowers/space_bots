@@ -31,7 +31,7 @@ class Healer(ship.Ship):
         self.salvation_thrown = False if not self.squad_in_combat() else self.salvation_thrown
 
         # Get the lowest health TeamMate and move towards them
-        self.healing_target = self.battle_state.lowest_health_teammate(self)
+        self.healing_target = self.battle_info.lowest_health_teammate(self)
         if self.healing_target and self.healing_target != self:
             # Rush
             rush = 3 if self.healing_target.health_percent() < .5 else 1
@@ -72,7 +72,7 @@ class Healer(ship.Ship):
 # Simple test of the Healer functionality
 def test():
     """Test for Healer Class"""
-    from space_bots import game_engine_adapter, planet, battle_state
+    from space_bots import game_engine_adapter, planet
     from space_bots.universe import Universe
     from space_bots.ships.miner import Miner
 
@@ -91,14 +91,9 @@ def test():
 
     # Create a Healer ship and a Miner Ship
     healer_ship = Healer(my_game_engine, 300, 300)
-    my_universe.add_ship(healer_ship)
+    my_universe.add_ship(healer_ship, team='earth')
     miner_ship = Miner(my_game_engine, 400, 400)
-    my_universe.add_ship(miner_ship)
-
-    # Give our ship the Battle State (universal in this case)
-    my_battle_state = battle_state.BattleState(my_universe)
-    healer_ship.set_battle_state(my_battle_state)
-    miner_ship.set_battle_state(my_battle_state)
+    my_universe.add_ship(miner_ship, team='earth')
 
     # Give the miner some damage to heal up
     miner_ship.damage(300)

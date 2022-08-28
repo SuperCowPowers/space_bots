@@ -25,7 +25,7 @@ class Ship(entity.Entity):
         self.p.laser_damage *= self.level
 
         # Battle State/Reconnaissance
-        self.battle_state = None
+        self.battle_info = None
 
         # Combat indicators and vars
         self.in_combat = False
@@ -45,8 +45,8 @@ class Ship(entity.Entity):
         super().__init__(game_engine, x, y, mass=self.p.mass, speed=self.p.speed,
                          collision_radius=self.p.collision_radius)
 
-    def set_battle_state(self, battle_state):
-        self.battle_state = battle_state
+    def set_battle_info(self, battle_info):
+        self.battle_info = battle_info
 
     def squad_in_combat(self):
         return self.squad.in_combat if self.squad else False
@@ -303,8 +303,8 @@ def test():
     # Create two ships (one more massive than another
     heavy_ship = Ship(my_game_engine, 100, 100, ship_type='tank')
     light_ship = Ship(my_game_engine, 100, 200, ship_type='healer')
-    my_universe.add_ship(heavy_ship)
-    my_universe.add_ship(light_ship)
+    my_universe.add_ship(heavy_ship, team='earth')
+    my_universe.add_ship(light_ship, team='earth')
 
     # Give the ship a push and do some damage
     heavy_ship.force_x = 10000
