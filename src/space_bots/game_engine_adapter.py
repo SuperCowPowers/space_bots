@@ -53,7 +53,7 @@ class GameEngineAdapter:
 
     def restricted_announce(self, sound_name, voice='random'):
         """Play the sound with the given sound name"""
-        self.sound_player.announce(sound_name, voice)
+        return self.sound_player.announce(sound_name, voice)
 
     def set_background_color(self, color):
         self.background_color = color

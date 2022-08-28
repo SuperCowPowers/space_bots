@@ -61,6 +61,7 @@ class SoundPlayer:
         # FIXME: Hardcoded limits for now
         self.sound_limiter.add_limit('laser', 0.01)
         self.sound_limiter.add_limit('explosion', 1)
+        self.sound_limiter.add_limit('uff', 1)
 
     def play_background_music(self, mix='default'):
         """Play some Background Music"""
@@ -115,6 +116,8 @@ class SoundPlayer:
         if not any([_filter in voice_line_name for _filter in self.announce_filters]):
             # Play the voice line (with chosen announcer)
             self.add_sound_to_queue(voice_line_name, busy_wait=True)
+            return True
+        return False
 
 
 # Simple test of the SoundPlayer functionality

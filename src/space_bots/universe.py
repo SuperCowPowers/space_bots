@@ -121,13 +121,13 @@ class Universe:
         # Play announcements
         if self.announcements:
             for info in self.comms.get_messages('announcements'):
-                self.time_slow = 0.2
-                self.game_engine.restricted_announce(info['voice_line'], info['voice'])
+                if self.game_engine.restricted_announce(info['voice_line'], info['voice']):
+                    self.time_slow = 0.2
 
         # Play sounds
         for sound_name in self.comms.get_messages('sounds'):
             # FIXME: Laser to PowerCord Hack :)
-            if sound_name == 'laser' and self.intro_lasers < 4:
+            if sound_name == 'laser' and self.intro_lasers < 1:
                 self.time_slow = 0.3
                 self.game_engine.restricted_announce(self.power_cords[self.intro_lasers], None)
                 self.intro_lasers += 1
@@ -277,7 +277,7 @@ def test():
     for squad_name in ['berserker', 'spitter', 'mega_bug']:
         my_squad = Squad(team='xenos', squad_name=squad_name, target_strategy='nearest')
         for _ in range(2):
-            my_squad.add_ship(ship.Ship(my_game_engine, xpos, ypos, ship_type=squad_name, level=2))
+            my_squad.add_ship(ship.Ship(my_game_engine, xpos, ypos, ship_type=squad_name, level=3))
         my_universe.add_squad(my_squad)
         xpos = 300
         ypos = 300
@@ -294,15 +294,15 @@ def test():
         ypos = 900
 
     # Create our Squad
-    level = 1
+    level = 2
     earth_squad = Squad(team='earth', squad_name='roughnecks', target_strategy='threat')
     my_miner = miner.Miner(my_game_engine, 850, 700, level=level)
     earth_squad.add_ship(my_miner)
+    earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=1))
     earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=level))
-    earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=level))
-    earth_squad.add_ship(tank.Tank(my_game_engine, 850, 700, level=2))
+    earth_squad.add_ship(tank.Tank(my_game_engine, 850, 700, level=level))
     for _ in range(2):
-        earth_squad.add_ship(fighter.Fighter(my_game_engine, 850, 700, level=2))
+        earth_squad.add_ship(fighter.Fighter(my_game_engine, 850, 700, level=level))
     my_universe.add_squad(earth_squad)
 
     drone_squad = Squad(team='earth', squad_name='drones', target_strategy='nearest')
