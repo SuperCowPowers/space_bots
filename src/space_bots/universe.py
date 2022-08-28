@@ -29,10 +29,12 @@ class Universe:
         self.all_entities = []
         self.individual_entities = []
         self.is_finalized = False
-        self.time_slow = 0.0
+        self.time_slow = 0.5
         self.initial_count_down = False
         self.wave_over = False
         self.current_text = None
+        self.intro_lasers = 0
+        self.power_cords = ['power_cord_d', 'power_cord_e', 'power_cord_f', 'power_cord_g']
 
         # Universal Battle Info
         self.battle_info = battle_state.BattleState(self)
@@ -118,6 +120,11 @@ class Universe:
 
         # Play sounds
         for sound_name in self.comms.get_messages('sounds'):
+            # FIXME: Laser to PowerCord Hack :)
+            if sound_name == 'laser' and self.intro_lasers < 4:
+                self.time_slow = 0.1
+                self.game_engine.restricted_announce(self.power_cords[self.intro_lasers], None)
+                self.intro_lasers += 1
             self.game_engine.restricted_play_sound(sound_name)
 
         # Display info/stats
@@ -264,7 +271,7 @@ def test():
     for squad_name in ['berserker', 'spitter', 'mega_bug']:
         my_squad = Squad(team='xenos', squad_name=squad_name, target_strategy='nearest')
         for _ in range(2):
-            my_squad.add_ship(ship.Ship(my_game_engine, xpos, ypos, ship_type=squad_name, level=2))
+            my_squad.add_ship(ship.Ship(my_game_engine, xpos, ypos, ship_type=squad_name, level=9))
         my_universe.add_squad(my_squad)
         xpos = 300
         ypos = 300

@@ -18,6 +18,9 @@ class SoundPlayer:
         self.sound_queue = queue.Queue()
         self.mixer = pygame.mixer
 
+        # Announce filters FIXME
+        self.announce_filters = ['fighter', 'drone']
+
         # Loading the default background music
         music_location = path.join(path.dirname(__file__), 'sounds/background_music/')
         self.music_tracks = {}
@@ -36,7 +39,11 @@ class SoundPlayer:
         for sound_file in next(walk(sound_location), (None, None, []))[2]:
             clip_tag = path.splitext(sound_file)[0]
             self.sound_clips[clip_tag] = self.mixer.Sound(path.join(sound_location, sound_file))
-            self.sound_clips[clip_tag].set_volume(0.1)
+            # Special case for lasers
+            if clip_tag == 'laser':
+                self.sound_clips[clip_tag].set_volume(0.1)
+            else:
+                self.sound_clips[clip_tag].set_volume(0.3)
 
         # Load up our voice-over files
         sound_location = path.join(path.dirname(__file__), 'sounds/voice_overs/')
@@ -96,10 +103,15 @@ class SoundPlayer:
         # This just constructs a voice_line tag
         choices = ['male', 'female']
         announcer = choice(choices) if announcer == 'random' else announcer
-        voice_line_name = f'{voice_line}_{announcer}'
+        if announcer is not None:
+            voice_line_name = f'{voice_line}_{announcer}'
+        else:
+            voice_line_name = f'{voice_line}'
 
-        # Play the voice line (with chosen announcer)
-        self.add_sound_to_queue(voice_line_name, busy_wait=True)
+        # Check the announcer filter
+        if not any([_filter in voice_line_name for _filter in self.announce_filters]):
+            # Play the voice line (with chosen announcer)
+            self.add_sound_to_queue(voice_line_name, busy_wait=True)
 
 
 # Simple test of the SoundPlayer functionality
@@ -112,6 +124,11 @@ def test():
 
     # Create a Sound Adapter class and test some stuff out
     my_sound = SoundPlayer()
+
+    # Level Tests
+    my_sound.announce('uff', None)
+    # my_sound.announce('fighter_down', 'male')
+    my_sound.announce('power_cord_d', None)
 
     # We should only here one laser due to limiter
     sleep(1)

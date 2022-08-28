@@ -129,8 +129,8 @@ class Ship(entity.Entity):
                 comms.announce(f"{self.ship_type}_low")
                 self.low_health_announced = True
             if self.is_dead() and not self.death_announced:
+                comms.announce('uff')
                 comms.announce(f"{self.ship_type}_down")
-                comms.play_sound('explosion')
                 self.death_announced = True
             if self.current_laser_target and self.new_laser_target:
                 comms.play_sound('laser')
