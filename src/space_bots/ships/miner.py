@@ -67,7 +67,7 @@ class Miner(ship.Ship):
 # Simple test of the Miner functionality
 def test():
     """Test for Miner Class"""
-    from space_bots import game_engine_adapter, planet, battle_state
+    from space_bots import game_engine_adapter, planet
     from space_bots.universe import Universe
 
     # Create a Universe
@@ -85,16 +85,14 @@ def test():
 
     # Create a Miner ship
     miner_ship = Miner(my_game_engine, 400, 400)
-    my_universe.add_ship(miner_ship)
+    my_universe.add_ship(miner_ship, team='earth')
 
-    # Give our ship the Battle State (universal in this case)
-    my_battle_state = battle_state.BattleState(my_universe)
-    miner_ship.set_battle_state(my_battle_state)
-
-    # Give the ship a push and do some damage
-    miner_ship.force_x = 1000
-    miner_ship.force_y = -200
-    miner_ship.damage(100)
+    # Set mining planet
+    class pos:
+        pass
+    pos.x = 500
+    pos.y = 500
+    miner_ship.squad.protect(my_universe.battle_info.closest_planet(pos))
 
     # Invoke the event loop
     my_game_engine.event_loop()

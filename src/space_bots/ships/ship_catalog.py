@@ -112,7 +112,7 @@ ship_specs = {
     'zergling':
         {'color': (180, 130, 80),
          'mass': 2,
-         'speed': 0.8,
+         'speed': 0.7,
          'radius': 6,
          'hp': 50,
          'shield': 30,
@@ -164,7 +164,7 @@ ship_specs = {
          'threat': 50
          },
     'mega_bug':
-        {'color': (140, 40, 60),
+        {'color': (140, 60, 80),
          'mass': 25,  # FIXME
          'speed': 1.0,
          'radius': 20,

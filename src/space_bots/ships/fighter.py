@@ -14,6 +14,7 @@ class Fighter(ship.Ship):
         # Fighter Level adjustments
         self.level = level
         self.p.laser_damage *= self.level
+        self.add_buff('first_strike')
 
     def update(self):
         """Update the Fighter"""
@@ -36,9 +37,9 @@ class Fighter(ship.Ship):
 # Simple test of the Fighter functionality
 def test():
     """Test for Fighter Class"""
-    from space_bots import game_engine_adapter, planet, battle_state
+    from space_bots import game_engine_adapter, planet
     from space_bots.universe import Universe
-    from space_bots.ships.miner import Miner
+    from space_bots.ships.healer import Healer
 
     # Create a Universe
     my_universe = Universe()
@@ -50,22 +51,17 @@ def test():
     my_universe.set_game_engine(my_game_engine)
 
     # Create a Planet
-    my_planet = planet.Planet(my_game_engine, 500, 500)
+    my_planet = planet.Planet(my_game_engine, 700, 400)
     my_universe.add_planet(my_planet)
 
-    # Create a Fighter ship and a Miner Ship
-    healer_ship = Fighter(my_game_engine, 300, 300)
-    my_universe.add_ship(healer_ship)
-    miner_ship = Miner(my_game_engine, 400, 400)
-    my_universe.add_ship(miner_ship)
-
-    # Give our ship the Battle State (universal in this case)
-    my_battle_state = battle_state.BattleState(my_universe)
-    healer_ship.set_battle_state(my_battle_state)
-    miner_ship.set_battle_state(my_battle_state)
+    # Create a Fighter ship and a Healer Ship
+    figher_ship = Fighter(my_game_engine, 300, 300)
+    my_universe.add_ship(figher_ship, team='earth')
+    healer_ship = Healer(my_game_engine, 400, 400)
+    my_universe.add_ship(healer_ship, team='earth')
 
     # Give the miner some damage to heal up
-    miner_ship.damage(300)
+    figher_ship.damage(300)
 
     # Invoke the event loop
     my_game_engine.event_loop()

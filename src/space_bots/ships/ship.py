@@ -28,6 +28,7 @@ class Ship(entity.Entity):
         self.battle_info = None
 
         # Combat indicators and vars
+        self.first_strike = False
         self.in_combat = False
         self.combat_timer = 0
         self.dead = False
@@ -231,6 +232,8 @@ class Ship(entity.Entity):
     def draw_laser(self):
         """Draw the laser"""
         if self.s.target and force_utils.distance_between(self, self.s.target) < self.p.laser_range:
+            self.first_strike = False
+
             # Track if new target
             if self.s.target != self.current_laser_target:
                 self.current_laser_target = self.s.target

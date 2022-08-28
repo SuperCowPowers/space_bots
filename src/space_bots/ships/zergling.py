@@ -40,9 +40,9 @@ class Zergling(ship.Ship):
 # Simple test of the Zergling functionality
 def test():
     """Test for Zergling Class"""
-    from space_bots import game_engine_adapter, planet, battle_state
+    from space_bots import game_engine_adapter, planet
     from space_bots.universe import Universe
-    from space_bots.ships.miner import Miner
+    from space_bots.ships.healer import Healer
 
     # Create a Universe
     my_universe = Universe()
@@ -54,22 +54,17 @@ def test():
     my_universe.set_game_engine(my_game_engine)
 
     # Create a Planet
-    my_planet = planet.Planet(my_game_engine, 500, 500)
+    my_planet = planet.Planet(my_game_engine, 700, 400)
     my_universe.add_planet(my_planet)
 
-    # Create a Zergling ship and a Miner Ship
-    healer_ship = Zergling(my_game_engine, 300, 300)
-    my_universe.add_ship(healer_ship)
-    miner_ship = Miner(my_game_engine, 400, 400)
-    my_universe.add_ship(miner_ship)
-
-    # Give our ship the Battle State (universal in this case)
-    my_battle_state = battle_state.BattleState(my_universe)
-    healer_ship.set_battle_state(my_battle_state)
-    miner_ship.set_battle_state(my_battle_state)
+    # Create a Zergling ship and a Healer Ship
+    zerg_ship = Zergling(my_game_engine, 300, 300)
+    my_universe.add_ship(zerg_ship, team='zerg')
+    healer_ship = Healer(my_game_engine, 400, 400)
+    my_universe.add_ship(healer_ship, team='zerg')
 
     # Give the miner some damage to heal up
-    miner_ship.damage(300)
+    zerg_ship.damage(100)
 
     # Invoke the event loop
     my_game_engine.event_loop()

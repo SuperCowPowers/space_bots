@@ -54,6 +54,9 @@ class SoundPlayer:
             clip_tag = path.splitext(sound_file)[0]
             self.sound_clips[clip_tag] = self.mixer.Sound(path.join(sound_location, sound_file))
             self.sound_clips[clip_tag].set_volume(1.0)
+            # Special case for power_cords
+            if 'power_cord' in clip_tag:
+                self.sound_clips[clip_tag].set_volume(0.5)
 
         # FIXME: Hardcoded limits for now
         self.sound_limiter.add_limit('laser', 0.01)

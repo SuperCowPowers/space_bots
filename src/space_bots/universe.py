@@ -16,9 +16,14 @@ class Universe:
     # Note: Maybe refactor/rethink how this class should be used later
     #      - Collision Detection should be a separate class
 
-    def __init__(self, width=1600, height=1000):
+    def __init__(self, width=1600, height=1000, announcements=False):
         """Initialize the Universe class"""
         self.game_engine = None
+        self.announcements = announcements
+        if announcements:
+            self.time_slow = 10.0
+        else:
+            self.time_slow = 0
         self.pad = 150
         self.width = width
         self.height = height
@@ -29,7 +34,7 @@ class Universe:
         self.all_entities = []
         self.individual_entities = []
         self.is_finalized = False
-        self.time_slow = 0.5
+
         self.initial_count_down = False
         self.wave_over = False
         self.current_text = None
@@ -114,15 +119,16 @@ class Universe:
         """Let all the entities in the Universe communicate"""
 
         # Play announcements
-        for info in self.comms.get_messages('announcements'):
-            self.time_slow = 0.1
-            self.game_engine.restricted_announce(info['voice_line'], info['voice'])
+        if self.announcements:
+            for info in self.comms.get_messages('announcements'):
+                self.time_slow = 0.2
+                self.game_engine.restricted_announce(info['voice_line'], info['voice'])
 
         # Play sounds
         for sound_name in self.comms.get_messages('sounds'):
             # FIXME: Laser to PowerCord Hack :)
             if sound_name == 'laser' and self.intro_lasers < 4:
-                self.time_slow = 0.1
+                self.time_slow = 0.3
                 self.game_engine.restricted_announce(self.power_cords[self.intro_lasers], None)
                 self.intro_lasers += 1
             self.game_engine.restricted_play_sound(sound_name)
@@ -157,7 +163,7 @@ class Universe:
 
         # Time Slow
         time.sleep(self.time_slow)
-        self.time_slow *= .95
+        self.time_slow *= .9
 
         # Do we only have one team left?
         team_counts = Counter([s.team for s in self.all_ships])
@@ -257,7 +263,7 @@ def test():
     """Test for Universe Class"""
 
     # Create our Universe
-    my_universe = Universe(1600, 1000)
+    my_universe = Universe(1600, 1000, announcements=True)
 
     # Create the Game Engine
     my_game_engine = game_engine_adapter.GameEngineAdapter(my_universe)
@@ -271,20 +277,20 @@ def test():
     for squad_name in ['berserker', 'spitter', 'mega_bug']:
         my_squad = Squad(team='xenos', squad_name=squad_name, target_strategy='nearest')
         for _ in range(2):
-            my_squad.add_ship(ship.Ship(my_game_engine, xpos, ypos, ship_type=squad_name, level=9))
+            my_squad.add_ship(ship.Ship(my_game_engine, xpos, ypos, ship_type=squad_name, level=2))
         my_universe.add_squad(my_squad)
         xpos = 300
         ypos = 300
 
     # Add two zerg squads
-    xpos = 700
-    ypos = 200
+    xpos = 300
+    ypos = 150
     for squad_name in ['zerg1', 'zerg2']:
         zerg_squad = Squad(team='xenos', squad_name=squad_name, target_strategy='nearest')
         for _ in range(15):
             zerg_squad.add_ship(zergling.Zergling(my_game_engine, xpos, ypos))
         my_universe.add_squad(zerg_squad)
-        xpos = 300
+        xpos = 100
         ypos = 900
 
     # Create our Squad

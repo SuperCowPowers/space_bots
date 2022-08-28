@@ -26,6 +26,12 @@ ship_buffs = {
          'timer': 5,
          'display': False
          },
+    'first_strike':
+        {'effects': {'laser_range_modifier': 2.0},
+         'timer': 5,
+         'display': True,
+         'color': (220, 100, 100)
+         },
     'ape_shit':
         {'effects': {'outgoing_damage_modifier': 0.5},
          'timer': 2,

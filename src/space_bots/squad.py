@@ -104,7 +104,7 @@ class Squad:
         # Squad level communication
         if self.combat_status_change:
             if self.in_combat and self.first_combat and self.squad_name == 'roughnecks':
-                comms.announce('lets_rock', 'squad_leader_1')
+                # comms.announce('lets_rock', 'squad_leader_1')
                 self.first_combat = False
 
         # Squad Zenite Extracted and Damage Taken
