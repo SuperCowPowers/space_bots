@@ -50,6 +50,10 @@ class Universe:
         # All entities are collected into one big list
         self.all_entities = self.planets + self.squads
 
+        # Make sure all entities are in a reasonable starting position
+        self._space_out_planets()
+        force_utils.resolve_coincident(self.all_ships)
+
         # Initial Text
         self.current_text = 'Wave Incoming!'
 
@@ -298,8 +302,8 @@ def test():
         my_planet = Planet(my_game_engine, x=randint(800, 850), y=randint(500, 550))
         my_universe.add_planet(my_planet)
 
-    # Space them out
-    my_universe._space_out_planets()
+    # Explicitly call finalize on the Universe
+    my_universe.finalize()
 
     # Position
     class pos:

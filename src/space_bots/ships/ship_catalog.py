@@ -81,7 +81,7 @@ ship_specs = {
          'hp': 60,
          'shield': 40,
          'laser_range': 50,
-         'laser_damage': 0.05,
+         'laser_damage': 0.25,  # Still has a punch but low radius
          'laser_width': 2,
          'capacitor': 10,
          'ship_width': 3,
@@ -110,7 +110,7 @@ ship_specs = {
          'threat': 400
          },
     'zergling':
-        {'color': (200, 150, 100),
+        {'color': (180, 130, 80),
          'mass': 2,
          'speed': 0.8,
          'radius': 6,
@@ -128,7 +128,7 @@ ship_specs = {
          'threat': 20
          },
     'spitter':
-        {'color': (200, 120, 100),
+        {'color': (180, 100, 80),
          'mass': 30,
          'speed': 0.25,
          'radius': 14,
@@ -146,7 +146,7 @@ ship_specs = {
          'threat': 80
          },
     'berserker':
-        {'color': (180, 80, 80),
+        {'color': (160, 60, 60),
          'mass': 40,
          'speed': 0.2,
          'radius': 16,
@@ -164,7 +164,7 @@ ship_specs = {
          'threat': 50
          },
     'mega_bug':
-        {'color': (160, 60, 80),
+        {'color': (140, 40, 60),
          'mass': 25,  # FIXME
          'speed': 1.0,
          'radius': 20,

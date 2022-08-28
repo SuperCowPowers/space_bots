@@ -34,16 +34,11 @@ def repulsion_forces(source, target, rest_distance=None):
     if cur_distance > rest_distance:
         return (0, 0), (0, 0)
 
-    # Are we coincident?
-    if cur_distance < 0.001:
-        # Force a position change (just source is fine)
-        source.x += gauss(0, 30)
-        source.y += gauss(0, 30)
-        return (0, 0), (0, 0)
-
     # Okay the repulsion will be greater the closer we are
     # Note: We know with logic above that cur_distance != 0.0
+    # Note: This should be d**2 but works better linear
     repulsion_factor = 1000.0/(cur_distance*cur_distance)
+    # repulsion_factor = 1.0 / cur_distance
 
     # Compute normalized distance vectors
     norm_st, norm_ts = normalized_distance_vectors(source, target)
@@ -56,7 +51,7 @@ def repulsion_forces(source, target, rest_distance=None):
     t_s_ratio = target.mass/source.mass
     s_t_ratio = source.mass/target.mass
     source_repulsion = (source_repulsion[0]*t_s_ratio, source_repulsion[1]*t_s_ratio)
-    source_repulsion = (source_repulsion[0] * s_t_ratio, source_repulsion[1] * s_t_ratio)
+    source_repulsion = (source_repulsion[0]*s_t_ratio, source_repulsion[1]*s_t_ratio)
     return source_repulsion, target_repulsion
 
 
@@ -83,8 +78,11 @@ def attraction_forces(source, target, within_range):
 
 def force_based_movement(entity, limit=None):
     """Move the Entity based on it's current forces, mass, and limits (if any)"""
-    delta_x = entity.force_x / (entity.mass*entity.mass)
-    delta_y = entity.force_y / (entity.mass*entity.mass)
+    # Experimenting with 'forces' (in air quotes)
+    # delta_x = entity.force_x / entity.mass
+    # delta_y = entity.force_y / entity.mass
+    delta_x = entity.force_x / (entity.mass * entity.mass)
+    delta_y = entity.force_y / (entity.mass * entity.mass)
     if limit is not None:
         delta_x = max(min(delta_x, limit), -limit)
         delta_y = max(min(delta_y, limit), -limit)

@@ -246,8 +246,8 @@ class Ship(entity.Entity):
     def draw_shield(self):
         """Draw the Shield"""
         shield_health = 220 * self.s.shield / self.p.shield + 35
-        if self.team == 'pirate':
-            shield_color = (shield_health/1.5, shield_health/1.5, shield_health/1.5)
+        if self.team != 'earth':
+            shield_color = (shield_health/2, shield_health/2, shield_health/2)
         else:
             shield_color = (shield_health, shield_health, shield_health)
         self.game_engine.draw_circle(shield_color, (self.x, self.y), self.p.shield_radius, width=self.p.shield_width)
