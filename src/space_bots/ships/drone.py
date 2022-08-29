@@ -14,12 +14,10 @@ class Drone(ship.Ship):
 
         # Drone specific stuff
         self.protect_asset = None
-        self.p.damage_modifier = 0.25  # 75% reduction (cause science)
+        self.p.damage_modifier = 0.5  # 50% reduction (cause science)
 
         # Drone Level adjustments
         self.level = level
-
-        # Drones get a buff when there's more of them (real implementation TBD)
         self.p.laser_damage *= self.level*self.level  # Hee Hee
 
     def update(self):
@@ -39,12 +37,6 @@ class Drone(ship.Ship):
 
         # Now actually call the move command (which uses force/mass calc)
         self.move()
-
-    def draw(self):
-        """Draw the entire ship"""
-        self.draw_laser()
-        self.draw_ship()
-        self.draw_shield()
 
 
 # Simple test of the Drone functionality

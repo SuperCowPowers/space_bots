@@ -51,9 +51,7 @@ class Healer(ship.Ship):
     def draw(self):
         """Draw the entire ship"""
         self.draw_healing_laser()
-        self.draw_ship()
-        self.draw_shield()
-        self.draw_buffs()
+        super().draw()
 
     def draw_healing_laser(self):
         """Draw the mining lasers"""

@@ -58,6 +58,7 @@ class Squad:
         self.combat_status_change = False
         self.total_zenite = 0
         self.total_damage = 0
+        self.buff_manager = None
 
     def add_ship(self, ship):
         """Add a Ship to this Squad"""
@@ -67,9 +68,24 @@ class Squad:
         self.ships.append(ship)
 
     def set_battle_info(self, battle_info):
+        """Someone has given us battle info/reconnaissance"""
         self.battle_info = battle_info
         for ship in self.ships:
             ship.set_battle_info(battle_info)
+
+    def set_buff_manager(self, buffs):
+        self.buff_manager = buffs
+        for ship in self.ships:
+            ship.buff_manager = buffs
+
+        # Now add squad buffs
+        self.add_squad_buffs()
+
+    def add_squad_buffs(self):
+        """Now add squad buffs"""
+        fighters = [ship for ship in self.ships if ship.ship_type == 'fighter']
+        for ship in fighters:
+            self.buff_manager.apply('first_strike', ship)
 
     def set_combat_status(self, combat):
 
@@ -268,7 +284,7 @@ class Squad:
 def test():
     """Test for Squad Class"""
     from space_bots import game_engine_adapter
-    from space_bots.ships import ship, miner, healer, tank
+    from space_bots.ships import ship, miner, healer, tank, fighter
     from space_bots.universe import Universe
 
     # Create a universe
@@ -282,15 +298,15 @@ def test():
 
     # Create our Squad
     my_squad = Squad('earth', 'roughnecks', target_strategy='threat')
-    my_squad.add_ship(healer.Healer(my_game_engine, 600, 400))
+    my_squad.add_ship(healer.Healer(my_game_engine, 600, 400, level=2))
     my_squad.add_ship(tank.Tank(my_game_engine, 600, 400))
-    my_squad.add_ship(ship.Ship(my_game_engine, 600, 400, ship_type='fighter'))
+    my_squad.add_ship(fighter.Fighter(my_game_engine, 600, 400))
     my_squad.add_ship(miner.Miner(my_game_engine, 600, 400))
 
     # Create a Pirate Squad (who doesn't want to be a pirate?)
     pirate_squad = Squad('xenos', 'pirates', target_strategy='nearest')
     pirate_squad.add_ship(ship.Ship(my_game_engine, 1200, 700, ship_type='spitter'))
-    pirate_squad.add_ship(ship.Ship(my_game_engine, 1200, 700, ship_type='berserker'))
+    pirate_squad.add_ship(ship.Ship(my_game_engine, 1200, 700, ship_type='spitter'))
     pirate_squad.add_ship(ship.Ship(my_game_engine, 1200, 700, ship_type='berserker'))
     pirate_squad.add_ship(ship.Ship(my_game_engine, 1200, 700, ship_type='berserker'))
 

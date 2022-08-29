@@ -3,22 +3,19 @@
 ship_buffs = {
     'protection':
         {'effects': {'incoming_damage_modifier': -0.1},
-         'timer': 0,
          'display': False
          },
     'kings':
         {'effects': {'threat_modifier': -0.5},
-         'timer': 0,
          'display': False
          },
     'take_the_pain':
-        {'effects': {'extra_shield': 800},
-         'timer': 10,  # If the shield isn't used up expire after 10 seconds
-         'display': False,  # The extra_shield will show but no additional buff effect
+        {'effects': {'shield': 800},
+         'display': True,
+         'color': (60, 60, 200)
          },
     'fortitude':
         {'effects': {'hp_modifier': 0.2},
-         'timer': 0,
          'display': False
          },
     'salvation':
@@ -30,7 +27,7 @@ ship_buffs = {
         {'effects': {'laser_range_modifier': 2.0},
          'timer': 5,
          'display': True,
-         'color': (220, 100, 100)
+         'color': (180, 60, 200)
          },
     'ape_shit':
         {'effects': {'outgoing_damage_modifier': 0.5},

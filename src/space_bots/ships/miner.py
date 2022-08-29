@@ -53,8 +53,7 @@ class Miner(ship.Ship):
     def draw(self):
         """Draw the entire ship"""
         self.draw_mining_laser()
-        self.draw_ship()
-        self.draw_shield()
+        super().draw()
 
     def draw_mining_laser(self):
         """Draw the mining lasers"""

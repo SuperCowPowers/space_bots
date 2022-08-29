@@ -7,7 +7,7 @@ from collections import Counter
 # Local Imports
 from space_bots import comms, battle_state
 from space_bots.squad import Squad
-from space_bots.utils import force_utils
+from space_bots.utils import force_utils, buff_manager
 
 
 class Universe:
@@ -41,8 +41,9 @@ class Universe:
         self.intro_lasers = 0
         self.power_cords = ['power_cord_d', 'power_cord_e', 'power_cord_f', 'power_cord_g']
 
-        # Universal Battle Info
+        # Universal Battle Info and Buff Manager
         self.battle_info = battle_state.BattleState(self)
+        self.buffs = buff_manager.BuffManager()
 
         # Communication Channels
         self.comms = comms.Comms()
@@ -93,6 +94,7 @@ class Universe:
         """Add a Squad to the Universe"""
         squad.game_engine = self.game_engine
         squad.set_battle_info(self.battle_info)
+        squad.set_buff_manager(self.buffs)
         self.squads.append(squad)
 
     @staticmethod
@@ -156,6 +158,9 @@ class Universe:
 
         # Now run collision detection
         self.collision_detection()
+
+        # Update/Manage the buffs for all the ships
+        self.buffs.update()
 
         # Now update all the entities in the Universe
         for entity in self.all_entities:

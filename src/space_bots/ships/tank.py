@@ -55,12 +55,6 @@ class Tank(ship.Ship):
         # Now actually call the move command (which uses force/mass calc)
         self.move()
 
-    def draw(self):
-        """Draw the entire ship"""
-        self.draw_laser()
-        self.draw_ship()
-        self.draw_shield()
-
 
 # Simple test of the Tank functionality
 def test():
