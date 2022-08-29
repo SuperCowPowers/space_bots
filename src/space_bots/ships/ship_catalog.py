@@ -86,8 +86,8 @@ ship_specs = {
          'capacitor': 10,
          'ship_width': 3,
          'shield_width': 1,
-         'shield_recharge': 0.05,
-         'hull_recharge': 0.05,
+         'shield_recharge': 0.1,
+         'hull_recharge': 0.1,
          'keep_range': 40,
          'threat': 20
          },

@@ -305,10 +305,10 @@ def test():
     # Create our Squad
     level = 1
     earth_squad = Squad(team='earth', squad_name='roughnecks', target_strategy='threat')
-    my_miner = miner.Miner(my_game_engine, 850, 700, level=level)
+    my_miner = miner.Miner(my_game_engine, 850, 700, level=2)
     earth_squad.add_ship(my_miner)
     earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=2))
-    earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=1))
+    earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=2))
     earth_squad.add_ship(tank.Tank(my_game_engine, 850, 700, level=2))
     for _ in range(2):
         earth_squad.add_ship(fighter.Fighter(my_game_engine, 850, 700, level=level))
@@ -336,6 +336,9 @@ def test():
     # Add Protection Orders
     earth_squad.protect(my_universe.battle_info.closest_planet(pos))
     drone_squad.protect(my_miner, 30)
+
+    # Have the Zerg squad target the miner
+    zerg_squad.attack_target(my_miner)
 
     # Invoke the event loop
     my_game_engine.event_loop()

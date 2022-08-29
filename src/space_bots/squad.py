@@ -50,6 +50,9 @@ class Squad:
         self.protection_asset = None
         self.protection_distance = 150
 
+        # Primary Attack Target
+        self.primary_attack_target = None
+
         # Battle State/Reconnaissance
         self.battle_info = None
         self.in_combat = False
@@ -120,6 +123,10 @@ class Squad:
         self.protection_asset = asset
         self.protection_distance = distance
 
+    def attack_target(self, target):
+        """Tell the Squad to attack a planet, squad or a ship (target)"""
+        self.primary_attack_target = target
+
     def communicate(self, comms):
         """Squad Communication"""
 
@@ -180,6 +187,13 @@ class Squad:
             (_, _), (dx, dy) = force_utils.attraction_forces(self, _ship, 140)
             _ship.force_x += dx
             _ship.force_y += dy
+
+        # Primary Attack Target
+        if self.primary_attack_target:
+            for _ship in self.ships:
+                (_, _), (dx, dy) = force_utils.attraction_forces(self.primary_attack_target, _ship, 0)
+                _ship.force_x += dx
+                _ship.force_y += dy
 
         # Protecting an Asset
         if self.protection_asset:
