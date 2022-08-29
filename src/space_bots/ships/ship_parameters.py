@@ -25,7 +25,7 @@ class ShipParameters:
         self.shield_width = ship_specs[ship_type]['shield_width']
         self.keep_range = ship_specs[ship_type]['keep_range']
         self.threat = ship_specs[ship_type]['threat']
-        self.damage_modifier = ship_specs[ship_type].get('damage_modifier', 1.0)
+        self.incoming_damage_modifier = ship_specs[ship_type].get('damage_modifier', 1.0)
         self.targeting_lock_avoidance = ship_specs[ship_type].get('targeting_lock_avoidance', 0.0)
         self.shield_radius = self.radius + self.shield_width
-        self.collision_radius = self.shield_radius * 1.2
+        self.collision_radius = self.shield_radius * 1.3

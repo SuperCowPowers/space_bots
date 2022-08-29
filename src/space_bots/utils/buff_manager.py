@@ -36,12 +36,31 @@ class BuffManager:
         my_buff_info['expire'] = expire
         self.ship_buffs[ship][buff_name] = my_buff_info
 
+        # Now actually apply the buff effect
+        effects = my_buff_info['effects']
+
+        # FIXME: This seems like a bad/suboptimal way to apply buffs
+        for effect, value in effects.items():
+            if effect == 'laser_range_modifier':
+                ship.p.laser_range *= value
+            elif effect == 'hp_modifier':
+                ship.p.hp *= value
+            elif effect == 'incoming_damage_modifier':
+                ship.p.incoming_damage_modifier *= value
+            elif effect == 'shield':
+                ship.s.shield += value
+            elif effect == 'heal':
+                ship.s.hp += value
+            else:
+                print(f"{buff_name}: Don't know how to apply")
+        print(effects)
+
     def buff_me(self, ship):
         """Make changes to the ship's state/parameters to reflect all the current buffs"""
         pass
 
     def get_visible_buffs(self, ship):
-        """Return any visible buffs to the ship so they can draw them"""
+        """Return any visible buffs to the ship, so they can draw them"""
         visible_buffs = []
         for buff_name, buff_info in self.ship_buffs[ship].items():
             if buff_info['display']:

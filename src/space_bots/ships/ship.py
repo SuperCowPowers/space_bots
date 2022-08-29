@@ -26,6 +26,8 @@ class Ship(entity.Entity):
 
         # Battle State/Reconnaissance
         self.battle_info = None
+        self.self_buffs = []
+        self.squad_buffs = []
         self.buff_manager = None
 
         # Combat indicators and vars
@@ -65,7 +67,7 @@ class Ship(entity.Entity):
         self.combat_timer = 200
 
         # Damage modifiers
-        points *= self.p.damage_modifier
+        points *= self.p.incoming_damage_modifier
         self.damage_taken += points
 
         # Shield Damage
@@ -266,7 +268,7 @@ class Ship(entity.Entity):
         buff_pos = self.p.shield_radius+2
         for buff in self.buff_manager.get_visible_buffs(self):
             color = buff['color']
-            self.game_engine.draw_circle(color, (self.x, self.y), buff_pos, width=1)
+            self.game_engine.draw_circle(color, (self.x, self.y), buff_pos, width=2)
             buff_pos += 2
 
 

@@ -2,7 +2,7 @@
 
 ship_buffs = {
     'protection':
-        {'effects': {'incoming_damage_modifier': -0.1},
+        {'effects': {'incoming_damage_modifier': 0.9},
          'display': False
          },
     'kings':
@@ -10,16 +10,15 @@ ship_buffs = {
          'display': False
          },
     'take_the_pain':
-        {'effects': {'shield': 800},
-         'display': True,
-         'color': (60, 60, 200)
+        {'effects': {'shield': 500},
+         'display': False
          },
     'fortitude':
-        {'effects': {'hp_modifier': 0.2},
+        {'effects': {'hp_modifier': 1.2},
          'display': False
          },
     'salvation':
-        {'effects': {'heal': 500},
+        {'effects': {'heal': 700},
          'timer': 5,
          'display': False
          },
@@ -30,7 +29,7 @@ ship_buffs = {
          'color': (180, 60, 200)
          },
     'ape_shit':
-        {'effects': {'outgoing_damage_modifier': 0.5},
+        {'effects': {'outgoing_damage_modifier': 1.5},
          'timer': 2,
          'display': True,
          'color': (220, 100, 100)

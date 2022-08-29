@@ -78,14 +78,24 @@ class Squad:
         for ship in self.ships:
             ship.buff_manager = buffs
 
-        # Now add squad buffs
-        self.add_squad_buffs()
+    def get_buffed(self):
+        """Now setup/add buffs for the entire squad"""
 
-    def add_squad_buffs(self):
-        """Now add squad buffs"""
-        fighters = [ship for ship in self.ships if ship.ship_type == 'fighter']
-        for ship in fighters:
-            self.buff_manager.apply('first_strike', ship)
+        # Announce we're getting buffed
+        self.announcer_messages.put('get_buffed')
+
+        # Self buffs
+        for ship in self.ships:
+            for buff in ship.self_buffs:
+                self.buff_manager.apply(buff, ship)
+                self.announcer_messages.put(buff)
+
+        # Squad buffs
+        for ship in self.ships:
+            for buff in ship.squad_buffs:
+                self.announcer_messages.put(buff)
+                for _ship in self.ships:
+                    self.buff_manager.apply(buff, _ship)
 
     def set_combat_status(self, combat):
 
@@ -167,7 +177,7 @@ class Squad:
 
         # Squad Movement: Group up
         for _ship in self.ships:
-            (_, _), (dx, dy) = force_utils.attraction_forces(self, _ship, 120)
+            (_, _), (dx, dy) = force_utils.attraction_forces(self, _ship, 140)
             _ship.force_x += dx
             _ship.force_y += dy
 

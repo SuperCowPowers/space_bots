@@ -11,6 +11,9 @@ class Fighter(ship.Ship):
         # Call SuperClass (Entity) Initialization
         super().__init__(game_engine, x, y, ship_type='fighter')
 
+        # Fighter specific stuff
+        self.self_buffs = ['first_strike']
+
         # Fighter Level adjustments
         self.level = level
         self.p.laser_damage *= self.level

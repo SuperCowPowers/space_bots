@@ -38,8 +38,7 @@ class Universe:
         self.initial_count_down = False
         self.wave_over = False
         self.current_text = None
-        self.intro_lasers = 0
-        self.power_cords = ['power_cord_d', 'power_cord_e', 'power_cord_f', 'power_cord_g']
+        self.squads_buffed = False
 
         # Universal Battle Info and Buff Manager
         self.battle_info = battle_state.BattleState(self)
@@ -117,6 +116,13 @@ class Universe:
     def in_combat(self):
         return any([s.in_combat for s in self.squads])
 
+    def buff_squads(self):
+        self.game_engine.restricted_announce('power_cord_d', None)
+        self.game_engine.restricted_announce('get_buffed')
+        for squad in self.squads:
+            squad.get_buffed()
+        self.squads_buffed = True
+
     def communicate(self):
         """Let all the entities in the Universe communicate"""
 
@@ -128,11 +134,6 @@ class Universe:
 
         # Play sounds
         for sound_name in self.comms.get_messages('sounds'):
-            # FIXME: Laser to PowerCord Hack :)
-            if sound_name == 'laser' and self.intro_lasers < 1:
-                self.time_slow = 0.3
-                self.game_engine.restricted_announce(self.power_cords[self.intro_lasers], None)
-                self.intro_lasers += 1
             self.game_engine.restricted_play_sound(sound_name)
 
         # Display info/stats
@@ -152,6 +153,9 @@ class Universe:
         # No one is going to remember to call finalize, so call it here
         if not self.is_finalized:
             self.finalize()
+        if self.in_combat() and not self.squads_buffed:
+            print('Buffing Squads...')
+            self.buff_squads()
 
         # First lets remove any dead ships
         self.all_ships = [s for s in self.all_ships if not s.is_dead()]
@@ -282,7 +286,7 @@ def test():
     for squad_name in ['berserker', 'spitter', 'mega_bug']:
         my_squad = Squad(team='xenos', squad_name=squad_name, target_strategy='nearest')
         for _ in range(2):
-            my_squad.add_ship(ship.Ship(my_game_engine, xpos, ypos, ship_type=squad_name, level=3))
+            my_squad.add_ship(ship.Ship(my_game_engine, xpos, ypos, ship_type=squad_name, level=2))
         my_universe.add_squad(my_squad)
         xpos = 300
         ypos = 300
@@ -299,13 +303,13 @@ def test():
         ypos = 900
 
     # Create our Squad
-    level = 2
+    level = 1
     earth_squad = Squad(team='earth', squad_name='roughnecks', target_strategy='threat')
     my_miner = miner.Miner(my_game_engine, 850, 700, level=level)
     earth_squad.add_ship(my_miner)
+    earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=2))
     earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=1))
-    earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=level))
-    earth_squad.add_ship(tank.Tank(my_game_engine, 850, 700, level=level))
+    earth_squad.add_ship(tank.Tank(my_game_engine, 850, 700, level=2))
     for _ in range(2):
         earth_squad.add_ship(fighter.Fighter(my_game_engine, 850, 700, level=level))
     my_universe.add_squad(earth_squad)
@@ -331,7 +335,7 @@ def test():
 
     # Add Protection Orders
     earth_squad.protect(my_universe.battle_info.closest_planet(pos))
-    drone_squad.protect(my_miner, 20)
+    drone_squad.protect(my_miner, 30)
 
     # Invoke the event loop
     my_game_engine.event_loop()

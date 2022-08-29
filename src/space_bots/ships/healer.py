@@ -15,6 +15,7 @@ class Healer(ship.Ship):
         # Healer specific stuff
         self.healing_target = None
         self.salvation_thrown = False
+        self.squad_buffs = ['fortitude']
 
         # Healing Level adjustments
         self.level = level
@@ -58,13 +59,10 @@ class Healer(ship.Ship):
         if self.healing_target and force_utils.distance_between(self, self.healing_target) < self.p.laser_range:
 
             # Does my target need healing
-            if self.healing_target.health_percent() < .97:
+            if self.healing_target.health_percent() < .99:
                 self.game_engine.draw_line(self.p.color, (self.x, self.y), (self.healing_target.x, self.healing_target.y),
                                            width=self.p.laser_width + self.level)
-
-                # Out of combat heal buff
-                healing_power = 10 if not self.squad_in_combat() else 1
-                self.healing_target.heal(self.p.laser_damage * healing_power)
+                self.healing_target.heal(self.p.laser_damage)
 
 
 # Simple test of the Healer functionality

@@ -15,8 +15,9 @@ class Tank(ship.Ship):
         # Tank specific stuff
         self.protect_target = None
         self.p.damage_modifier = 0.75  # 25% reduction
-        self.collision_radius = self.p.shield_radius * 2  # Tanks need their space
+        self.collision_radius = self.p.shield_radius * 1.5  # Tanks need their space
         self.shield_thrown = False
+        self.squad_buffs = ['protection']
 
         # Tank Level adjustments
         self.level = level
