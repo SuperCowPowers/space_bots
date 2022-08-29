@@ -240,7 +240,7 @@ class Ship(entity.Entity):
 
     def draw_shield(self):
         """Draw the Shield"""
-        shield_health = 220 * self.s.shield / self.p.shield + 35
+        shield_health = min(220 * self.s.shield / self.p.shield + 35, 255)
         if self.team != 'earth':
             shield_color = (shield_health/2, shield_health/2, shield_health/2)
         else:
@@ -250,17 +250,6 @@ class Ship(entity.Entity):
     def add_buff(self, buff):
         """Any buff goes to the buff manager who manages the application and expiration of buffs"""
         self.buff_manager.apply(buff, self)
-
-        # Buff effects
-        """
-        effects = self.s.buff_info[buff]['effects']
-        for attribute, value in effects.items():
-            # Attributes could be actions
-            if attribute == 'heal':
-                self.heal(value)
-            else:
-                setattr(self.s, attribute, value)
-        """
 
     def draw_buffs(self):
         """Draw any buffs we might have"""

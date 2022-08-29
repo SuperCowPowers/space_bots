@@ -10,7 +10,7 @@ ship_buffs = {
          'display': False
          },
     'take_the_pain':
-        {'effects': {'shield': 500},
+        {'effects': {'shield': 800},
          'display': False
          },
     'fortitude':
@@ -18,7 +18,7 @@ ship_buffs = {
          'display': False
          },
     'salvation':
-        {'effects': {'heal': 700},
+        {'effects': {'heal': 800},
          'timer': 5,
          'display': False
          },
