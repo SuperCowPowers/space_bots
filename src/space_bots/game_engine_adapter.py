@@ -90,7 +90,7 @@ class GameEngineAdapter:
 
     def draw_text(self, text, color=(140, 200, 140)):
         img = self.font.render(text, True, color)
-        self.screen.blit(img, (600, self.height-80))
+        self.screen.blit(img, (450, self.height-80))
 
     @staticmethod
     def image_load(image_file, x_size=0, y_size=0):

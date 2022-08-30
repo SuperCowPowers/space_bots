@@ -21,6 +21,7 @@ class MissionPlanner:
         self.current_mission = None
         self.test_squads = None
         self.test_squads_pos = (300, 500)
+        self.zerg_pos = (1100, 700)
         self.mission_planet = None
         self.mission_begin_time = None
         self.event_queue = Queue()
@@ -52,13 +53,15 @@ class MissionPlanner:
 
     def add_zerg_squad(self, ship_type, num_ships):
         """Add a Zerg Squad to the mission"""
+        x = self.zerg_pos[0]
+        y = self.zerg_pos[1]
         zerg_squad = squad.Squad('zerg', 'bugs_are_cool', target_strategy='nearest')
         if ship_type == 'zergling':
             for _ in range(num_ships):
-                zerg_squad.add_ship(zergling.Zergling(self.universe.game_engine, x=1200, y=800))
+                zerg_squad.add_ship(zergling.Zergling(self.universe.game_engine, x=x, y=y))
         else:
             for _ in range(num_ships):
-                zerg_squad.add_ship(ship.Ship(self.universe.game_engine, x=1200, y=800, ship_type=ship_type))
+                zerg_squad.add_ship(ship.Ship(self.universe.game_engine, x=x, y=y, ship_type=ship_type))
         self.universe.add_squad(zerg_squad)
 
     def add_test_squads(self):
@@ -185,7 +188,7 @@ def test():
 
     # Get the Universe Mission Planner
     my_mission = my_universe.mission_planner
-    my_mission.set_mission(7, test_squads=True)
+    my_mission.set_mission(9, test_squads=True)
 
     # Invoke the event loop
     my_game_engine.event_loop()

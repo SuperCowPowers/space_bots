@@ -36,7 +36,7 @@
          ]
     },
     "mission_2": {
-        "title": "Mission 2: Drones suck at Ranged Attacks",
+        "title": "Mission 2: Drones are Tough but have Limited Range",
         "event_sequence": [
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
             {"time": 3, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
@@ -105,13 +105,13 @@
          ]
     },
     "mission_5": {
-        "title": "Mission 5: Healers are your Friends",
+        "title": "Mission 5: Healers are Handy",
         "event_sequence": [
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
             {"time": 3, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
             {"time": 10, "event_info": {"squads": {"zergling": 4}}},
             {"time": 15, "event_info": {"squads": {"spitter": 3}}},
-            {"time": 20, "event_info": {"squads": {"zergling": 8}}}
+            {"time": 30, "event_info": {"squads": {"zergling": 8}}}
         ],
          "test_squads": [
             {
@@ -135,7 +135,7 @@
             {"time": 10, "event_info": {"squads": {"zergling": 4}}},
             {"time": 10, "event_info": {"squads": {"berserker": 2}}},
             {"time": 15, "event_info": {"squads": {"spitter": 2}}},
-            {"time": 25, "event_info": {"squads": {"zergling": 8}}}
+            {"time": 30, "event_info": {"squads": {"zergling": 8}}}
         ],
          "test_squads": [
             {
@@ -166,6 +166,60 @@
                 "name": "miner_squad",
                 "ships": [{"type":"healer", "level": 1}, {"type":"miner", "level": 1},
                     {"type":"fighter", "level": 1}, {"type":"tank", "level": 1}]
+            },
+            {
+                "name": "drones",
+                "ships": [
+                    {"type": "drone", "level": 1},
+                    {"type": "drone", "level": 1}
+                ]
+            }
+         ]
+    },
+    "mission_8": {
+        "title": "Mission 8: Tanks have Limits",
+        "event_sequence": [
+            {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
+            {"time": 3, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 10, "event_info": {"squads": {"zergling": 8}}},
+            {"time": 10, "event_info": {"squads": {"berserker": 2}}},
+            {"time": 13, "event_info": {"squads": {"mega_bug": 1}}},
+            {"time": 15, "event_info": {"squads": {"spitter": 2}}},
+            {"time": 20, "event_info": {"squads": {"zergling": 8}}},
+            {"time": 25, "event_info": {"squads": {"zergling": 6}}}
+        ],
+         "test_squads": [
+            {
+                "name": "miner_squad",
+                "ships": [{"type":"healer", "level": 1}, {"type":"miner", "level": 1},
+                    {"type":"fighter", "level": 1}, {"type":"tank", "level": 1}]
+            },
+            {
+                "name": "drones",
+                "ships": [
+                    {"type": "drone", "level": 1},
+                    {"type": "drone", "level": 1}
+                ]
+            }
+         ]
+    },
+    "mission_9": {
+        "title": "Mission 9: Double Heals for the Win",
+        "event_sequence": [
+            {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
+            {"time": 3, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 10, "event_info": {"squads": {"zergling": 8}}},
+            {"time": 10, "event_info": {"squads": {"berserker": 2}}},
+            {"time": 13, "event_info": {"squads": {"mega_bug": 1}}},
+            {"time": 15, "event_info": {"squads": {"spitter": 2}}},
+            {"time": 20, "event_info": {"squads": {"zergling": 8}}},
+            {"time": 25, "event_info": {"squads": {"zergling": 6}}}
+        ],
+         "test_squads": [
+            {
+                "name": "miner_squad",
+                "ships": [{"type":"healer", "level": 1}, {"type":"healer", "level": 1},
+                    {"type":"miner", "level": 1}, {"type":"fighter", "level": 1}, {"type":"tank", "level": 1}]
             },
             {
                 "name": "drones",

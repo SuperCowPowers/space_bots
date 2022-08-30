@@ -32,8 +32,8 @@ class Drone(ship.Ship):
         self.protect_asset = self.squad.protection_asset
         if self.protect_asset:
             (dx, dy), (_, _) = force_utils.attraction_forces(self, self.protect_asset, self.squad.protection_distance)
-            self.force_x += dx * 20  # FIXME: Review this
-            self.force_y += dy * 20
+            self.force_x += dx
+            self.force_y += dy
 
         # Now actually call the move command (which uses force/mass calc)
         self.move()

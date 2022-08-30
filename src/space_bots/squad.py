@@ -118,7 +118,7 @@ class Squad:
                     self.combat_status_change = True
                     self.in_combat = False
 
-    def protect(self, asset, distance=150):
+    def protect(self, asset, distance=120):
         """Tell the Squad to protect a planet, squad or a ship (asset)"""
         self.protection_asset = asset
         self.protection_distance = distance
@@ -186,7 +186,7 @@ class Squad:
 
         # Squad Movement: Group up
         for _ship in self.ships:
-            (_, _), (dx, dy) = force_utils.attraction_forces(self, _ship, 140)
+            (_, _), (dx, dy) = force_utils.attraction_forces(self, _ship, 100)
             _ship.force_x += dx
             _ship.force_y += dy
 

@@ -17,7 +17,6 @@ class Zergling(ship.Ship):
 
         # Zergling Level adjustments
         self.level = level
-        self.force_damp = 0.998  # Zerglings are free
 
     def update(self):
         """Update the Zergling"""
