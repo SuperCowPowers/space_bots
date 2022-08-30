@@ -1,7 +1,7 @@
 """ShipParameters: Class for setting up a Ship Parameters (what it is)"""
 
 # Local imports
-from space_bots.ships.ship_catalog import ship_specs
+from space_bots.ships.specs.ship_catalog import ship_specs
 
 
 class ShipParameters:

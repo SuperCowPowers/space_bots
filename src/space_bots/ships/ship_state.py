@@ -1,7 +1,7 @@
 """ShipState: Class for Managing all the Ship State"""
 
 # Local imports
-from space_bots.ships.ship_catalog import ship_specs
+from space_bots.ships.specs.ship_catalog import ship_specs
 
 
 class ShipState:

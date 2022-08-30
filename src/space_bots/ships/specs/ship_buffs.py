@@ -2,7 +2,7 @@
 
 ship_buffs = {
     'protection':
-        {'effects': {'incoming_damage_modifier': 0.9},
+        {'effects': {'incoming_damage_modifier': 0.8},
          'display': False
          },
     'kings':
@@ -14,7 +14,7 @@ ship_buffs = {
          'display': False
          },
     'fortitude':
-        {'effects': {'hp_modifier': 1.2},
+        {'effects': {'hp_modifier': 1.1},
          'display': False
          },
     'salvation':
@@ -23,12 +23,12 @@ ship_buffs = {
          'display': False
          },
     'first_strike':
-        {'effects': {'laser_range_modifier': 2.0},
+        {'effects': {'laser_range_modifier': 1.5},
          'timer': 5,
          'display': True,
          'color': (180, 60, 200)
          },
-    'ape_shit':
+    'now_im_mad':
         {'effects': {'outgoing_damage_modifier': 1.5},
          'timer': 2,
          'display': True,

@@ -3,7 +3,7 @@ import time
 from collections import defaultdict
 
 # Local imports
-from space_bots.ships import ship_buffs
+from space_bots.ships.specs import ship_buffs
 
 
 class BuffManager:
