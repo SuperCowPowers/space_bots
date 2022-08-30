@@ -6,7 +6,7 @@ from space_bots.ships import ship
 
 class Zergling(ship.Ship):
     """Zergling: A Zergling ship in Space Bots"""
-    def __init__(self, game_engine, x=100, y=100, level=1):
+    def __init__(self, game_engine, x=300, y=300, level=1):
 
         # Call SuperClass (Entity) Initialization
         super().__init__(game_engine, x, y, ship_type='zergling')

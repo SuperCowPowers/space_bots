@@ -1,0 +1,179 @@
+{
+    "mission_0": {
+        "title": "Mission 0: Lonely",
+        "event_sequence": [
+            {"time": 3, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 10, "event_info": {"squads": {"zergling": 4}}},
+            {"time": 20, "event_info": {"squads": {"zergling": 8}}}
+        ],
+         "test_squads": [
+            {
+                "name": "miner_squad",
+                "ships": [{"type":"miner", "level": 1}]
+            }
+         ]
+    },
+    "mission_1": {
+        "title": "Mission 1: Drones are Great",
+        "event_sequence": [
+            {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
+            {"time": 3, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 10, "event_info": {"squads": {"zergling": 4}}},
+            {"time": 20, "event_info": {"squads": {"zergling": 8}}}
+        ],
+         "test_squads": [
+            {
+                "name": "miner_squad",
+                "ships": [{"type":"miner", "level": 1}]
+            },
+            {
+                "name": "drones",
+                "ships": [
+                    {"type": "drone", "level": 1},
+                    {"type": "drone", "level": 1}
+                ]
+            }
+         ]
+    },
+    "mission_2": {
+        "title": "Mission 2: Drones suck at Ranged Attacks",
+        "event_sequence": [
+            {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
+            {"time": 3, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 10, "event_info": {"squads": {"zergling": 4}}},
+            {"time": 15, "event_info": {"squads": {"spitter": 1}}},
+            {"time": 20, "event_info": {"squads": {"zergling": 8}}}
+        ],
+         "test_squads": [
+            {
+                "name": "miner_squad",
+                "ships": [{"type":"miner", "level": 1}]
+            },
+            {
+                "name": "drones",
+                "ships": [
+                    {"type": "drone", "level": 1},
+                    {"type": "drone", "level": 1}
+                ]
+            }
+         ]
+    },
+    "mission_3": {
+        "title": "Mission 3: Fighters are your Friends",
+        "event_sequence": [
+            {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
+            {"time": 3, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 10, "event_info": {"squads": {"zergling": 4}}},
+            {"time": 15, "event_info": {"squads": {"spitter": 1}}},
+            {"time": 20, "event_info": {"squads": {"zergling": 8}}}
+        ],
+         "test_squads": [
+            {
+                "name": "miner_squad",
+                "ships": [{"type":"miner", "level": 1}, {"type":"fighter", "level": 1}]
+            },
+            {
+                "name": "drones",
+                "ships": [
+                    {"type": "drone", "level": 1},
+                    {"type": "drone", "level": 1}
+                ]
+            }
+         ]
+    },
+    "mission_4": {
+        "title": "Mission 4: Feeling the Pain",
+        "event_sequence": [
+            {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
+            {"time": 3, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 10, "event_info": {"squads": {"zergling": 4}}},
+            {"time": 15, "event_info": {"squads": {"spitter": 3}}},
+            {"time": 20, "event_info": {"squads": {"zergling": 8}}}
+        ],
+         "test_squads": [
+            {
+                "name": "miner_squad",
+                "ships": [{"type":"miner", "level": 1}, {"type":"fighter", "level": 1}]
+            },
+            {
+                "name": "drones",
+                "ships": [
+                    {"type": "drone", "level": 1},
+                    {"type": "drone", "level": 1}
+                ]
+            }
+         ]
+    },
+    "mission_5": {
+        "title": "Mission 5: Healers are your Friends",
+        "event_sequence": [
+            {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
+            {"time": 3, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 10, "event_info": {"squads": {"zergling": 4}}},
+            {"time": 15, "event_info": {"squads": {"spitter": 3}}},
+            {"time": 20, "event_info": {"squads": {"zergling": 8}}}
+        ],
+         "test_squads": [
+            {
+                "name": "miner_squad",
+                "ships": [{"type":"healer", "level": 1}, {"type":"miner", "level": 1}, {"type":"fighter", "level": 1}]
+            },
+            {
+                "name": "drones",
+                "ships": [
+                    {"type": "drone", "level": 1},
+                    {"type": "drone", "level": 1}
+                ]
+            }
+         ]
+    },
+    "mission_6": {
+        "title": "Mission 6: Fighters aren't Tanks",
+        "event_sequence": [
+            {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
+            {"time": 3, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 10, "event_info": {"squads": {"zergling": 4}}},
+            {"time": 10, "event_info": {"squads": {"berserker": 2}}},
+            {"time": 15, "event_info": {"squads": {"spitter": 2}}},
+            {"time": 25, "event_info": {"squads": {"zergling": 8}}}
+        ],
+         "test_squads": [
+            {
+                "name": "miner_squad",
+                "ships": [{"type":"healer", "level": 1}, {"type":"miner", "level": 1}, {"type":"fighter", "level": 1}]
+            },
+            {
+                "name": "drones",
+                "ships": [
+                    {"type": "drone", "level": 1},
+                    {"type": "drone", "level": 1}
+                ]
+            }
+         ]
+    },
+    "mission_7": {
+        "title": "Mission 7: Tanks are Tanks",
+        "event_sequence": [
+            {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
+            {"time": 3, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 10, "event_info": {"squads": {"zergling": 4}}},
+            {"time": 10, "event_info": {"squads": {"berserker": 2}}},
+            {"time": 15, "event_info": {"squads": {"spitter": 2}}},
+            {"time": 25, "event_info": {"squads": {"zergling": 8}}}
+        ],
+         "test_squads": [
+            {
+                "name": "miner_squad",
+                "ships": [{"type":"healer", "level": 1}, {"type":"miner", "level": 1},
+                    {"type":"fighter", "level": 1}, {"type":"tank", "level": 1}]
+            },
+            {
+                "name": "drones",
+                "ships": [
+                    {"type": "drone", "level": 1},
+                    {"type": "drone", "level": 1}
+                ]
+            }
+         ]
+    }
+}

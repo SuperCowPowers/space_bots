@@ -7,7 +7,7 @@ from space_bots.ships import ship
 
 class Drone(ship.Ship):
     """Drone: A Drone ship in Space Bots"""
-    def __init__(self, game_engine, x=100, y=100, level=1):
+    def __init__(self, game_engine, x=300, y=300, level=1):
 
         # Call SuperClass (Entity) Initialization
         super().__init__(game_engine, x, y, ship_type='drone')
@@ -32,8 +32,8 @@ class Drone(ship.Ship):
         self.protect_asset = self.squad.protection_asset
         if self.protect_asset:
             (dx, dy), (_, _) = force_utils.attraction_forces(self, self.protect_asset, self.squad.protection_distance)
-            self.force_x += dx * 10
-            self.force_y += dy * 10
+            self.force_x += dx * 20  # FIXME: Review this
+            self.force_y += dy * 20
 
         # Now actually call the move command (which uses force/mass calc)
         self.move()

@@ -9,7 +9,7 @@ from space_bots.ships import ship_parameters, ship_state
 
 class Ship(entity.Entity):
     """Ship: Class for the ships in Space Bots"""
-    def __init__(self, game_engine, x=100, y=100, ship_type='fighter', level=1):
+    def __init__(self, game_engine, x=500, y=500, ship_type='fighter', level=1):
 
         # Set my attributes
         self.squad = None

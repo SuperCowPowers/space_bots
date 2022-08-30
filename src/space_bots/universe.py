@@ -2,10 +2,9 @@
 import time
 import string
 from random import randint, choice
-from collections import Counter
 
 # Local Imports
-from space_bots import comms, battle_state
+from space_bots import comms, battle_state, mission_planner
 from space_bots.squad import Squad
 from space_bots.utils import force_utils, buff_manager
 
@@ -16,12 +15,12 @@ class Universe:
     # Note: Maybe refactor/rethink how this class should be used later
     #      - Collision Detection should be a separate class
 
-    def __init__(self, width=1600, height=1000, announcements=False):
+    def __init__(self, width=1600, height=1000, announcements=True):
         """Initialize the Universe class"""
         self.game_engine = None
         self.announcements = announcements
         if announcements:
-            self.time_slow = 10.0
+            self.time_slow = 0.0  # FIXME
         else:
             self.time_slow = 0
         self.pad = 150
@@ -47,6 +46,9 @@ class Universe:
         # Communication Channels
         self.comms = comms.Comms()
 
+        # Mission Planner
+        self.mission_planner = mission_planner.MissionPlanner(self)
+
     def finalize(self):
         """Tasks to do after initial universe setup"""
         print('Universe Finalize...')
@@ -55,21 +57,21 @@ class Universe:
         self.all_ships = [ship for _squad in self.squads for ship in _squad.ships]
 
         # All entities are collected into one big list
-        self.all_entities = self.planets + self.squads
+        self.all_entities = self.planets + self.squads + self.individual_entities
 
         # Make sure all entities are in a reasonable starting position
         self._space_out_planets()
         force_utils.resolve_coincident(self.all_ships)
 
-        # Initial Text
-        self.current_text = 'Wave Incoming!'
+        # Mission Planner Finalize
+        self.mission_planner.finalize()
 
         # Start up the background music
         self.game_engine.play_background_music()
 
         # Put a couple of announcements into the comms
-        self.comms.announce('lets_rumble', voice='male')
-        self.comms.announce('great_match', voice='female')
+        # self.comms.announce('lets_rumble', voice='male')
+        # self.comms.announce('great_match', voice='female')
 
         # All done setting up
         self.is_finalized = True
@@ -91,10 +93,17 @@ class Universe:
 
     def add_squad(self, squad):
         """Add a Squad to the Universe"""
+
+        # Get Squad ready for Life in the Universe
         squad.game_engine = self.game_engine
         squad.set_battle_info(self.battle_info)
         squad.set_buff_manager(self.buffs)
+        force_utils.resolve_coincident(squad.ships)
+
+        # Add the Squad and update the Universal State
         self.squads.append(squad)
+        self.all_ships = [ship for _squad in self.squads for ship in _squad.ships]
+        self.all_entities = self.planets + self.squads + self.individual_entities
 
     @staticmethod
     def gen_squad_name():
@@ -138,7 +147,7 @@ class Universe:
 
         # Display info/stats
         for display_text in self.comms.get_messages('display'):
-            self.game_engine.universe.current_text = display_text
+            self.current_text = display_text
 
         # Give the sound queue some cycles
         self.game_engine.play_sound_queue()
@@ -153,6 +162,11 @@ class Universe:
         # No one is going to remember to call finalize, so call it here
         if not self.is_finalized:
             self.finalize()
+
+        # Mission Planner Update
+        self.mission_planner.update()
+
+        # FIXME: Buffs
         if self.in_combat() and not self.squads_buffed:
             print('Buffing Squads...')
             self.buff_squads()
@@ -175,6 +189,8 @@ class Universe:
         self.time_slow *= .9
 
         # Do we only have one team left?
+        # FIXME
+        """
         team_counts = Counter([s.team for s in self.all_ships])
         if len(team_counts.keys()) == 1 and not self.wave_over:
             self.wave_over = True
@@ -182,6 +198,7 @@ class Universe:
                 self.comms.announce('won_match')
             else:
                 self.comms.announce('lost_match')
+        """
 
     def draw(self):
         """Let all the entities in the Universe draw themselves"""
@@ -284,7 +301,7 @@ def test():
     xpos = 300
     ypos = 850
     for squad_name in ['berserker', 'spitter', 'mega_bug']:
-        my_squad = Squad(team='xenos', squad_name=squad_name, target_strategy='nearest')
+        my_squad = Squad(team='zerg', squad_name=squad_name, target_strategy='nearest')
         for _ in range(2):
             my_squad.add_ship(ship.Ship(my_game_engine, xpos, ypos, ship_type=squad_name, level=2))
         my_universe.add_squad(my_squad)
@@ -295,7 +312,7 @@ def test():
     xpos = 300
     ypos = 150
     for squad_name in ['zerg1', 'zerg2']:
-        zerg_squad = Squad(team='xenos', squad_name=squad_name, target_strategy='nearest')
+        zerg_squad = Squad(team='zerg', squad_name=squad_name, target_strategy='nearest')
         for _ in range(15):
             zerg_squad.add_ship(zergling.Zergling(my_game_engine, xpos, ypos))
         my_universe.add_squad(zerg_squad)

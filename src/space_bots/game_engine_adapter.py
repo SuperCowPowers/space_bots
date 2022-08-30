@@ -88,9 +88,9 @@ class GameEngineAdapter:
     def draw_polygon(self, color, points, width=3):
         pygame.draw.polygon(self.screen, color, points, width)
 
-    def draw_text(self, text, color=(220, 220, 220)):
+    def draw_text(self, text, color=(140, 200, 140)):
         img = self.font.render(text, True, color)
-        self.screen.blit(img, (300, self.height-40))
+        self.screen.blit(img, (600, self.height-80))
 
     @staticmethod
     def image_load(image_file, x_size=0, y_size=0):

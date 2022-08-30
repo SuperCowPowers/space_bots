@@ -149,8 +149,10 @@ class Squad:
         repairs = f' - Repair Cost: ${repair_cost:.1f}k'
         net = zenite_worth - repair_cost
         total = f' = ${net:.1f}k'
+
+        # FIXME: Not currently using this
         display_text = zenite + repairs + total
-        comms.display('mission_info', display_text)
+        # comms.display('mission_info', display_text)
 
         # Also communicate any queued announcer messages
         while not self.announcer_messages.empty():
@@ -172,7 +174,7 @@ class Squad:
         # Get my adversaries
         self.adversaries = self.battle_info.adversary_ships(self)
 
-        # Compute health, mass, and threat (mass*1/distance)
+        # Compute health, mass, and threat
         self.ship_health = self.lowest_health()
         self.ship_distance = self.distance_from_squad()
         self.ship_mass = self.highest_mass()
