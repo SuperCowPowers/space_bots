@@ -51,17 +51,17 @@ class MissionPlanner:
         # Set the Universe Text
         self.universe.current_text = self.current_mission['title']
 
-    def add_zerg_squad(self, ship_type, num_ships):
+    def add_zerg_squad(self, ship_type, num_ships, level=1):
         """Add a Zerg Squad to the mission"""
         x = self.zerg_pos[0]
         y = self.zerg_pos[1]
         zerg_squad = squad.Squad('zerg', 'bugs_are_cool', target_strategy='nearest')
         if ship_type == 'zergling':
             for _ in range(num_ships):
-                zerg_squad.add_ship(zergling.Zergling(self.universe.game_engine, x=x, y=y))
+                zerg_squad.add_ship(zergling.Zergling(self.universe.game_engine, x=x, y=y, level=level))
         else:
             for _ in range(num_ships):
-                zerg_squad.add_ship(ship.Ship(self.universe.game_engine, x=x, y=y, ship_type=ship_type))
+                zerg_squad.add_ship(ship.Ship(self.universe.game_engine, x=x, y=y, ship_type=ship_type, level=level))
         self.universe.add_squad(zerg_squad)
 
     def add_test_squads(self):
@@ -156,9 +156,9 @@ class MissionPlanner:
             event_info = self.event_queue.get()['event_info']
 
             # Add Squads
-            if 'squads' in event_info:
-                for ship_type, num_ships in event_info['squads'].items():
-                    self.add_zerg_squad(ship_type, num_ships)
+            if 'squad' in event_info:
+                squad_info = event_info['squad']
+                self.add_zerg_squad(squad_info['type'], squad_info['count'], squad_info.get('level', 1))
 
             # Protection Orders
             if 'protect' in event_info:
@@ -189,7 +189,7 @@ def test():
 
     # Get the Universe Mission Planner
     my_mission = my_universe.mission_planner
-    my_mission.set_mission(10, test_squads=True)
+    my_mission.set_mission(12, test_squads=True)
 
     # Invoke the event loop
     my_game_engine.event_loop()

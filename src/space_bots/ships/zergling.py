@@ -17,6 +17,7 @@ class Zergling(ship.Ship):
 
         # Zergling Level adjustments
         self.level = level
+        self.p.laser_damage *= self.level
 
     def update(self):
         """Update the Zergling"""

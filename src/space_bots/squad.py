@@ -185,8 +185,9 @@ class Squad:
         self.main_target = self.compute_main_target()
 
         # Squad Movement: Group up
+        squad_radius = 50 + len(self.ships) * 10
         for _ship in self.ships:
-            (_, _), (dx, dy) = force_utils.attraction_forces(self, _ship, 100)
+            (_, _), (dx, dy) = force_utils.attraction_forces(self, _ship, squad_radius)
             _ship.force_x += dx
             _ship.force_y += dy
 

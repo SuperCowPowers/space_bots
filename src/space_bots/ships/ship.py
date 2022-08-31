@@ -210,12 +210,13 @@ class Ship(entity.Entity):
             self.game_engine.draw_circle((100, 100, 10), (self.x, self.y), health_indicator_radius, width=width)
 
         # Level Pips
-        pip_y = self.y-self.p.radius
-        pip_x = self.x+self.p.radius
-        if self.level > 1:
-            for _ in range(self.level):
-                self.game_engine.draw_circle(self.p.color, (pip_x, pip_y), 3, width=0)
-                pip_x += 5
+        if self.ship_type not in ['scout', 'zergling']:
+            pip_y = self.y-self.p.radius
+            pip_x = self.x+self.p.radius
+            if self.level > 1:
+                for _ in range(self.level):
+                    self.game_engine.draw_circle(self.p.color, (pip_x, pip_y), 3, width=0)
+                    pip_x += 5
 
     def draw_dead(self):
         """Draw the Dead Ship Icon"""
