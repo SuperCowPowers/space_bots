@@ -72,7 +72,8 @@ class MissionPlanner:
         for squad_info in self.current_mission['test_squads']:
 
             # Add Squad and Ships
-            new_squad = squad.Squad('earth', squad_info['name'], target_strategy='threat')
+            targeting = squad_info.get('targeting', 'threat')
+            new_squad = squad.Squad('earth', squad_info['name'], target_strategy=targeting)
             for ship_info in squad_info['ships']:
                 self._add_ship_to_test_squad(new_squad, ship_info['type'], ship_info['level'])
             self.test_squads.append(new_squad)
@@ -188,7 +189,7 @@ def test():
 
     # Get the Universe Mission Planner
     my_mission = my_universe.mission_planner
-    my_mission.set_mission(9, test_squads=True)
+    my_mission.set_mission(10, test_squads=True)
 
     # Invoke the event loop
     my_game_engine.event_loop()
