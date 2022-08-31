@@ -19,6 +19,9 @@ class Zergling(ship.Ship):
         self.level = level
         self.p.laser_damage *= self.level
 
+        # Zerglings are 'frenzied'
+        self.force_damp = 0.995
+
     def update(self):
         """Update the Zergling"""
 

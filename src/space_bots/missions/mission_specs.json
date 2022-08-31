@@ -267,17 +267,18 @@
             {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 8}}},
             {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 2}}},
-            {"time": 15, "event_info": {"squad": {"type": "spitter", "count": 2}}},
+            {"time": 15, "event_info": {"squad": {"type": "spitter", "count": 3}}},
             {"time": 20, "event_info": {"squad": {"type": "berserker", "count": 2}}},
-            {"time": 25, "event_info": {"squad": {"type": "zergling", "count": 15, "level": 2}}},
-            {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 15, "level": 2}}},
-            {"time": 15, "event_info": {"squad": {"type": "zergling", "count": 15, "level": 2}}}
+            {"time": 25, "event_info": {"squad": {"type": "zergling", "count": 20, "level": 2}}},
+            {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 20, "level": 2}}},
+            {"time": 15, "event_info": {"squad": {"type": "zergling", "count": 20, "level": 2}}}
         ],
          "test_squads": [
             {
                 "name": "miner_squad", "targeting": "threat",
                 "ships": [{"type":"healer", "level": 1}, {"type":"healer", "level": 1},
-                    {"type":"miner", "level": 1}, {"type":"fighter", "level": 1}, {"type":"tank", "level": 1}]
+                    {"type":"miner", "level": 1}, {"type":"fighter", "level": 1},
+                    {"type":"fighter", "level": 1},{"type":"tank", "level": 1}]
             },
             {
                 "name": "drones",
@@ -295,7 +296,38 @@
             {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 8}}},
             {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 2}}},
-            {"time": 15, "event_info": {"squad": {"type": "spitter", "count": 2}}},
+            {"time": 15, "event_info": {"squad": {"type": "spitter", "count": 3}}},
+            {"time": 20, "event_info": {"squad": {"type": "berserker", "count": 2}}},
+            {"time": 25, "event_info": {"squad": {"type": "zergling", "count": 15, "level": 2}}},
+            {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 15, "level": 2}}},
+            {"time": 15, "event_info": {"squad": {"type": "zergling", "count": 15, "level": 2}}}
+        ],
+         "test_squads": [
+            {
+                "name": "miner_squad", "targeting": "threat",
+                "ships": [{"type":"healer", "level": 1}, {"type":"healer", "level": 1},
+                    {"type":"miner", "level": 1}, {"type":"fighter", "level": 1},  {"type":"fighter", "level": 1},
+                    {"type":"tank", "level": 1},
+                    {"type": "drone", "level": 1}, {"type": "drone", "level": 1}, {"type": "drone", "level": 1},
+                    {"type": "drone", "level": 1}, {"type": "drone", "level": 1}]
+            },
+            {
+                "name": "drones",
+                "ships": [
+                    {"type": "drone", "level": 1},
+                    {"type": "drone", "level": 1}
+                ]
+            }
+         ]
+    },
+     "mission_13": {
+        "title": "Mission 13: Fighters = Zerg Counter",
+        "event_sequence": [
+            {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
+            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 8}}},
+            {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 2}}},
+            {"time": 15, "event_info": {"squad": {"type": "spitter", "count": 3}}},
             {"time": 20, "event_info": {"squad": {"type": "berserker", "count": 2}}},
             {"time": 25, "event_info": {"squad": {"type": "zergling", "count": 15, "level": 2}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 15, "level": 2}}},
@@ -306,8 +338,7 @@
                 "name": "miner_squad", "targeting": "threat",
                 "ships": [{"type":"healer", "level": 1}, {"type":"healer", "level": 1},
                     {"type":"miner", "level": 1}, {"type":"fighter", "level": 1}, {"type":"tank", "level": 1},
-                    {"type": "drone", "level": 1}, {"type": "drone", "level": 1}, {"type": "drone", "level": 1},
-                    {"type": "drone", "level": 1}, {"type": "drone", "level": 1}]
+                    {"type":"fighter", "level": 1}, {"type":"fighter", "level": 1}]
             },
             {
                 "name": "drones",
