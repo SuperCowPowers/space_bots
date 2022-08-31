@@ -59,7 +59,7 @@ class SoundPlayer:
                 self.sound_clips[clip_tag].set_volume(0.5)
 
         # FIXME: Hardcoded limits for now
-        self.sound_limiter.add_limit('laser', 0.01)
+        self.sound_limiter.add_limit('laser', 0.05)
         self.sound_limiter.add_limit('explosion', 1)
         self.sound_limiter.add_limit('uff', 1)
 
@@ -132,7 +132,9 @@ def test():
     my_sound = SoundPlayer()
 
     # Level Tests
+    sleep(1.1)
     my_sound.announce('uff', None)
+    my_sound.add_sound_to_queue('drone_death', None)
     # my_sound.announce('fighter_down', 'male')
     my_sound.announce('power_cord_d', None)
 
