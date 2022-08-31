@@ -212,8 +212,10 @@
             {"time": 10, "event_info": {"squads": {"berserker": 2}}},
             {"time": 13, "event_info": {"squads": {"mega_bug": 1}}},
             {"time": 15, "event_info": {"squads": {"spitter": 2}}},
-            {"time": 20, "event_info": {"squads": {"zergling": 8}}},
-            {"time": 25, "event_info": {"squads": {"zergling": 6}}}
+            {"time": 20, "event_info": {"squads": {"zergling": 4}}},
+            {"time": 25, "event_info": {"squads": {"zergling": 4}}},
+            {"time": 40, "event_info": {"squads": {"zergling": 4}}},
+            {"time": 50, "event_info": {"squads": {"zergling": 4}}}
         ],
          "test_squads": [
             {
