@@ -210,7 +210,7 @@ class Ship(entity.Entity):
             self.game_engine.draw_circle((100, 100, 10), (self.x, self.y), health_indicator_radius, width=width)
 
         # Level Pips
-        if self.ship_type not in ['scout', 'zergling']:
+        if self.ship_type not in ['drone', 'zergling']:
             pip_y = self.y-self.p.radius
             pip_x = self.x+self.p.radius
             if self.level > 1:

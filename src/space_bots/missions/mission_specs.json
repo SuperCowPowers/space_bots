@@ -317,5 +317,33 @@
                 ]
             }
          ]
+    },
+    "mission_42": {
+        "title": "Mission 42: Experimental",
+        "event_sequence": [
+            {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
+            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 8, "level":2}}},
+            {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 2, "level":2}}},
+            {"time": 13, "event_info": {"squad": {"type": "mega_bug", "count": 1, "level":2}}},
+            {"time": 15, "event_info": {"squad": {"type": "spitter", "count": 2, "level":2}}},
+            {"time": 20, "event_info": {"squad": {"type": "zergling", "count": 4, "level":2}}},
+            {"time": 25, "event_info": {"squad": {"type": "zergling", "count": 4, "level":2}}},
+            {"time": 35, "event_info": {"squad": {"type": "zergling", "count": 4, "level":2}}}
+        ],
+         "test_squads": [
+            {
+                "name": "miner_squad",
+                "ships": [{"type":"healer", "level": 2}, {"type":"healer", "level": 2},
+                    {"type":"miner", "level": 2}, {"type":"fighter", "level": 2}, {"type":"tank", "level": 2}]
+            },
+            {
+                "name": "drones",
+                "ships": [
+                    {"type": "drone", "level": 2},
+                    {"type": "drone", "level": 2}
+                ]
+            }
+         ]
     }
 }
