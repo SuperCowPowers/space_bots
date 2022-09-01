@@ -37,7 +37,7 @@ class Universe:
         self.squads_buffed = False
 
         # Universal Battle Info and Buff Manager
-        self.battle_info = battle_state.BattleState(self)
+        self.battle_info = battle_state.BattleState(self, 1000)
         self.buffs = buff_manager.BuffManager()
 
         # Communication Channels

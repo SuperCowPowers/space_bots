@@ -6,25 +6,23 @@ from space_bots.utils import force_utils
 
 class BattleState:
     """"BattleState: Class stores all the battle state (ship, planets, etc) for Space Bots"""
-    def __init__(self, universe):
+    def __init__(self, universe, scanner_range):
 
         # Set my attributes
         self.universe = universe
+        self.scanner_range = scanner_range
 
     def all_ships(self):
         """Ask the battle state for ALL the ships"""
         return self.universe.all_ships
 
-    def all_ships_cept_me(self, ship):
-        """Ask the battle state for ALL the ships"""
-        return [s for s in self.all_ships() if s != ship]
-
     def adversary_ships(self, ship):
-        """Ask the battle state for ships NOT on my team"""
-        return [s for s in self.universe.all_ships if s.team != ship.team]
+        """Ask the battle state for ships NOT on my team within the specified range"""
+        adversaries = [s for s in self.universe.all_ships if s.team != ship.team]
+        return [s for s in adversaries if force_utils.distance_between(ship, s) < self.scanner_range]
 
     def team_ships(self, ship):
-        """Ask the battle state for ships on my team"""
+        """Ask the battle state for all ships on my team"""
         return [s for s in self.universe.all_ships if s.team == ship.team]
 
     def all_planets(self):
@@ -37,13 +35,6 @@ class BattleState:
         planet_distance = [(p, force_utils.distance_between(ship, p)) for p in self.all_planets()]
         planet_distance.sort(key=lambda tup: tup[1])
         return [p[0] for p in planet_distance][0]
-
-    def closest_teammate(self, ship):
-        if not self.all_ships():
-            return None
-        ship_distance = [(s, force_utils.distance_between(ship, s)) for s in self.all_ships_cept_me(ship)]
-        ship_distance.sort(key=lambda tup: tup[1])
-        return [s[0] for s in ship_distance][0]
 
     def lowest_health_teammate(self, ship):
         if not self.all_ships():
