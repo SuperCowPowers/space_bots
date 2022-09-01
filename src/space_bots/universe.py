@@ -29,9 +29,6 @@ class Universe:
         self.planets = []
         self.squads = []
         self.all_ships = []
-        self.individual_ships = []
-        self.all_entities = []
-        self.individual_entities = []
         self.is_finalized = False
 
         self.initial_count_down = False
@@ -55,9 +52,6 @@ class Universe:
 
         # We need a list of individual ships for collision detections
         self.all_ships = [ship for _squad in self.squads for ship in _squad.ships]
-
-        # All entities are collected into one big list
-        self.all_entities = self.planets + self.squads + self.individual_entities
 
         # Make sure all entities are in a reasonable starting position
         self._space_out_planets()
@@ -83,10 +77,6 @@ class Universe:
     def get_comms(self):
         return self.comms
 
-    def add_entity(self, entity):
-        """Add a Planet to the Universe"""
-        self.individual_entities.append(entity)
-
     def add_planet(self, planet):
         """Add a Planet to the Universe"""
         self.planets.append(planet)
@@ -103,7 +93,6 @@ class Universe:
         # Add the Squad and update the Universal State
         self.squads.append(squad)
         self.all_ships = [ship for _squad in self.squads for ship in _squad.ships]
-        self.all_entities = self.planets + self.squads + self.individual_entities
 
     @staticmethod
     def gen_squad_name():
@@ -116,11 +105,6 @@ class Universe:
         squad = Squad(team=team, squad_name=self.gen_squad_name(), target_strategy='nearest')
         squad.add_ship(ship)
         self.add_squad(squad)
-
-    def remove_ship(self, ship):
-        """Remove a Ship from the Universe"""
-        self.individual_ships.remove(ship)
-        self.all_ships.remove(ship)
 
     def in_combat(self):
         return any([s.in_combat for s in self.squads])
@@ -152,9 +136,9 @@ class Universe:
         # Give the sound queue some cycles
         self.game_engine.play_sound_queue()
 
-        # Have all the entities communicate
-        for entity in self.all_entities:
-            entity.communicate(self.comms)
+        # Have all the squads communicate
+        for squad in self.squads:
+            squad.communicate(self.comms)
 
     def update(self):
         """Let all the entities in the Universe update themselves"""
@@ -171,8 +155,16 @@ class Universe:
             print('Buffing Squads...')
             self.buff_squads()
 
-        # First lets remove any dead ships
-        self.all_ships = [s for s in self.all_ships if not s.is_dead()]
+        # Let check Squad Status
+        for squad in self.squads.copy():  # Copy so we can remove from the actual list
+            if squad.all_dead():
+                squad.pre_delete()
+                self.squads.remove(squad)
+
+        # Build all ships list from remaining squads
+        self.all_ships = []
+        for squad in self.squads:
+            self.all_ships += squad.ships
 
         # Now run collision detection
         self.collision_detection()
@@ -180,9 +172,13 @@ class Universe:
         # Update/Manage the buffs for all the ships
         self.buffs.update()
 
-        # Now update all the entities in the Universe
-        for entity in self.all_entities:
-            entity.update()
+        # Now update all the Planets in the Universe
+        for planet in self.planets:
+            planet.update()
+
+        # Now update all the Squads in the Universe
+        for squad in self.squads:
+            squad.update()
 
         # Time Slow
         time.sleep(self.time_slow)
@@ -345,13 +341,13 @@ def test():
     my_universe.finalize()
 
     # Position
-    class pos:
+    class Pos:
         pass
-    pos.x = 1200
-    pos.y = 500
+    Pos.x = 1200
+    Pos.y = 500
 
     # Add Protection Orders
-    earth_squad.protect(my_universe.battle_info.closest_planet(pos))
+    earth_squad.protect(my_universe.battle_info.closest_planet(Pos))
     drone_squad.protect(my_miner, 30)
 
     # Have the Zerg squad target the miner

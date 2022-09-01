@@ -189,7 +189,7 @@ def test():
 
     # Get the Universe Mission Planner
     my_mission = my_universe.mission_planner
-    my_mission.set_mission(10, test_squads=True)
+    my_mission.set_mission(8, test_squads=True)
 
     # Invoke the event loop
     my_game_engine.event_loop()

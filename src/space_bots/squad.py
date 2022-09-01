@@ -32,6 +32,7 @@ class Squad:
 
         # The Ships in this Squad
         self.ships = []
+        self.delete_me = False
 
         # Keep info/stats on my adversaries (populated in update)
         self.adversaries = None
@@ -70,11 +71,30 @@ class Squad:
         ship.battle_info = self.battle_info
         self.ships.append(ship)
 
+    def all_dead(self):
+        """Are all the ships in this Squad dead?"""
+        if not self.ships:
+            self.delete_me = True
+            return True
+        else:  # I'm not dead yet :)
+            return False
+
     def set_battle_info(self, battle_info):
         """Someone has given us battle info/reconnaissance"""
         self.battle_info = battle_info
         for ship in self.ships:
             ship.set_battle_info(battle_info)
+
+    def should_delete(self):
+        """Report True/False on whether this Squad be deleted"""
+        return self.delete_me
+
+    def pre_delete(self):
+        """All Entities have a pre_delete method where they might take some action/set stuff before being deleted"""
+        print(f"Squad removing ships {self}")
+        for ship in self.ships:
+            ship.pre_delete()
+        self.ships = []
 
     def set_buff_manager(self, buffs):
         self.buff_manager = buffs
@@ -166,7 +186,10 @@ class Squad:
         """Update the Squad"""
 
         # Remove any dead ships
-        self.ships = [s for s in self.ships if not s.is_dead()]
+        for ship in self.ships.copy():  # Copy so we can remove from actual list
+            if ship.is_dead():
+                ship.pre_delete()
+                self.ships.remove(ship)
 
         # Are any of my ships in combat?
         self.set_combat_status(any([s.in_combat for s in self.ships]))

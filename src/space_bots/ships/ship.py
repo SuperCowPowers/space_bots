@@ -55,6 +55,10 @@ class Ship(entity.Entity):
     def squad_in_combat(self):
         return self.squad.in_combat if self.squad else False
 
+    def pre_delete(self):
+        """All Entities have a pre_delete method where they might take some action/set stuff before being deleted"""
+        print(f"pre_delete ship: {self}")
+
     def within_range(self, target):
         """Is this target within weapons range"""
         return force_utils.distance_between(self, target) < self.p.laser_range
@@ -84,6 +88,7 @@ class Ship(entity.Entity):
         if self.s.hp <= 0:
             self.s.hp = 0
             self.dead = True
+            self.delete_me = True
 
     def heal(self, points):
         """Heal any damage on this ship"""
