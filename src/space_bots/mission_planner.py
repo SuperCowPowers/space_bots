@@ -82,10 +82,10 @@ class MissionPlanner:
         for _squad in self.test_squads:
             self.universe.add_squad(_squad)
 
-    def _set_protection_orders(self, source_name, target_name, distance):
-        """Internal: Get the current mission and pull out protection orders"""
+    def _set_focus_orders(self, source_name, target_name, focus_type, distance=None):
+        """Internal: Get the current mission and pull out focus (protect or attack) orders"""
 
-        # This code is a bit wonky, we want flexibility in protection orders
+        # This code is a bit wonky, we want flexibility in protection/attack orders
         # So for the target we need to go through planets, squads and ships to see what they want
 
         # Get the source
@@ -102,8 +102,9 @@ class MissionPlanner:
             if target is None:
                 target = self._get_ship(target_name)
 
-        # Now execute protection order
-        source.protect(target, distance)
+        # Now execute focus order
+        if focus_type == 'protect':
+            source.protect(target, distance)
 
     def _get_ship(self, ship_type):
         """Internal: Given a ship type get the ship with that type
@@ -165,7 +166,13 @@ class MissionPlanner:
                 for source, target_info in event_info['protect'].items():
                     target = target_info['target']
                     distance = target_info.get('distance', 150)
-                    self._set_protection_orders(source, target, distance)
+                    self._set_focus_orders(source, target, focus_type='protect', distance=distance)
+
+            # Attack Target Orders
+            if 'attack' in event_info:
+                for source, target_info in event_info['attack'].items():
+                    target = target_info['target']
+                    self._set_focus_orders(source, target, focus_type='attack')
 
     def finalize(self):
         """Mission Planner Finalize"""
@@ -189,7 +196,7 @@ def test():
 
     # Get the Universe Mission Planner
     my_mission = my_universe.mission_planner
-    my_mission.set_mission(9, test_squads=True)
+    my_mission.set_mission(12, test_squads=True)
 
     # Invoke the event loop
     my_game_engine.event_loop()

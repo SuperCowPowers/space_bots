@@ -57,7 +57,7 @@ class Ship(entity.Entity):
 
     def pre_delete(self):
         """All Entities have a pre_delete method where they might take some action/set stuff before being deleted"""
-        print(f"pre_delete ship: {self}")
+        pass
 
     def within_range(self, target):
         """Is this target within weapons range"""

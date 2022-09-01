@@ -45,7 +45,7 @@ class Entity(ABC):
 
     def pre_delete(self):
         """All Entities have a pre_delete method where they might take some action/set stuff before being deleted"""
-        print(f"pre_delete: {self}")
+        pass
 
 
 # Simple test of the Entity functionality

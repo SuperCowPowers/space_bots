@@ -91,7 +91,7 @@ class Squad:
 
     def pre_delete(self):
         """All Entities have a pre_delete method where they might take some action/set stuff before being deleted"""
-        print(f"Squad removing ships {self}")
+        print(f"Squad pre_delete {self}")
         for ship in self.ships:
             ship.pre_delete()
         self.ships = []
