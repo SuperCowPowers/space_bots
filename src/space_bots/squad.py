@@ -85,10 +85,6 @@ class Squad:
         for ship in self.ships:
             ship.set_battle_info(battle_info)
 
-    def should_delete(self):
-        """Report True/False on whether this Squad be deleted"""
-        return self.delete_me
-
     def pre_delete(self):
         """All Entities have a pre_delete method where they might take some action/set stuff before being deleted"""
         print(f"Squad pre_delete {self}")

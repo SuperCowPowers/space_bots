@@ -1,8 +1,10 @@
 """Tank: A Tank ship in Space Bots"""
+import time
 
 # Local Imports
 from space_bots.utils import force_utils
 from space_bots.ships import ship
+from space_bots.torp import Torp
 
 
 class Tank(ship.Ship):
@@ -18,6 +20,9 @@ class Tank(ship.Ship):
         self.collision_radius *= 1.1  # Tanks need their space
         self.shield_thrown = False
         self.squad_buffs = ['protection']
+        self.torp_range = 200
+        self.torps = []
+        self.next_torp_reload = 0
 
         # Tank Level adjustments
         self.level = level
@@ -28,16 +33,35 @@ class Tank(ship.Ship):
         self.p.shield_recharge *= self.level
         self.p.hull_recharge *= self.level
 
+    def expire_torps(self, now):
+        for t in self.torps:
+            if now > t.expire:
+                t.delete_me = True
+
     def update(self):
         """Update the Tank"""
 
         # General updates
         self.general_ship_updates()
         self.general_targeting()
-        # self.general_avoidance() Tanks don't avoid anyone :)
 
         # Tank specific stuff
         self.shield_thrown = False if not self.squad_in_combat() else self.shield_thrown
+
+        # Delete dead/exploded torps
+        now = time.time()
+        self.expire_torps(now)
+        self.torps = [t for t in self.torps if not t.delete_me]
+
+        # Fire new Torps
+        if self.s.target and force_utils.distance_between(self, self.s.target) < self.torp_range:
+            if now > self.next_torp_reload:
+                if len(self.torps) < 8:
+                    t = Torp(self, self.game_engine, self.x, self.y)
+                    self.torps.append(t)
+                self.next_torp_reload = now + 0.1
+            for torp in self.torps:
+                torp.update()
 
         # Move towards squads primary target (Tanks need to 'get in there')
         if self.squad.main_target:
@@ -53,7 +77,7 @@ class Tank(ship.Ship):
             self.protect_target.add_buff('take_the_pain')
             self.shield_thrown = True
 
-        # Now actually call the move command (which uses force/mass calc)
+        # Now actually call the move command
         self.move()
 
 

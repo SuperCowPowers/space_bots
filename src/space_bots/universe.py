@@ -29,6 +29,7 @@ class Universe:
         self.planets = []
         self.squads = []
         self.all_ships = []
+        self.torps = []
         self.is_finalized = False
 
         self.initial_count_down = False
@@ -166,6 +167,11 @@ class Universe:
         for squad in self.squads:
             self.all_ships += squad.ships
 
+        # Build torps list from ships
+        self.torps = []
+        for ship in self.all_ships:
+            self.torps += ship.torps
+
         # Now run collision detection
         self.collision_detection()
 
@@ -222,7 +228,14 @@ class Universe:
         # Test for collisions between all entities in the Universe
         # Note: This has lots of room for improvement (spacial hierarchies/etc)
 
-        # First: Ships vs Ships
+        # First: Torps vs Zerg Ships
+        zerg_ships = self.battle_info.zerg_ships()
+        for torp in self.torps:
+            for ship in zerg_ships:
+                if force_utils.distance_between(torp, ship) < ship.p.shield_radius:
+                    torp.impact(ship)
+
+        # Second: Ships vs Ships
         for index, ship in enumerate(self.all_ships):
             for co_ship in self.all_ships[index+1:]:
 
@@ -233,7 +246,7 @@ class Universe:
                 co_ship.force_x += co_dx * ship.mass/co_ship.mass
                 co_ship.force_y += co_dy * ship.mass/co_ship.mass
 
-        # Next: Ships vs Planet
+        # Third: Ships vs Planet
         for ship in self.all_ships:
             for planet in self.planets:
 
@@ -243,7 +256,6 @@ class Universe:
                 ship.force_y += dy * 10
 
         # Last: Ships against boundaries
-        # FIXME
         # Note: This is a 'hard' boundary
         for _ship in self.all_ships:
             ship_pad = self.pad/4

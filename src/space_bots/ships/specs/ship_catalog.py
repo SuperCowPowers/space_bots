@@ -3,7 +3,7 @@
 ship_specs = {
     'tank':
         {'color': (100, 100, 220),
-         'mass': 60,
+         'mass': 600,
          'speed': 0.2,
          'radius': 20,
          'hp': 300,
@@ -17,11 +17,12 @@ ship_specs = {
          'shield_recharge': 0.05,
          'hull_recharge': 0.05,
          'keep_range': 0,
-         'threat': 200
+         'threat': 200,
+         'max_torps': 8
          },
     'healer':
         {'color': (100, 200, 100),
-         'mass': 30,
+         'mass': 300,
          'speed': 0.25,
          'radius': 14,
          'hp': 150,
@@ -39,7 +40,7 @@ ship_specs = {
          },
     'fighter':
         {'color': (180, 60, 200),
-         'mass': 40,
+         'mass': 400,
          'speed': 0.2,
          'radius': 16,
          'hp': 200,
@@ -57,7 +58,7 @@ ship_specs = {
          },
     'miner':
         {'color': (180, 160, 60),
-         'mass': 50,
+         'mass': 500,
          'speed': 0.25,
          'radius': 12,
          'hp': 200,
@@ -75,7 +76,7 @@ ship_specs = {
          },
     'drone':
         {'color': (180, 200, 100),
-         'mass': 15,
+         'mass': 150,
          'speed': 0.6,
          'radius': 7,
          'hp': 60,
@@ -93,7 +94,7 @@ ship_specs = {
          },
     'starbase':
         {'color': (100, 100, 200),
-         'mass': 200,
+         'mass': 2000,
          'speed': 0.05,
          'radius': 20,
          'hp': 800,
@@ -107,11 +108,12 @@ ship_specs = {
          'shield_recharge': 0.05,
          'hull_recharge': 0.05,
          'keep_range': 200,
-         'threat': 400
+         'threat': 400,
+         'max_torps': 20
          },
     'zergling':
         {'color': (180, 130, 80),
-         'mass': 2,
+         'mass': 20,
          'speed': 0.7,
          'radius': 6,
          'hp': 50,
@@ -129,7 +131,7 @@ ship_specs = {
          },
     'spitter':
         {'color': (180, 100, 80),
-         'mass': 30,
+         'mass': 300,
          'speed': 0.25,
          'radius': 14,
          'hp': 150,
@@ -147,7 +149,7 @@ ship_specs = {
          },
     'berserker':
         {'color': (160, 60, 60),
-         'mass': 40,
+         'mass': 400,
          'speed': 0.2,
          'radius': 16,
          'hp': 200,
@@ -165,7 +167,7 @@ ship_specs = {
          },
     'mega_bug':
         {'color': (140, 60, 80),
-         'mass': 25,  # FIXME
+         'mass': 800,
          'speed': 1.0,
          'radius': 20,
          'hp': 800,

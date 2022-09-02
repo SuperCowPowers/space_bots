@@ -39,10 +39,6 @@ class Entity(ABC):
         self.force_x *= self.force_damp
         self.force_y *= self.force_damp
 
-    def should_delete(self):
-        """All Entities report True/False on whether they should be deleted"""
-        return self.delete_me
-
     def pre_delete(self):
         """All Entities have a pre_delete method where they might take some action/set stuff before being deleted"""
         pass

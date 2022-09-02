@@ -77,12 +77,12 @@ def attraction_forces(source, target, within_range):
 
 
 def force_based_movement(entity, limit=None):
-    """Move the Entity based on it's current forces, mass, and limits (if any)"""
+    """Move the Entity based on its current forces, mass, and limits (if any)"""
     # Experimenting with 'forces' (in air quotes)
-    # delta_x = entity.force_x / entity.mass
-    # delta_y = entity.force_y / entity.mass
-    delta_x = entity.force_x / (entity.mass * entity.mass)
-    delta_y = entity.force_y / (entity.mass * entity.mass)
+    delta_x = entity.force_x / entity.mass
+    delta_y = entity.force_y / entity.mass
+    # delta_x = entity.force_x / (entity.mass * entity.mass)
+    # delta_y = entity.force_y / (entity.mass * entity.mass)
     if limit is not None:
         delta_x = max(min(delta_x, limit), -limit)
         delta_y = max(min(delta_y, limit), -limit)

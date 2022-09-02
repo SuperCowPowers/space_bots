@@ -16,6 +16,9 @@ class BattleState:
         """Ask the battle state for ALL the ships"""
         return self.universe.all_ships
 
+    def zerg_ships(self):
+        return [s for s in self.universe.all_ships if s.team == 'zerg']
+
     def adversary_ships(self, ship):
         """Ask the battle state for ships NOT on my team within the specified range"""
         adversaries = [s for s in self.universe.all_ships if s.team != ship.team]

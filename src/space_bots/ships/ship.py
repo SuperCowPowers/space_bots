@@ -41,6 +41,7 @@ class Ship(entity.Entity):
         self.damage_taken = 0
         self.current_laser_target = None
         self.new_laser_target = False
+        self.torps = []
 
         # Communications Message Queues
         self.announcer_messages = SimpleQueue()
@@ -166,18 +167,19 @@ class Ship(entity.Entity):
         else:
             self.s.target = self.squad.secondary_target(self)
 
-        # Move towards primary target (even if it's not my current target)
-        if self.squad.main_target:
+    def general_movement(self):
+        """Movement Logic that's useful for most ships"""
+        if self.s.target:
             (dx, dy), (_, _) = force_utils.attraction_forces(self, self.squad.main_target, self.p.laser_range/1.2)
-            self.force_x += dx * 0.5
-            self.force_y += dy * 0.5
+            self.force_x += dx
+            self.force_y += dy
 
-    def general_avoidance(self, factor=0.5):
-        """Avoidance logic that's useful for most ships"""
+    def general_avoidance(self):
+        """Avoidance Logic that's useful for most ships"""
         for enemy_ship in self.squad.adversaries:
             (dx, dy), (_, _) = force_utils.repulsion_forces(self, enemy_ship, rest_distance=self.p.keep_range)
-            self.force_x += dx * factor
-            self.force_y += dy * factor
+            self.force_x += dx * 0.5
+            self.force_y += dy * 0.5
 
     def update(self):
         """Update the Ship"""
@@ -185,17 +187,19 @@ class Ship(entity.Entity):
         # General updates
         self.general_ship_updates()
         self.general_targeting()
+        self.general_movement()
         self.general_avoidance()
 
-        # Now actually call the move command (which uses force/mass calc)
+        # Now actually call the move command
         self.move()
 
     def draw(self):
         """Draw the entire ship"""
         self.draw_laser()
-        self.draw_ship()
         self.draw_shield()
         self.draw_buffs()
+        self.draw_torps()
+        self.draw_ship()
 
     def draw_ship(self):
         """Draw the Ship Icon"""
@@ -230,6 +234,11 @@ class Ship(entity.Entity):
         """Draw the Dead Ship Icon"""
         self.game_engine.draw_circle((0, 0, 0), (self.x, self.y), self.p.radius)
 
+    def draw_torps(self):
+        """Draw any Torps we launch"""
+        for torp in self.torps:
+            torp.draw()
+
     def draw_laser(self):
         """Draw the laser"""
         if self.s.target and force_utils.distance_between(self, self.s.target) < self.p.laser_range:
@@ -243,9 +252,13 @@ class Ship(entity.Entity):
             # Draw the laser
             self.game_engine.draw_line(self.p.color, (self.x, self.y), (self.s.target.x, self.s.target.y), width=self.p.laser_width)
 
-            # Do the Damage
-            self.s.target.damage(self.p.laser_damage)
-            self.damage_done += self.p.laser_damage
+            # Fire the laser
+            self.fire_laser()
+
+    def fire_laser(self):
+        """Actually fire the laser and do damage"""
+        self.s.target.damage(self.p.laser_damage)
+        self.damage_done += self.p.laser_damage
 
     def draw_shield(self):
         """Draw the Shield"""
