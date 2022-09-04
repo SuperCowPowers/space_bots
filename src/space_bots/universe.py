@@ -244,7 +244,7 @@ class Universe:
             for co_ship in self.all_ships[index+1:]:
 
                 # Compute any collision forces
-                ship_spacing = ship.p.pad_radius + co_ship.p.pad_radius
+                ship_spacing = ship.pad_radius + co_ship.pad_radius
                 (dx, dy), (co_dx, co_dy) = force_utils.repulsion_forces(ship, co_ship, ship_spacing)
                 ship.force_x += dx * co_ship.mass/ship.mass
                 ship.force_y += dy * co_ship.mass/ship.mass
@@ -254,10 +254,9 @@ class Universe:
         # Third: Ships vs Planet
         for ship in self.all_ships:
             for planet in self.planets:
-
                 # Compute any collision forces
                 (dx, dy), (p_dx, p_dy) = force_utils.repulsion_forces(ship, planet)
-                ship.force_x += dx * 10
+                ship.force_x += dx * 10  # Planets are big
                 ship.force_y += dy * 10
 
         # Last: Ships against boundaries
@@ -365,7 +364,7 @@ def test():
 
     # Add Protection Orders
     earth_squad.protect(my_universe.battle_info.closest_planet(Pos))
-    drone_squad.protect(my_miner, 30)
+    drone_squad.protect(my_miner, 40)
 
     # Have the Zerg squad target the miner
     zerg_squad.attack_target(my_miner)

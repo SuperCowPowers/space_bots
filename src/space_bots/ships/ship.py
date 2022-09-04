@@ -3,7 +3,7 @@ from queue import SimpleQueue
 
 # Local Imports
 from space_bots import entity
-from space_bots.utils import force_utils, torp_launcher
+from space_bots.utils import force_utils, torp_launcher, laser_guns
 from space_bots.ships import ship_parameters, ship_state
 
 
@@ -11,17 +11,19 @@ class Ship(entity.Entity):
     """Ship: Class for the ships in Space Bots"""
     def __init__(self, game_engine, x=500, y=500, ship_type='fighter', level=1):
 
-        # Set my attributes
-        self.squad = None
-        self.team = None
-
-        # Set my Ship Parameters, State, and Buffs
+        # Set my Ship Parameters and State
         self.ship_type = ship_type
         self.p = ship_parameters.ShipParameters(ship_type)
         self.s = ship_state.ShipState(ship_type)
-        self.level = level
 
-        # General ship adjustments
+        # Call SuperClass (Entity) Initialization
+        super().__init__(game_engine, x, y, mass=self.p.mass, speed=self.p.speed,
+                         collision_radius=self.p.collision_radius)
+
+        # Set my attributes
+        self.squad = None
+        self.team = None
+        self.level = level
         self.p.laser_damage *= self.level
 
         # Battle State/Reconnaissance
@@ -30,7 +32,7 @@ class Ship(entity.Entity):
         self.squad_buffs = []
         self.buff_manager = None
 
-        # Combat indicators and vars
+        # Combat indicators
         self.first_strike = False
         self.in_combat = False
         self.dead = False
@@ -39,16 +41,16 @@ class Ship(entity.Entity):
         self.damage_done = 0
         self.damage_taken = 0
         self.laser_sound = False
-        self.laser_overheat = False
-        self.laser_temp = 0
+
+        # Most ship have laser guns so set up the deployment here
+        self.laser_guns = laser_guns.LaserGuns(self)
+        self.laser_guns.set_deployment(1)
+
+        # Not many ships have Torp Launcher (so they set_deployment in their subclass init
         self.torp_launcher = torp_launcher.TorpLauncher(self)
 
         # Communications Message Queues
         self.announcer_messages = SimpleQueue()
-
-        # Call SuperClass (Entity) Initialization
-        super().__init__(game_engine, x, y, mass=self.p.mass, speed=self.p.speed,
-                         collision_radius=self.p.collision_radius)
 
     def set_battle_info(self, battle_info):
         self.battle_info = battle_info
@@ -120,23 +122,29 @@ class Ship(entity.Entity):
     def communicate(self, comms):
         """Communicate with Squad or Team"""
         # Only earth ships do communication
-        if self.team == 'earth':
-            if self.health_percent() < 0.5 and not self.low_health_announced:
-                comms.announce(f"{self.ship_type}_low")
-                self.low_health_announced = True
-            if self.is_dead() and not self.death_announced:
-                if self.ship_type == 'drone':
-                    comms.play_sound('drone_death')
-                else:
-                    comms.announce('uff', None)
-                comms.announce(f"{self.ship_type}_down")
-                self.death_announced = True
-            # Low Capacitor
-            if self.s.capacitor < 1:
-                comms.put_message('universe', f"{self.ship_type} Low Capacitor")
+        if self.team != 'earth':
+            return
 
+        # Health/Death Ship Status
+        if self.health_percent() < 0.5 and not self.low_health_announced:
+            comms.announce(f"{self.ship_type}_low")
+            self.low_health_announced = True
+        if self.is_dead() and not self.death_announced:
+            if self.ship_type == 'drone':
+                comms.play_sound('drone_death')
+            else:
+                comms.announce('uff', None)
+            comms.announce(f"{self.ship_type}_down")
+            self.death_announced = True
+
+        # Low Capacitor
+        # if self.s.capacitor < 1:
+        #     comms.put_message('universe', f"{self.ship_type} Low Capacitor {self.s.capacitor}")
+
+        # Laser Sound
         if self.laser_sound:
             comms.play_sound('laser')
+            comms.put_message('universe', 'laser')
             self.laser_sound = False
 
         # Also communicate any queued announcer messages
@@ -160,14 +168,6 @@ class Ship(entity.Entity):
         # TorpLauncher update/fire
         self.torp_launcher.update()
         self.torp_launcher.fire(self.squad.main_target)
-
-        # Laser temperature
-        self.laser_temp -= 1
-        if self.laser_temp > 200:
-            self.laser_overheat = True
-        elif self.laser_temp < 0:
-            self.laser_temp = 0
-            self.laser_overheat = False
 
     def general_targeting(self):
         """Targeting logic that's useful for most ships"""
@@ -204,12 +204,12 @@ class Ship(entity.Entity):
         self.move()
 
     def draw(self):
-        """Draw the entire ship"""
-        self.draw_torps()
-        self.draw_laser()
+        """Draw the ship, weapons, shields..."""
+        self.draw_lasers()
         self.draw_shield()
         self.draw_buffs()
         self.draw_ship()
+        self.draw_torps()
 
     def draw_ship(self):
         """Draw the Ship Icon"""
@@ -250,29 +250,9 @@ class Ship(entity.Entity):
         for torp in self.torp_launcher.torps:
             torp.draw()
 
-    def draw_laser(self):
-        """Draw the laser"""
-        ready_for_laser = self.s.capacitor > 2 and not self.laser_overheat
-        if ready_for_laser and self.s.target and force_utils.distance_between(self, self.s.target) < self.p.laser_range:
-            self.first_strike = False
-
-            # Draw the laser
-            self.game_engine.draw_line(self.p.color, (self.x, self.y), (self.s.target.x, self.s.target.y), width=self.p.laser_width)
-
-            # Fire the laser
-            self.fire_laser()
-
-    def fire_laser(self):
-        """Actually fire the laser and do damage"""
-        self.s.target.damage(self.p.laser_damage)
-        self.damage_done += self.p.laser_damage
-        self.s.capacitor -= 0.1
-
-        # Logic based on laser temp
-        if self.laser_temp == 0:
-            self.laser_sound = True
-            self.laser_temp = 10
-        self.laser_temp += self.p.laser_heat
+    def draw_lasers(self):
+        """Draw (and fire) lasers for this ship"""
+        self.laser_guns.draw_fire(self.s.target)
 
     def draw_shield(self):
         """Draw the Shield"""

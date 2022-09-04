@@ -14,6 +14,7 @@ class Entity(ABC):
         self.speed = speed
         self.mass = mass
         self.collision_radius = collision_radius
+        self.pad_radius = self.collision_radius + 5
         self.force_x = 0
         self.force_y = 0
         self.force_damp = 0.99

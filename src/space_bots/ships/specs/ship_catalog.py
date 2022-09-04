@@ -49,7 +49,7 @@ ship_specs = {
          'shield': 150,
          'laser_range': 160,
          'laser_damage': 0.25,
-         'laser_width': 4,
+         'laser_width': 3,
          'capacitor': 30,
          'ship_width': 5,
          'shield_width': 2,

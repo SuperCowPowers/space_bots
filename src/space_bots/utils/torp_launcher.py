@@ -124,7 +124,7 @@ class TorpLauncher:
                 lp['torp'].force_x = lp['x'] * .1
                 lp['torp'].force_y = lp['y'] * .1
                 lp['torp'].released = True
-                lp['torp'] = None  # Torp is now free, so remove it from launch point
+                lp['torp'] = None  # Torp released, so remove it from launch point
 
 
 # Simple test of the TorpLauncher functionality

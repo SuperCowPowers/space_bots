@@ -10,7 +10,6 @@ def distance_between(source, target):
 
 
 def normalized_distance_vectors(source, target):
-
     # Compute source to target vector
     st_dx = target.x - source.x
     st_dy = target.y - source.y
@@ -20,6 +19,15 @@ def normalized_distance_vectors(source, target):
     # Target to Source is just the negative
     n_ts = (-n_st[0], -n_st[1])
     return n_st, n_ts
+
+
+def hitting(source, target):
+    """Simply test to see if source and target are hitting/overlapping"""
+    min_dist = source.collision_radius + target.collision_radius
+    if distance_between(source, target) < min_dist:
+        return True
+    else:
+        return False
 
 
 def repulsion_forces(source, target, rest_distance=None):

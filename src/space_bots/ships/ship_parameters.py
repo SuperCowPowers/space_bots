@@ -32,4 +32,3 @@ class ShipParameters:
         self.max_torps = ship_specs[ship_type].get('max_torps', 0)
         self.shield_radius = self.radius + self.shield_width
         self.collision_radius = self.shield_radius
-        self.pad_radius = self.collision_radius * 1.3
