@@ -134,6 +134,10 @@ class Universe:
         for display_text in self.comms.get_messages('display'):
             self.current_text = display_text
 
+        # Log messages sent to the universe
+        for message in self.comms.get_messages('universe'):
+            print(f"Comms: {message}")
+
         # Give the sound queue some cycles
         self.game_engine.play_sound_queue()
 

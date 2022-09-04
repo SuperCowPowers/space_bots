@@ -1,5 +1,4 @@
 """Torp: Class for the Torpedoes in Space Bots"""
-import time
 
 # Local Imports
 from space_bots import entity

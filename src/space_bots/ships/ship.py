@@ -131,6 +131,9 @@ class Ship(entity.Entity):
                     comms.announce('uff', None)
                 comms.announce(f"{self.ship_type}_down")
                 self.death_announced = True
+            # Low Capacitor
+            if self.s.capacitor < 1:
+                comms.put_message('universe', f"{self.ship_type} Low Capacitor")
 
         if self.laser_sound:
             comms.play_sound('laser')
@@ -239,12 +242,12 @@ class Ship(entity.Entity):
                     pip_x += 5
 
     def get_torps(self):
-        """Grab out current/active Torps from the Launcher"""
-        return self.torp_launcher.torps
+        """Return the LIVE Torps from the Launcher"""
+        return self.torp_launcher.live_torps()
 
     def draw_torps(self):
         """Draw any Torps we launch"""
-        for torp in self.get_torps():
+        for torp in self.torp_launcher.torps:
             torp.draw()
 
     def draw_laser(self):

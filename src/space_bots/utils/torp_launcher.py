@@ -13,22 +13,23 @@ class TorpLauncher:
         # TorpLauncher specific stuff
         self.origin_ship = ship
         self.torps = []
-        self.torp_range = 250
-        self.torp_reload_rate = 0.1
+        self.torp_range = 300
         self.next_torp_reload = 0
         self.current_time = None
-        self.min_capacitor = 1
+        self.min_capacitor = 2
 
         # These vars are defined in set_configuration
+        self.launch_points = None
         self.torp_level = None
         self.max_torps = None
-        self.launch_points = None
+        self.torp_reload_rate = None
 
     def set_deployment(self, launch_points, level=1):
         """Set the deployment of the Torp Launcher"""
         self.max_torps = launch_points
         self.torp_level = level
         self.launch_points = self._generate_launch_points(launch_points)
+        self.torp_reload_rate = 1.0/launch_points
 
     def is_deployed(self):
         return self.launch_points is not None
@@ -41,19 +42,29 @@ class TorpLauncher:
         launch_points = [{'torp': None, 'x': h[0], 'y': h[1]} for h in hard_points]
         return launch_points
 
-    def first_available_launch_point(self, new_torp):
+    def load_next_available_launch_point(self):
         # Update next reload
         self.next_torp_reload = self.current_time + self.torp_reload_rate
 
-        # Select the next launch
+        # Select the next launch point
         for lp in self.launch_points:
             if lp['torp'] is None:
+                new_torp = torp.Torp(self.origin_ship, self.torp_level)
                 lp['torp'] = new_torp
-                self.origin_ship.s.capacitor -= 1
+                self.torps.append(new_torp)  # We have to track torps even after they get released
+                self.origin_ship.s.capacitor -= 2
                 return
 
         # Shouldn't get here
         print('No Launch Points!!!!')
+
+    def live_torps(self):
+        """Return a list of Torps that have been launched"""
+        return [t for t in self.torps if t.released]
+
+    def fully_loaded(self):
+        """Is the Launcher fully Loaded?"""
+        return all([lp['torp'] for lp in self.launch_points])
 
     def expire_torps(self):
         """Time Expiration for Existing Torps"""
@@ -74,10 +85,8 @@ class TorpLauncher:
         self.torps = [t for t in self.torps if not t.delete_me]
 
         # Load Torps into our launch points
-        if self.torp_available():
-            t = torp.Torp(self.origin_ship, self.torp_level)
-            self.torps.append(t)
-            self.first_available_launch_point(t)
+        if self.torp_available_for_loading():
+            self.load_next_available_launch_point()
 
         # Update launch points relative to ship movements
         for lp in self.launch_points:
@@ -89,7 +98,7 @@ class TorpLauncher:
         for t in self.torps:
             t.update()
 
-    def torp_available(self):
+    def torp_available_for_loading(self):
         """Is a new Torp available for firing?"""
         return (self.origin_ship.s.capacitor > self.min_capacitor) and \
                (self.current_time > self.next_torp_reload) and \
@@ -98,19 +107,22 @@ class TorpLauncher:
     def fire(self, target):
         """Launch a Torpedo at the given Target"""
 
-        # Do we have a target and is it within range?
-        if target is None or not force_utils.distance_between(self.origin_ship, target) < self.torp_range:
+        # Many ships do not have a TorpLauncher
+        if not self.is_deployed():
+            return
+
+        # Is the target out of range?
+        if target is None or force_utils.distance_between(self.origin_ship, target) > self.torp_range:
             return
 
         # Fire Torps (by setting the active target)
-        if len(self.torps) == self.max_torps:
+        if self.fully_loaded():
             for lp in self.launch_points:
-                if lp['torp']:
-                    lp['torp'].set_target(target)
-                    lp['torp'].force_x = lp['x'] * .1
-                    lp['torp'].force_y = lp['y'] * .1
-                    lp['torp'].released = True
-                    lp['torp'] = None  # Torp is now free, so remove it from launch point
+                lp['torp'].set_target(target)
+                lp['torp'].force_x = lp['x'] * .1
+                lp['torp'].force_y = lp['y'] * .1
+                lp['torp'].released = True
+                lp['torp'] = None  # Torp is now free, so remove it from launch point
 
 
 # Simple test of the TorpLauncher functionality

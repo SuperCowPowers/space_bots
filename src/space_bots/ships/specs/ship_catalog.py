@@ -11,12 +11,12 @@ ship_specs = {
          'laser_range': 100,
          'laser_damage': 0.1,
          'laser_width': 5,
-         'capacitor': 100,
+         'capacitor': 80,
          'ship_width': 6,
          'shield_width': 2,
          'shield_recharge': 0.05,
          'hull_recharge': 0.05,
-         'cap_recharge': 0.025,
+         'cap_recharge': 0.05,
          'keep_range': 0,
          'threat': 200,
          'max_torps': 8
@@ -55,7 +55,7 @@ ship_specs = {
          'shield_width': 2,
          'shield_recharge': 0.005,
          'hull_recharge': 0.005,
-         'cap_recharge': 0.05,
+         'cap_recharge': 0.025,
          'keep_range': 140,
          'threat': 50,
          'max_torps': 4
@@ -75,7 +75,7 @@ ship_specs = {
          'shield_width': 2,
          'shield_recharge': 0.005,
          'hull_recharge': 0.005,
-         'cap_recharge': 0.05,
+         'cap_recharge': 0.025,
          'keep_range': 400,
          'threat': 30
          },
@@ -95,7 +95,7 @@ ship_specs = {
          'shield_width': 1,
          'shield_recharge': 0.1,  # Drones can't be healed, so nanobot repairs
          'hull_recharge': 0.1,
-         'cap_recharge': 0.05,
+         'cap_recharge': 0.01,
          'keep_range': 60,
          'threat': 20
          },
@@ -121,8 +121,8 @@ ship_specs = {
          },
     'zergling':
         {'color': (180, 130, 80),
-         'mass': 20,
-         'speed': 0.7,
+         'mass': 120,
+         'speed': 1.0,
          'radius': 6,
          'hp': 50,
          'shield': 30,

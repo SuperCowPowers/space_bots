@@ -204,7 +204,8 @@ class Squad:
         self.main_target = self.compute_main_target()
 
         # Squad Movement: Group up
-        squad_radius = 50 + len(self.ships) * 10
+        group_ships = [s for s in self.ships if s.ship_type != 'zergling']
+        squad_radius = 50 + len(group_ships) * 10
         for _ship in self.ships:
             (_, _), (dx, dy) = force_utils.attraction_forces(self, _ship, squad_radius)
             _ship.force_x += dx

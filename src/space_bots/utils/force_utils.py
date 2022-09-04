@@ -31,7 +31,7 @@ def repulsion_forces(source, target, rest_distance=None):
 
     # If my current distance > rest_distance then 'rest'
     cur_distance = distance_between(source, target)
-    if cur_distance > rest_distance:
+    if cur_distance == 0 or cur_distance > rest_distance:
         return (0, 0), (0, 0)
 
     # Okay the repulsion will be greater the closer we are
