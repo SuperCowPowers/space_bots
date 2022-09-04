@@ -18,9 +18,11 @@ class ShipParameters:
         self.laser_range = ship_specs[ship_type]['laser_range']
         self.laser_damage = ship_specs[ship_type]['laser_damage']
         self.laser_width = ship_specs[ship_type]['laser_width']
+        self.laser_heat = ship_specs[ship_type].get('laser_heat', 2)
         self.capacitor = ship_specs[ship_type]['capacitor']
         self.shield_recharge = ship_specs[ship_type]['shield_recharge']
         self.hull_recharge = ship_specs[ship_type]['hull_recharge']
+        self.cap_recharge = ship_specs[ship_type]['cap_recharge']
         self.ship_width = ship_specs[ship_type]['ship_width']
         self.shield_width = ship_specs[ship_type]['shield_width']
         self.keep_range = ship_specs[ship_type]['keep_range']

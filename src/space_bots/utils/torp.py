@@ -1,5 +1,4 @@
 """Torp: Class for the Torpedoes in Space Bots"""
-import random
 import time
 
 # Local Imports
@@ -9,24 +8,24 @@ from space_bots.utils import force_utils
 
 class Torp(entity.Entity):
     """Torp: Class for the Torpedoes in Space Bots"""
-    def __init__(self, origin_ship, game_engine, x=500, y=500, level=1):
+    def __init__(self, origin_ship, target_ship, level=1):
 
         # Set my Torp Parameters
         self.origin_ship = origin_ship
+        self.target = target_ship
         self.level = level
-        self.damage = level * 5
+        self.damage = level * 10
         self.mass = 10
-        self.speed = 1.0
+        self.speed = None
         self.color = origin_ship.p.color
-        self.guidance = True
-        self.expire = time.time() + 3
+        self.release_counter = 0
+        self.guidance_engaged = False
+        self.expire = 400
 
         # Call SuperClass (Entity) Initialization
-        super().__init__(game_engine, x, y, mass=self.mass, speed=self.speed)
+        super().__init__(origin_ship.game_engine, origin_ship.x, origin_ship.y, mass=self.mass, speed=self.speed)
 
-        # Fun to slightly randomize the torp launches
-        self.force_x = random.uniform(-2, 2)
-        self.force_y = random.uniform(-2, 2)
+        # Torps don't slow down
         self.force_damp = 1.0
 
     def pre_delete(self):
@@ -44,15 +43,17 @@ class Torp(entity.Entity):
 
     def update(self):
         """Update the Torp"""
+        self.release_counter += 1
+        if self.release_counter > 150:
+            self.guidance_engaged = True
+        if self.release_counter > 200:
+            self.guidance_engaged = False
+
         # Move towards primary target until guidance wears off
-        if self.origin_ship.squad.main_target:
-            if self.guidance:
-                (dx, dy), (_, _) = force_utils.attraction_forces(self, self.origin_ship.squad.main_target, 0)
-                self.force_x += dx
-                self.force_y += dy
-                # If we have a reasonable force vector turn off guidance
-                if abs(self.force_x) > 10 or abs(self.force_y) > 10:
-                    self.guidance = False
+        if self.guidance_engaged:
+            (dx, dy), (_, _) = force_utils.attraction_forces(self, self.target, 0)
+            self.force_x += dx
+            self.force_y += dy
 
         # Now actually call the move command
         self.move()

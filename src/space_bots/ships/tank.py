@@ -2,9 +2,8 @@
 import time
 
 # Local Imports
-from space_bots.utils import force_utils
+from space_bots.utils import force_utils, torp_launcher
 from space_bots.ships import ship
-from space_bots.torp import Torp
 
 
 class Tank(ship.Ship):
@@ -20,9 +19,6 @@ class Tank(ship.Ship):
         self.collision_radius *= 1.1  # Tanks need their space
         self.shield_thrown = False
         self.squad_buffs = ['protection']
-        self.torp_range = 200
-        self.torps = []
-        self.next_torp_reload = 0
 
         # Tank Level adjustments
         self.level = level
@@ -32,11 +28,8 @@ class Tank(ship.Ship):
         self.s.shield = self.p.shield
         self.p.shield_recharge *= self.level
         self.p.hull_recharge *= self.level
-
-    def expire_torps(self, now):
-        for t in self.torps:
-            if now > t.expire:
-                t.delete_me = True
+        self.p.cap_recharge *= self.level
+        self.torp_launcher = torp_launcher.TorpLauncher(self, self.p.max_torps, level)
 
     def update(self):
         """Update the Tank"""
@@ -45,27 +38,13 @@ class Tank(ship.Ship):
         self.general_ship_updates()
         self.general_targeting()
 
-        # Tank specific stuff
-        self.shield_thrown = False if not self.squad_in_combat() else self.shield_thrown
-
-        # Delete dead/exploded torps
-        now = time.time()
-        self.expire_torps(now)
-        self.torps = [t for t in self.torps if not t.delete_me]
-
-        # Fire new Torps
-        if self.s.target and force_utils.distance_between(self, self.s.target) < self.torp_range:
-            if now > self.next_torp_reload:
-                if len(self.torps) < 8:
-                    t = Torp(self, self.game_engine, self.x, self.y)
-                    self.torps.append(t)
-                self.next_torp_reload = now + 0.1
-            for torp in self.torps:
-                torp.update()
+        # Update and then Launch/Fire new Torpedoes
+        self.torp_launcher.update()
+        self.torp_launcher.fire(self.squad.main_target)
 
         # Move towards squads primary target (Tanks need to 'get in there')
         if self.squad.main_target:
-            (dx, dy), (_, _) = force_utils.attraction_forces(self, self.squad.main_target, 0)
+            (dx, dy), (_, _) = force_utils.attraction_forces(self, self.squad.main_target, 100)
             self.force_x += dx * 2
             self.force_y += dy * 2
 
@@ -80,6 +59,10 @@ class Tank(ship.Ship):
         # Now actually call the move command
         self.move()
 
+    def draw_laser(self):
+        """Tank has no laser"""
+        pass
+
 
 # Simple test of the Tank functionality
 def test():
@@ -87,6 +70,7 @@ def test():
     from space_bots import game_engine_adapter, planet
     from space_bots.universe import Universe
     from space_bots.ships.healer import Healer
+    from space_bots.ships.ship import Ship
 
     # Create a Universe
     my_universe = Universe()
@@ -107,8 +91,13 @@ def test():
     healer_ship = Healer(my_game_engine, 400, 400)
     my_universe.add_ship(healer_ship, team='earth')
 
+    # Add a Zerg enemy
+    zerg = Ship(my_game_engine, 500, 700, ship_type='mega_bug')
+    my_universe.add_ship(zerg, team='zerg')
+    # zerg.general_targeting = lambda: None     # Hack the zerg ship (no targeting)
+
     # Give the tank some damage to heal up
-    tank.damage(800)
+    tank.damage(500)
 
     # Invoke the event loop
     my_game_engine.event_loop()

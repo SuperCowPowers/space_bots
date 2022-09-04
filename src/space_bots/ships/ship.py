@@ -3,7 +3,7 @@ from queue import SimpleQueue
 
 # Local Imports
 from space_bots import entity
-from space_bots.utils import force_utils
+from space_bots.utils import force_utils, torp_launcher
 from space_bots.ships import ship_parameters, ship_state
 
 
@@ -33,15 +33,15 @@ class Ship(entity.Entity):
         # Combat indicators and vars
         self.first_strike = False
         self.in_combat = False
-        self.combat_timer = 0
         self.dead = False
         self.low_health_announced = False
         self.death_announced = False
         self.damage_done = 0
         self.damage_taken = 0
-        self.current_laser_target = None
-        self.new_laser_target = False
-        self.torps = []
+        self.laser_sound = False
+        self.laser_overheat = False
+        self.laser_temp = 0
+        self.torp_launcher = torp_launcher.TorpLauncher(self)
 
         # Communications Message Queues
         self.announcer_messages = SimpleQueue()
@@ -66,10 +66,6 @@ class Ship(entity.Entity):
 
     def damage(self, points):
         """Inflict damage on this ship"""
-
-        # You're in combat
-        self.in_combat = True
-        self.combat_timer = 200
 
         # Damage modifiers
         points *= self.p.incoming_damage_modifier
@@ -123,7 +119,7 @@ class Ship(entity.Entity):
 
     def communicate(self, comms):
         """Communicate with Squad or Team"""
-        # Only earth does all this communication
+        # Only earth ships do communication
         if self.team == 'earth':
             if self.health_percent() < 0.5 and not self.low_health_announced:
                 comms.announce(f"{self.ship_type}_low")
@@ -135,9 +131,10 @@ class Ship(entity.Entity):
                     comms.announce('uff', None)
                 comms.announce(f"{self.ship_type}_down")
                 self.death_announced = True
-            if self.current_laser_target and self.new_laser_target:
-                comms.play_sound('laser')
-                self.new_laser_target = False
+
+        if self.laser_sound:
+            comms.play_sound('laser')
+            self.laser_sound = False
 
         # Also communicate any queued announcer messages
         while not self.announcer_messages.empty():
@@ -153,11 +150,17 @@ class Ship(entity.Entity):
         self.s.hp += self.p.hull_recharge
         self.s.hp = min(self.s.hp, self.p.hp)
 
-        # Combat logic
-        self.combat_timer -= 1
-        if self.combat_timer < 0:
-            self.combat_timer = 0
-            self.in_combat = False
+        # Capacitor recharge
+        self.s.capacitor += self.p.cap_recharge
+        self.s.capacitor = min(self.s.capacitor, self.p.capacitor)
+
+        # Laser temperature
+        self.laser_temp -= 1
+        if self.laser_temp > 200:
+            self.laser_overheat = True
+        elif self.laser_temp < 0:
+            self.laser_temp = 0
+            self.laser_overheat = False
 
     def general_targeting(self):
         """Targeting logic that's useful for most ships"""
@@ -178,8 +181,8 @@ class Ship(entity.Entity):
         """Avoidance Logic that's useful for most ships"""
         for enemy_ship in self.squad.adversaries:
             (dx, dy), (_, _) = force_utils.repulsion_forces(self, enemy_ship, rest_distance=self.p.keep_range)
-            self.force_x += dx * 0.5
-            self.force_y += dy * 0.5
+            self.force_x += dx
+            self.force_y += dy
 
     def update(self):
         """Update the Ship"""
@@ -195,10 +198,10 @@ class Ship(entity.Entity):
 
     def draw(self):
         """Draw the entire ship"""
+        self.draw_torps()
         self.draw_laser()
         self.draw_shield()
         self.draw_buffs()
-        self.draw_torps()
         self.draw_ship()
 
     def draw_ship(self):
@@ -230,24 +233,20 @@ class Ship(entity.Entity):
                     self.game_engine.draw_circle(self.p.color, (pip_x, pip_y), 3, width=0)
                     pip_x += 5
 
-    def draw_dead(self):
-        """Draw the Dead Ship Icon"""
-        self.game_engine.draw_circle((0, 0, 0), (self.x, self.y), self.p.radius)
+    def get_torps(self):
+        """Grab out current/active Torps from the Launcher"""
+        return self.torp_launcher.torps
 
     def draw_torps(self):
         """Draw any Torps we launch"""
-        for torp in self.torps:
+        for torp in self.get_torps():
             torp.draw()
 
     def draw_laser(self):
         """Draw the laser"""
-        if self.s.target and force_utils.distance_between(self, self.s.target) < self.p.laser_range:
+        ready_for_laser = self.s.capacitor > 2 and not self.laser_overheat
+        if ready_for_laser and self.s.target and force_utils.distance_between(self, self.s.target) < self.p.laser_range:
             self.first_strike = False
-
-            # Track if new target
-            if self.s.target != self.current_laser_target:
-                self.current_laser_target = self.s.target
-                self.new_laser_target = True
 
             # Draw the laser
             self.game_engine.draw_line(self.p.color, (self.x, self.y), (self.s.target.x, self.s.target.y), width=self.p.laser_width)
@@ -259,11 +258,18 @@ class Ship(entity.Entity):
         """Actually fire the laser and do damage"""
         self.s.target.damage(self.p.laser_damage)
         self.damage_done += self.p.laser_damage
+        self.s.capacitor -= 0.1
+
+        # Logic based on laser temp
+        if self.laser_temp == 0:
+            self.laser_sound = True
+            self.laser_temp = 10
+        self.laser_temp += self.p.laser_heat
 
     def draw_shield(self):
         """Draw the Shield"""
         shield_health = min(220 * self.s.shield / self.p.shield + 35, 255)
-        if self.team != 'earth':
+        if self.team == 'zerg':
             shield_color = (shield_health/2, shield_health/2, shield_health/2)
         else:
             shield_color = (shield_health, shield_health, shield_health)

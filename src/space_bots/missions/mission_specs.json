@@ -292,8 +292,8 @@
      "mission_12": {
         "title": "Mission 12: Drones = Zerg Counter",
         "event_sequence": [
-            {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
-            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 0, "event_info": {"protect": {"miner_drones": {"target": "miner", "distance": 30}}}},
+            {"time": 2, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 8}}},
             {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 2}}},
             {"time": 15, "event_info": {"squad": {"type": "spitter", "count": 3}}},
@@ -308,11 +308,11 @@
                 "ships": [{"type":"healer", "level": 1}, {"type":"healer", "level": 1},
                     {"type":"miner", "level": 1}, {"type":"fighter", "level": 1},
                     {"type":"tank", "level": 1},
-                    {"type": "drone", "level": 1}, {"type": "drone", "level": 1}, {"type": "drone", "level": 1},
+                    {"type": "drone", "level": 1}, {"type": "drone", "level": 1},
                     {"type": "drone", "level": 1}, {"type": "drone", "level": 1}]
             },
             {
-                "name": "drones",
+                "name": "miner_drones",
                 "ships": [
                     {"type": "drone", "level": 1},
                     {"type": "drone", "level": 1}
@@ -349,6 +349,98 @@
             }
          ]
     },
+    "mission_14": {
+        "title": "Mission 14: Torps are good against big enemies",
+        "event_sequence": [
+            {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
+            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 10, "event_info": {"squad": {"type": "mega_bug", "count": 2, "level":2}}},
+            {"time": 15, "event_info": {"squad": {"type": "mega_bug", "count": 2, "level":2}}}
+        ],
+         "test_squads": [
+            {
+                "name": "miner_squad",
+                "ships": [{"type":"healer", "level": 2}, {"type":"miner", "level": 1},
+                     {"type":"tank", "level": 2}]
+            },
+            {
+                "name": "drones",
+                "ships": [
+                    {"type": "drone", "level": 1}
+                ]
+            }
+         ]
+    },
+     "mission_15": {
+        "title": "Mission 15: Torps suck against Zerglings",
+        "event_sequence": [
+            {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
+            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 20, "targeting": "nearest", "level":2}}},
+            {"time": 15, "event_info": {"squad": {"type": "zergling", "count": 20, "targeting": "nearest","level":2}}},
+            {"time": 20, "event_info": {"squad": {"type": "zergling", "count": 20, "targeting": "nearest","level":2}}}
+        ],
+         "test_squads": [
+            {
+                "name": "miner_squad",
+                "ships": [{"type":"healer", "level": 2}, {"type":"miner", "level": 1},
+                     {"type":"tank", "level": 2}]
+            },
+            {
+                "name": "drones",
+                "ships": [
+                    {"type": "drone", "level": 1}
+                ]
+            }
+         ]
+    },
+    "mission_16": {
+        "title": "Mission 16: Drones are good against Zerglings",
+        "event_sequence": [
+            {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
+            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 20, "level":2}}},
+            {"time": 15, "event_info": {"squad": {"type": "zergling", "count": 20, "level":2}}},
+            {"time": 20, "event_info": {"squad": {"type": "zergling", "count": 20, "level":2}}}
+        ],
+         "test_squads": [
+            {
+                "name": "miner_squad",
+                "ships": [{"type":"healer", "level": 2}, {"type":"miner", "level": 1},
+                    {"type": "drone", "level": 2}, {"type": "drone", "level": 2},
+                    {"type": "drone", "level": 2}, {"type": "drone", "level": 2}]
+            },
+            {
+                "name": "drones",
+                "ships": [
+                    {"type": "drone", "level": 1}
+                ]
+            }
+         ]
+    },
+    "mission_17": {
+        "title": "Mission 17: Drones are bad against Big Enemies",
+        "event_sequence": [
+            {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
+            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 10, "event_info": {"squad": {"type": "mega_bug", "count": 2, "level":2}}},
+            {"time": 15, "event_info": {"squad": {"type": "mega_bug", "count": 2, "level":2}}}
+        ],
+         "test_squads": [
+            {
+                "name": "miner_squad",
+                "ships": [{"type":"healer", "level": 2}, {"type":"miner", "level": 1},
+                    {"type": "drone", "level": 2}, {"type": "drone", "level": 2},
+                    {"type": "drone", "level": 2}, {"type": "drone", "level": 2}]
+            },
+            {
+                "name": "drones",
+                "ships": [
+                    {"type": "drone", "level": 1}
+                ]
+            }
+         ]
+    },
     "mission_42": {
         "title": "Mission 42: Experimental",
         "event_sequence": [
@@ -356,17 +448,16 @@
             {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 8, "level":2}}},
             {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 2, "level":2}}},
-            {"time": 13, "event_info": {"squad": {"type": "mega_bug", "count": 1, "level":2}}},
-            {"time": 15, "event_info": {"squad": {"type": "spitter", "count": 2, "level":2}}},
-            {"time": 20, "event_info": {"squad": {"type": "zergling", "count": 4, "level":2}}},
-            {"time": 25, "event_info": {"squad": {"type": "zergling", "count": 4, "level":2}}},
-            {"time": 35, "event_info": {"squad": {"type": "zergling", "count": 4, "level":2}}}
+            {"time": 10, "event_info": {"squad": {"type": "mega_bug", "count": 1, "level":2}}},
+            {"time": 30, "event_info": {"squad": {"type": "mega_bug", "count": 4, "level":2}}},
+            {"time": 35, "event_info": {"squad": {"type": "zergling", "count": 20, "level":2}}}
         ],
          "test_squads": [
             {
                 "name": "miner_squad",
                 "ships": [{"type":"healer", "level": 2}, {"type":"healer", "level": 2},
-                    {"type":"miner", "level": 2}, {"type":"fighter", "level": 2}, {"type":"tank", "level": 2}]
+                    {"type":"miner", "level": 2}, {"type":"fighter", "level": 2},
+                    {"type":"fighter", "level": 2}, {"type":"tank", "level": 2}]
             },
             {
                 "name": "drones",

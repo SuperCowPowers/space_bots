@@ -14,6 +14,7 @@ class Zergling(ship.Ship):
         # Zergling specific stuff
         self.protect_asset = None
         self.p.damage_modifier = 0.5  # 50% reduction (cause they are slippery)
+        self.p.shield_radius = 1.0    # FIXME: Very slippery
 
         # Zergling Level adjustments
         self.level = level

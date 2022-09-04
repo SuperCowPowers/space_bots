@@ -24,7 +24,7 @@ def test():
     """Test for Fighter Class"""
     from space_bots import game_engine_adapter, planet
     from space_bots.universe import Universe
-    from space_bots.ships.healer import Healer
+    from space_bots.ships.ship import Ship
 
     # Create a Universe
     my_universe = Universe()
@@ -39,14 +39,15 @@ def test():
     my_planet = planet.Planet(my_game_engine, 700, 400)
     my_universe.add_planet(my_planet)
 
-    # Create a Fighter ship and a Healer Ship
-    fighter_ship = Fighter(my_game_engine, 300, 300)
-    my_universe.add_ship(fighter_ship, team='earth')
-    healer_ship = Healer(my_game_engine, 400, 400)
-    my_universe.add_ship(healer_ship, team='earth')
+    # Create a Fighter and fire some Torps
+    fighter = Fighter(my_game_engine, 300, 600)
+    my_universe.add_ship(fighter, team='earth')
 
-    # Give the miner some damage to heal up
-    fighter_ship.damage(300)
+    zerg = Ship(my_game_engine, 500, 700, ship_type='mega_bug')
+    my_universe.add_ship(zerg, team='zerg')
+
+    # Hack the zerg ship (no targeting)
+    zerg.general_targeting = lambda: None
 
     # Invoke the event loop
     my_game_engine.event_loop()

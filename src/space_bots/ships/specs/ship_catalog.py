@@ -4,18 +4,19 @@ ship_specs = {
     'tank':
         {'color': (100, 100, 220),
          'mass': 600,
-         'speed': 0.2,
+         'speed': 0.3,
          'radius': 20,
          'hp': 300,
          'shield': 500,
          'laser_range': 100,
-         'laser_damage': 0.05,
+         'laser_damage': 0.1,
          'laser_width': 5,
-         'capacitor': 50,
+         'capacitor': 100,
          'ship_width': 6,
          'shield_width': 2,
          'shield_recharge': 0.05,
          'hull_recharge': 0.05,
+         'cap_recharge': 0.025,
          'keep_range': 0,
          'threat': 200,
          'max_torps': 8
@@ -35,6 +36,7 @@ ship_specs = {
          'shield_width': 2,
          'shield_recharge': 0.0025,
          'hull_recharge': 0.0025,
+         'cap_recharge': 0.05,
          'keep_range': 300,
          'threat': 100
          },
@@ -53,7 +55,8 @@ ship_specs = {
          'shield_width': 2,
          'shield_recharge': 0.005,
          'hull_recharge': 0.005,
-         'keep_range': 80,
+         'cap_recharge': 0.05,
+         'keep_range': 140,
          'threat': 50
          },
     'miner':
@@ -71,6 +74,7 @@ ship_specs = {
          'shield_width': 2,
          'shield_recharge': 0.005,
          'hull_recharge': 0.005,
+         'cap_recharge': 0.05,
          'keep_range': 400,
          'threat': 30
          },
@@ -81,15 +85,17 @@ ship_specs = {
          'radius': 7,
          'hp': 60,
          'shield': 40,
-         'laser_range': 50,
-         'laser_damage': 0.25,  # Still has a punch but low radius
+         'laser_range': 80,
+         'laser_damage': 0.25,
          'laser_width': 2,
+         'laser_heat': 1.5,
          'capacitor': 10,
          'ship_width': 3,
          'shield_width': 1,
-         'shield_recharge': 0.05,
-         'hull_recharge': 0.05,
-         'keep_range': 40,
+         'shield_recharge': 0.1,  # Drones can't be healed, so nanobot repairs
+         'hull_recharge': 0.1,
+         'cap_recharge': 0.05,
+         'keep_range': 60,
          'threat': 20
          },
     'starbase':
@@ -107,6 +113,7 @@ ship_specs = {
          'shield_width': 3,
          'shield_recharge': 0.05,
          'hull_recharge': 0.05,
+         'cap_recharge': 0.05,
          'keep_range': 200,
          'threat': 400,
          'max_torps': 20
@@ -118,14 +125,16 @@ ship_specs = {
          'radius': 6,
          'hp': 50,
          'shield': 30,
-         'laser_range': 50,
+         'laser_range': 60,
          'laser_damage': 0.03,
          'laser_width': 2,
+         'laser_heat': 1.1,
          'capacitor': 10,
          'ship_width': 2,
          'shield_width': 1,
          'shield_recharge': 0.001,
          'hull_recharge': 0.001,
+         'cap_recharge': 0.05,
          'keep_range': 20,
          'threat': 20
          },
@@ -144,6 +153,7 @@ ship_specs = {
          'shield_width': 2,
          'shield_recharge': 0.0025,
          'hull_recharge': 0.0025,
+         'cap_recharge': 0.05,
          'keep_range': 100,
          'threat': 80
          },
@@ -162,7 +172,8 @@ ship_specs = {
          'shield_width': 2,
          'shield_recharge': 0.005,
          'hull_recharge': 0.005,
-         'keep_range': 0,
+         'cap_recharge': 0.05,
+         'keep_range': 100,
          'threat': 50
          },
     'mega_bug':
@@ -180,7 +191,8 @@ ship_specs = {
          'shield_width': 2,
          'shield_recharge': 0.005,
          'hull_recharge': 0.005,
-         'keep_range': 0,
+         'cap_recharge': 0.05,
+         'keep_range': 100,
          'threat': 400
          }
 }

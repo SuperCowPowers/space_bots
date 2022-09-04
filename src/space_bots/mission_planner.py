@@ -51,11 +51,11 @@ class MissionPlanner:
         # Set the Universe Text
         self.universe.current_text = self.current_mission['title']
 
-    def add_zerg_squad(self, ship_type, num_ships, level=1):
+    def add_zerg_squad(self, ship_type, num_ships, targeting, level=1):
         """Add a Zerg Squad to the mission"""
         x = self.zerg_pos[0]
         y = self.zerg_pos[1]
-        zerg_squad = squad.Squad('zerg', 'bugs_are_cool', target_strategy='nearest')
+        zerg_squad = squad.Squad('zerg', 'bugs_are_cool', target_strategy=targeting)
         if ship_type == 'zergling':
             for _ in range(num_ships):
                 zerg_squad.add_ship(zergling.Zergling(self.universe.game_engine, x=x, y=y, level=level))
@@ -159,7 +159,8 @@ class MissionPlanner:
             # Add Squads
             if 'squad' in event_info:
                 squad_info = event_info['squad']
-                self.add_zerg_squad(squad_info['type'], squad_info['count'], squad_info.get('level', 1))
+                self.add_zerg_squad(squad_info['type'], squad_info['count'],
+                                    squad_info.get('targeting', 'nearest'), squad_info.get('level', 1))
 
             # Protection Orders
             if 'protect' in event_info:
@@ -196,7 +197,7 @@ def test():
 
     # Get the Universe Mission Planner
     my_mission = my_universe.mission_planner
-    my_mission.set_mission(7, test_squads=True)
+    my_mission.set_mission(14, test_squads=True)
 
     # Invoke the event loop
     my_game_engine.event_loop()

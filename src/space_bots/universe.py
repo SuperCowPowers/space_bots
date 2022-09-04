@@ -167,10 +167,10 @@ class Universe:
         for squad in self.squads:
             self.all_ships += squad.ships
 
-        # Build torps list from ships
+        # Build a torpedo list from the ships
         self.torps = []
         for ship in self.all_ships:
-            self.torps += ship.torps
+            self.torps += ship.get_torps()
 
         # Now run collision detection
         self.collision_detection()

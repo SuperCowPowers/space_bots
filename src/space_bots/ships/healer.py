@@ -28,9 +28,6 @@ class Healer(ship.Ship):
         self.general_ship_updates()
         self.general_avoidance()
 
-        # Healer specific stuff
-        self.salvation_thrown = False if not self.squad_in_combat() else self.salvation_thrown
-
         # Get the lowest health TeamMate and move towards them
         self.healing_target = self.battle_info.lowest_health_teammate(self)
         if self.healing_target and self.healing_target != self:
