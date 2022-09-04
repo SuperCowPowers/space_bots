@@ -16,13 +16,14 @@ class TorpLauncher:
         self.torp_range = 300
         self.next_torp_reload = 0
         self.current_time = None
-        self.min_capacitor = 2
+        self.torp_cap_cost = 1.0
 
         # These vars are defined in set_configuration
         self.launch_points = None
         self.torp_level = None
         self.max_torps = None
         self.torp_reload_rate = None
+        self.min_capacitor = None
 
     def set_deployment(self, launch_points, level=1):
         """Set the deployment of the Torp Launcher"""
@@ -30,6 +31,7 @@ class TorpLauncher:
         self.torp_level = level
         self.launch_points = self._generate_launch_points(launch_points)
         self.torp_reload_rate = 1.0/launch_points
+        self.min_capacitor = self.torp_cap_cost * launch_points
 
     def is_deployed(self):
         return self.launch_points is not None
@@ -52,7 +54,7 @@ class TorpLauncher:
                 new_torp = torp.Torp(self.origin_ship, self.torp_level)
                 lp['torp'] = new_torp
                 self.torps.append(new_torp)  # We have to track torps even after they get released
-                self.origin_ship.s.capacitor -= 2
+                self.origin_ship.s.capacitor -= self.torp_cap_cost
                 return
 
         # Shouldn't get here

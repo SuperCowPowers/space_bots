@@ -121,7 +121,7 @@ ship_specs = {
          },
     'zergling':
         {'color': (180, 130, 80),
-         'mass': 120,
+         'mass': 60,
          'speed': 1.0,
          'radius': 6,
          'hp': 50,
