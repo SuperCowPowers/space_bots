@@ -154,6 +154,10 @@ class Ship(entity.Entity):
         self.s.capacitor += self.p.cap_recharge
         self.s.capacitor = min(self.s.capacitor, self.p.capacitor)
 
+        # TorpLauncher update/fire
+        self.torp_launcher.update()
+        self.torp_launcher.fire(self.squad.main_target)
+
         # Laser temperature
         self.laser_temp -= 1
         if self.laser_temp > 200:
@@ -226,8 +230,9 @@ class Ship(entity.Entity):
 
         # Level Pips
         if self.ship_type not in ['drone', 'zergling']:
-            pip_y = self.y-self.p.radius
-            pip_x = self.x+self.p.radius
+            radius = self.p.shield_radius
+            pip_y = self.y-radius
+            pip_x = self.x+radius
             if self.level > 1:
                 for _ in range(self.level):
                     self.game_engine.draw_circle(self.p.color, (pip_x, pip_y), 3, width=0)

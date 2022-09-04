@@ -36,9 +36,7 @@ def repulsion_forces(source, target, rest_distance=None):
 
     # Okay the repulsion will be greater the closer we are
     # Note: We know with logic above that cur_distance != 0.0
-    # Note: This should be d**2 but works better linear
     repulsion_factor = 1000.0/(cur_distance*cur_distance)
-    # repulsion_factor = 1.0 / cur_distance
 
     # Compute normalized distance vectors
     norm_st, norm_ts = normalized_distance_vectors(source, target)

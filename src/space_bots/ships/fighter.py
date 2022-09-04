@@ -17,6 +17,7 @@ class Fighter(ship.Ship):
         # Fighter Level adjustments
         self.level = level
         self.p.laser_damage *= self.level
+        self.torp_launcher.set_deployment(self.p.max_torps, level)
 
 
 # Simple test of the Fighter functionality

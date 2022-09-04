@@ -232,7 +232,7 @@ class Universe:
         zerg_ships = self.battle_info.zerg_ships()
         for torp in self.torps:
             for ship in zerg_ships:
-                if force_utils.distance_between(torp, ship) < ship.p.shield_radius:
+                if force_utils.distance_between(torp, ship) < ship.p.collision_radius:
                     torp.impact(ship)
 
         # Second: Ships vs Ships
@@ -240,7 +240,8 @@ class Universe:
             for co_ship in self.all_ships[index+1:]:
 
                 # Compute any collision forces
-                (dx, dy), (co_dx, co_dy) = force_utils.repulsion_forces(ship, co_ship)
+                ship_spacing = ship.p.pad_radius + co_ship.p.pad_radius
+                (dx, dy), (co_dx, co_dy) = force_utils.repulsion_forces(ship, co_ship, ship_spacing)
                 ship.force_x += dx * co_ship.mass/ship.mass
                 ship.force_y += dy * co_ship.mass/ship.mass
                 co_ship.force_x += co_dx * ship.mass/co_ship.mass

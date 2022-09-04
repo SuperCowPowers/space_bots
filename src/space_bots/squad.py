@@ -210,13 +210,6 @@ class Squad:
             _ship.force_x += dx
             _ship.force_y += dy
 
-        # Primary Attack Target
-        if self.primary_attack_target:
-            for _ship in self.ships:
-                (_, _), (dx, dy) = force_utils.attraction_forces(self.primary_attack_target, _ship, 0)
-                _ship.force_x += dx
-                _ship.force_y += dy
-
         # Protecting an Asset
         if self.protection_asset:
             for _ship in self.ships:

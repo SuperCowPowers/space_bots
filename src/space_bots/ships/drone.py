@@ -31,7 +31,7 @@ class Drone(ship.Ship):
         # Move towards protecting asset (Drones need to protect the Asset)
         self.protect_asset = self.squad.protection_asset
         if self.protect_asset:
-            (dx, dy), (_, _) = force_utils.attraction_forces(self, self.protect_asset, self.protect_asset.collision_radius * 2)
+            (dx, dy), (_, _) = force_utils.attraction_forces(self, self.protect_asset, self.squad.protection_distance)
             self.force_x += dx * 2
             self.force_y += dy * 2
 

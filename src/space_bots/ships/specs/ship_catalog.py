@@ -57,7 +57,8 @@ ship_specs = {
          'hull_recharge': 0.005,
          'cap_recharge': 0.05,
          'keep_range': 140,
-         'threat': 50
+         'threat': 50,
+         'max_torps': 4
          },
     'miner':
         {'color': (180, 160, 60),

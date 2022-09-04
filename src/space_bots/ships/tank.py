@@ -1,8 +1,7 @@
 """Tank: A Tank ship in Space Bots"""
-import time
 
 # Local Imports
-from space_bots.utils import force_utils, torp_launcher
+from space_bots.utils import force_utils
 from space_bots.ships import ship
 
 
@@ -29,7 +28,7 @@ class Tank(ship.Ship):
         self.p.shield_recharge *= self.level
         self.p.hull_recharge *= self.level
         self.p.cap_recharge *= self.level
-        self.torp_launcher = torp_launcher.TorpLauncher(self, self.p.max_torps, level)
+        self.torp_launcher.set_deployment(self.p.max_torps, level)
 
     def update(self):
         """Update the Tank"""
@@ -37,10 +36,6 @@ class Tank(ship.Ship):
         # General updates
         self.general_ship_updates()
         self.general_targeting()
-
-        # Update and then Launch/Fire new Torpedoes
-        self.torp_launcher.update()
-        self.torp_launcher.fire(self.squad.main_target)
 
         # Move towards squads primary target (Tanks need to 'get in there')
         if self.squad.main_target:

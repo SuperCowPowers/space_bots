@@ -31,4 +31,5 @@ class ShipParameters:
         self.targeting_lock_avoidance = ship_specs[ship_type].get('targeting_lock_avoidance', 0.0)
         self.max_torps = ship_specs[ship_type].get('max_torps', 0)
         self.shield_radius = self.radius + self.shield_width
-        self.collision_radius = self.shield_radius * 1.3
+        self.collision_radius = self.shield_radius
+        self.pad_radius = self.collision_radius * 1.3
