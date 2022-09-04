@@ -364,7 +364,7 @@ def test():
 
     # Add Protection Orders
     earth_squad.protect(my_universe.battle_info.closest_planet(Pos))
-    drone_squad.protect(my_miner, 40)
+    drone_squad.protect(my_miner, 30)
 
     # Have the Zerg squad target the miner
     zerg_squad.attack_target(my_miner)
