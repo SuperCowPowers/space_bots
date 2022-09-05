@@ -19,7 +19,7 @@ class Fighter(ship.Ship):
         self.p.laser_damage *= self.level
 
         # Weapons
-        self.laser_guns.set_deployment(4)
+        self.laser_guns.set_deployment(3)  # Tri Laser :)
         self.torp_launcher.set_deployment(self.p.max_torps, level, min_capacitor=10)
 
 

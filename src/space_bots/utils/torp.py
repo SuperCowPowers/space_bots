@@ -55,7 +55,7 @@ class Torp(entity.Entity):
                 return
 
         # Guidance Initiated?
-        if self.release_counter > 50 and self.target:
+        if self.release_counter > 60 and self.target:
             (dx, dy), (_, _) = force_utils.attack_forces(self, self.target)
             self.force_x += dx
             self.force_y += dy
