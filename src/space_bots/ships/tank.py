@@ -14,7 +14,7 @@ class Tank(ship.Ship):
 
         # Tank specific stuff
         self.protect_target = None
-        self.p.damage_modifier = 0.75  # 25% reduction
+        self.p.damage_modifier = 0.7  # 30% reduction
         self.pad_radius += 10  # Tanks need their space
         self.shield_thrown = False
         self.squad_buffs = ['protection']
@@ -42,9 +42,9 @@ class Tank(ship.Ship):
 
         # Move towards squads primary target (Tanks need to 'get in there')
         if self.squad.main_target:
-            (dx, dy), (_, _) = force_utils.attraction_forces(self, self.squad.main_target, 100)
-            self.force_x += dx * 2
-            self.force_y += dy * 2
+            (dx, dy), (_, _) = force_utils.attraction_forces(self, self.squad.main_target, 50)
+            self.force_x += dx
+            self.force_y += dy
 
         # Track the lowest health TeamMate
         self.protect_target = self.battle_info.lowest_health_teammate(self)

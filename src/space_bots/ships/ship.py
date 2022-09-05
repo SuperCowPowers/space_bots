@@ -182,7 +182,7 @@ class Ship(entity.Entity):
 
     def general_movement(self):
         """Movement Logic that's useful for most ships"""
-        if self.s.target:
+        if self.squad.main_target:
             (dx, dy), (_, _) = force_utils.attraction_forces(self, self.squad.main_target, self.p.laser_range/1.2)
             self.force_x += dx
             self.force_y += dy

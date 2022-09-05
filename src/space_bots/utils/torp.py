@@ -13,7 +13,7 @@ class Torp(entity.Entity):
         self.origin_ship = origin_ship
         self.target = None
         self.level = level
-        self.damage = level * 10
+        self.damage = level * 5
         self.mass = 10
         self.speed = None
         self.color = origin_ship.p.color
