@@ -47,7 +47,7 @@ ship_specs = {
          'radius': 16,
          'hp': 200,
          'shield': 150,
-         'laser_range': 160,
+         'laser_range': 180,
          'laser_damage': 0.25,
          'laser_width': 3,
          'capacitor': 40,
@@ -56,7 +56,7 @@ ship_specs = {
          'shield_recharge': 0.005,
          'hull_recharge': 0.005,
          'cap_recharge': 0.025,
-         'keep_range': 140,
+         'keep_range': 180,
          'threat': 50,
          'max_torps': 4
          },
