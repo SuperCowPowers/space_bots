@@ -468,9 +468,8 @@
             {
                 "name": "drones",
                 "ships": [
-                    {"type": "drone", "level": 1},
-                    {"type": "drone", "level": 1},
-                    {"type": "drone", "level": 1}
+                    {"type": "drone", "level": 1}, {"type": "drone", "level": 1},
+                    {"type": "drone", "level": 1}, {"type": "drone", "level": 1}
                 ]
             }
          ]

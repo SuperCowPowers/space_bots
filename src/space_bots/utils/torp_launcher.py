@@ -15,7 +15,7 @@ class TorpLauncher(weapon.Weapon):
 
         # TorpLauncher specific stuff
         self.torps = []
-        self.torp_range = 400
+        self.torp_range = 350
         self.next_torp_reload = 0
         self.current_time = None
         self.torp_cap_cost = 0.75
@@ -62,9 +62,12 @@ class TorpLauncher(weapon.Weapon):
         if target is None or force_utils.distance_between(self.my_ship, target) > self.torp_range:
             return
 
+        # Only launch half if target at low health
+        launch = int(self.max_torps/2) if target.low_health() else self.max_torps
+
         # Fire Torps (by setting the active target)
         if self.fully_loaded():
-            for lp in self.launch_points:
+            for lp in self.launch_points[:launch]:
                 lp['torp'].set_target(target)
                 lp['torp'].force_x = lp['x'] * .1
                 lp['torp'].force_y = lp['y'] * .1
