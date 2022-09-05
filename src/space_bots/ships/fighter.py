@@ -19,8 +19,8 @@ class Fighter(ship.Ship):
         self.p.laser_damage *= self.level
 
         # Weapons
-        self.laser_guns.set_deployment(3)  # Tri Laser :)
-        self.torp_launcher.set_deployment(self.p.max_torps, level, min_capacitor=10)
+        self.laser_guns.set_deployment(2)  # Twin Laser :)
+        self.torp_launcher.set_deployment(self.p.max_torps, level, min_capacitor=20)
 
 
 # Simple test of the Fighter functionality
@@ -52,9 +52,10 @@ def test():
 
     zerg = Ship(my_game_engine, 500, 700, ship_type='berserker')
     my_universe.add_ship(zerg, team='zerg')
+    # Hack the zerg ship (no targeting)
+    # zerg.general_targeting = lambda: None
     zerg = Ship(my_game_engine, 500, 700, ship_type='berserker')
     my_universe.add_ship(zerg, team='zerg')
-
     # Hack the zerg ship (no targeting)
     # zerg.general_targeting = lambda: None
 

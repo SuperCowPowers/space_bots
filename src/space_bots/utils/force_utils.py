@@ -9,6 +9,12 @@ def distance_between(source, target):
     return math.sqrt(dx ** 2 + dy ** 2)
 
 
+def get_angle(source, target) -> float:
+    dx = target.x - source.x
+    dy = target.y - source.y
+    return math.atan2(dy, dx)
+
+
 def normalized_distance_vectors(source, target):
     # Compute source to target vector
     st_dx = target.x - source.x

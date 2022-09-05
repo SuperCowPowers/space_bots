@@ -20,33 +20,26 @@ class LaserGuns:
         self.color = self.origin_ship.p.color
 
         # These vars are defined in set_configuration
+        self.single_mount = True
         self.mount_points = None
         self.laser_level = None
         self.min_capacitor = None
         self.game_engine = None
 
-    def set_deployment(self, mount_points=4):
+    def set_deployment(self, mount_points=2):
         """Set the deployment of the Torp Launcher"""
-        self.mount_points = self._generate_mount_points(mount_points)
-        self.min_capacitor = self.cap_cost * mount_points
+        self.single_mount = True if mount_points == 1 else False
+        self.mount_points = mount_points
+        self.cap_cost *= mount_points
+        self.min_capacitor = self.cap_cost
         self.game_engine = self.origin_ship.game_engine
 
     def is_deployed(self):
         return self.mount_points is not None
 
-    def _generate_mount_points(self, n):
-        """Internal: Generate N Launch Points Along the Circumference of the origin ship"""
-
-        # Special Case for just ONE mount point
-        if n == 1:
-            return [{'x': 0, 'y': 0}]
-
-        # Compute N Points along the circumference
-        radius = self.origin_ship.p.shield_radius
-        theta_list = [2.0*math.pi*i/n for i in range(n)]
-        hard_points = [(radius * math.cos(t), radius * math.sin(t)) for t in theta_list]
-        mount_points = [{'x': h[0], 'y': h[1]} for h in hard_points]
-        return mount_points
+    def draw_mount(self, coords):
+        self.game_engine.draw_circle(self.color, coords, 3, width=0)
+        self.game_engine.draw_circle((220, 220, 220), coords, 4, width=1)
 
     def draw_fire(self, target):
         """Since they share a lot of logic, combine Draw and Fire"""
@@ -72,18 +65,30 @@ class LaserGuns:
             return
 
         # Get our current laser damage from origin ship (might be buffed)
-        laser_damage = self.origin_ship.p.laser_damage
+        laser_damage = self.origin_ship.p.laser_damage * self.mount_points
 
         # Draw (and Fire) the lasers
-        for mount in self.mount_points:
-            x = self.origin_ship.x + mount['x']
-            y = self.origin_ship.y + mount['y']
-            self.game_engine.draw_line(self.color, (x, y), (target.x, target.y), width=self.width)
+        if self.single_mount:
+            self.game_engine.draw_line(self.color, (self.origin_ship.x, self.origin_ship.y),
+                                       (target.x, target.y), width=self.width)
+        else:
+            # Assuming 2 mounts for now
+            # FIXME: Seems overly complicated
+            theta = force_utils.get_angle(self.origin_ship, target) + math.pi/2
+            radius = self.origin_ship.p.shield_radius
+            first_mount = (radius * math.cos(theta), radius * math.sin(theta))
+            second_mount = (-first_mount[0], -first_mount[1])
+            first_mount = (first_mount[0] + self.origin_ship.x, first_mount[1] + self.origin_ship.y)
+            second_mount = (second_mount[0] + self.origin_ship.x, second_mount[1] + self.origin_ship.y)
+            self.game_engine.draw_line(self.color, (first_mount[0], first_mount[1]),
+                                       (target.x, target.y), width=self.width)
+            self.game_engine.draw_line(self.color, (second_mount[0], second_mount[1]),
+                                       (target.x, target.y), width=self.width)
 
-            # Fire the laser and do damage to target ship
-            target.damage(laser_damage)
-            self.origin_ship.damage_done += laser_damage
-            self.origin_ship.s.capacitor -= self.cap_cost
+        # Fire the laser(s) and do damage to target ship
+        target.damage(laser_damage)
+        self.origin_ship.damage_done += laser_damage
+        self.origin_ship.s.capacitor -= self.cap_cost
 
 
 # Simple test of the LaserGuns functionality

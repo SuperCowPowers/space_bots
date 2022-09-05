@@ -448,18 +448,18 @@
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 5}}},
             {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 3}}},
             {"time": 10, "event_info": {"squad": {"type": "spitter", "count": 3}}},
-            {"time": 25, "event_info": {"squad": {"type": "zergling", "count": 5}}},
-            {"time": 25, "event_info": {"squad": {"type": "berserker", "count": 3}}},
-            {"time": 25, "event_info": {"squad": {"type": "spitter", "count": 3}}},
-            {"time": 40, "event_info": {"squad": {"type": "zergling", "count": 5}}},
-            {"time": 40, "event_info": {"squad": {"type": "berserker", "count": 3}}},
-            {"time": 40, "event_info": {"squad": {"type": "spitter", "count": 3}}}
+            {"time": 35, "event_info": {"squad": {"type": "zergling", "count": 5}}},
+            {"time": 35, "event_info": {"squad": {"type": "berserker", "count": 3}}},
+            {"time": 35, "event_info": {"squad": {"type": "spitter", "count": 3}}},
+            {"time": 60, "event_info": {"squad": {"type": "zergling", "count": 5}}},
+            {"time": 60, "event_info": {"squad": {"type": "berserker", "count": 3}}},
+            {"time": 60, "event_info": {"squad": {"type": "spitter", "count": 3}}}
         ],
          "test_squads": [
             {
                 "name": "miner_squad", "targeting": "threat",
                 "ships": [{"type":"healer", "level": 1}, {"type":"healer", "level": 1},
-                    {"type":"miner", "level": 1}, {"type":"fighter", "level": 2}, {"type":"tank", "level": 1},
+                    {"type":"miner", "level": 1}, {"type":"fighter", "level": 1}, {"type":"tank", "level": 1},
                     {"type":"fighter", "level": 1}]
             },
             {

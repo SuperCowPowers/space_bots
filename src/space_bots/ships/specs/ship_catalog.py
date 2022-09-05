@@ -50,7 +50,7 @@ ship_specs = {
          'laser_range': 160,
          'laser_damage': 0.25,
          'laser_width': 3,
-         'capacitor': 30,
+         'capacitor': 40,
          'ship_width': 5,
          'shield_width': 2,
          'shield_recharge': 0.005,
@@ -58,7 +58,7 @@ ship_specs = {
          'cap_recharge': 0.025,
          'keep_range': 140,
          'threat': 50,
-         'max_torps': 3
+         'max_torps': 4
          },
     'miner':
         {'color': (180, 160, 60),
