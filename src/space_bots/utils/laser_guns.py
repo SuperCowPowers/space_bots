@@ -15,7 +15,7 @@ class LaserGuns:
         self.width = self.origin_ship.p.laser_width
         self.cap_cost = 0.05
         self.needs_recharge = False
-        self.full_charge = 200
+        self.full_charge = 400
         self.current_charge = 0
         self.color = self.origin_ship.p.color
 

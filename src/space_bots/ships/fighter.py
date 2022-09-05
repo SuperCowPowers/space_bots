@@ -20,7 +20,7 @@ class Fighter(ship.Ship):
 
         # Weapons
         self.laser_guns.set_deployment(4)
-        self.torp_launcher.set_deployment(self.p.max_torps, level)
+        self.torp_launcher.set_deployment(self.p.max_torps, level, min_capacitor=10)
 
 
 # Simple test of the Fighter functionality
@@ -29,6 +29,7 @@ def test():
     from space_bots import game_engine_adapter, planet
     from space_bots.universe import Universe
     from space_bots.ships.ship import Ship
+    from space_bots.ships.healer import Healer
 
     # Create a Universe
     my_universe = Universe()
@@ -43,15 +44,19 @@ def test():
     my_planet = planet.Planet(my_game_engine, 700, 400)
     my_universe.add_planet(my_planet)
 
-    # Create a Fighter and fire some Torps
-    fighter = Fighter(my_game_engine, 300, 600)
+    # Create a Fighter, Healer and lets rumble
+    fighter = Fighter(my_game_engine, 300, 400)
     my_universe.add_ship(fighter, team='earth')
+    healer_ship = Healer(my_game_engine, 300, 400, level=2)
+    my_universe.add_ship(healer_ship, team='earth')
 
-    zerg = Ship(my_game_engine, 500, 700, ship_type='mega_bug')
+    zerg = Ship(my_game_engine, 500, 700, ship_type='berserker')
+    my_universe.add_ship(zerg, team='zerg')
+    zerg = Ship(my_game_engine, 500, 700, ship_type='berserker')
     my_universe.add_ship(zerg, team='zerg')
 
     # Hack the zerg ship (no targeting)
-    zerg.general_targeting = lambda: None
+    # zerg.general_targeting = lambda: None
 
     # Invoke the event loop
     my_game_engine.event_loop()

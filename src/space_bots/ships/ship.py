@@ -42,11 +42,11 @@ class Ship(entity.Entity):
         self.damage_taken = 0
         self.laser_sound = False
 
-        # Most ship have laser guns so set up the deployment here
+        # Most ships have laser guns so set up the deployment here
         self.laser_guns = laser_guns.LaserGuns(self)
         self.laser_guns.set_deployment(1)
 
-        # Not many ships have Torp Launcher (so they set_deployment in their subclass init
+        # Most ships DON'T have a Torp Launcher (so they set_deployment in their subclass init
         self.torp_launcher = torp_launcher.TorpLauncher(self)
 
         # Communications Message Queues
@@ -116,6 +116,9 @@ class Ship(entity.Entity):
     def critical_health(self):
         return self.health_percent() < 0.2
 
+    def cap_percent(self):
+        return self.s.capacitor/self.p.capacitor
+
     def is_dead(self):
         return self.dead
 
@@ -136,10 +139,6 @@ class Ship(entity.Entity):
                 comms.announce('uff', None)
             comms.announce(f"{self.ship_type}_down")
             self.death_announced = True
-
-        # Low Capacitor
-        # if self.s.capacitor < 1:
-        #     comms.put_message('universe', f"{self.ship_type} Low Capacitor {self.s.capacitor}")
 
         # Laser Sound
         if self.laser_sound:
@@ -206,10 +205,10 @@ class Ship(entity.Entity):
     def draw(self):
         """Draw the ship, weapons, shields..."""
         self.draw_lasers()
-        self.draw_shield()
+        self.draw_torps()
         self.draw_buffs()
         self.draw_ship()
-        self.draw_torps()
+        self.draw_shield()
 
     def draw_ship(self):
         """Draw the Ship Icon"""
@@ -219,7 +218,6 @@ class Ship(entity.Entity):
         self.game_engine.draw_circle(hull_color, (self.x, self.y), self.p.radius, width=self.p.ship_width)
 
         # Health Indicator
-        # FIXME
         width = 1 if self.ship_type in ['scout', 'zergling'] else 0
         health_indicator_radius = int(max(self.p.radius/3, 3))
         if self.critical_health():
@@ -233,9 +231,8 @@ class Ship(entity.Entity):
 
         # Level Pips
         if self.ship_type not in ['drone', 'zergling']:
-            radius = self.p.shield_radius
-            pip_y = self.y-radius
-            pip_x = self.x+radius
+            pip_x = self.x + self.p.shield_radius
+            pip_y = self.y - self.p.shield_radius
             if self.level > 1:
                 for _ in range(self.level):
                     self.game_engine.draw_circle(self.p.color, (pip_x, pip_y), 3, width=0)

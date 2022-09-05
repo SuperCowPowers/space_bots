@@ -11,12 +11,12 @@ ship_specs = {
          'laser_range': 100,
          'laser_damage': 0.1,
          'laser_width': 5,
-         'capacitor': 80,
+         'capacitor': 50,
          'ship_width': 6,
          'shield_width': 2,
          'shield_recharge': 0.05,
          'hull_recharge': 0.05,
-         'cap_recharge': 0.05,
+         'cap_recharge': 0.06,
          'keep_range': 0,
          'threat': 200,
          'max_torps': 8
@@ -36,7 +36,7 @@ ship_specs = {
          'shield_width': 2,
          'shield_recharge': 0.0025,
          'hull_recharge': 0.0025,
-         'cap_recharge': 0.05,
+         'cap_recharge': 0.025,
          'keep_range': 300,
          'threat': 100
          },
@@ -95,7 +95,7 @@ ship_specs = {
          'shield_width': 1,
          'shield_recharge': 0.1,  # Drones can't be healed, so nanobot repairs
          'hull_recharge': 0.1,
-         'cap_recharge': 0.01,
+         'cap_recharge': 0.05,  # Fast Cap Recharge
          'keep_range': 60,
          'threat': 20
          },

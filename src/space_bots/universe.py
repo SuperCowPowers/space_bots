@@ -325,7 +325,7 @@ def test():
     ypos = 150
     for squad_name in ['zerg1', 'zerg2']:
         zerg_squad = Squad(team='zerg', squad_name=squad_name, target_strategy='nearest')
-        for _ in range(15):
+        for _ in range(25):
             zerg_squad.add_ship(zergling.Zergling(my_game_engine, xpos, ypos))
         my_universe.add_squad(zerg_squad)
         xpos = 100

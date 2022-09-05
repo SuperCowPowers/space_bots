@@ -26,16 +26,14 @@ class Healer(ship.Ship):
 
         # General updates
         self.general_ship_updates()
-        self.general_avoidance()
+        self.general_avoidance()  # Healer needs to avoid enemies
 
         # Get the lowest health TeamMate and move towards them
         self.healing_target = self.battle_info.lowest_health_teammate(self)
         if self.healing_target and self.healing_target != self:
-            # Rush
-            rush = 3 if self.healing_target.health_percent() < .5 else 1
             (_, _), (dx, dy) = force_utils.attraction_forces(self.healing_target, self, self.p.laser_range - 10)
-            self.force_x += dx * rush
-            self.force_y += dy * rush
+            self.force_x += dx
+            self.force_y += dy
 
             # Cast Salvation
             if self.healing_target.health_percent() < .07 and not self.salvation_thrown:
@@ -43,7 +41,7 @@ class Healer(ship.Ship):
                 self.healing_target.add_buff('salvation')
                 self.salvation_thrown = True
 
-        # Now actually call the move command (which uses force/mass calc)
+        # Now actually call the move command
         self.move()
 
     def draw(self):

@@ -39,9 +39,9 @@ class Tank(ship.Ship):
 
         # Move towards squads primary target (Tanks need to 'get in there')
         if self.squad.main_target:
-            (dx, dy), (_, _) = force_utils.attraction_forces(self, self.squad.main_target, 100)
-            self.force_x += dx * 2
-            self.force_y += dy * 2
+            (dx, dy), (_, _) = force_utils.attraction_forces(self, self.squad.main_target, 0)
+            self.force_x += dx * 3
+            self.force_y += dy * 3
 
         # Track the lowest health TeamMate
         self.protect_target = self.battle_info.lowest_health_teammate(self)

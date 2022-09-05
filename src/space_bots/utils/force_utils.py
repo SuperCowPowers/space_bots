@@ -71,13 +71,26 @@ def attraction_forces(source, target, within_range):
 
     # Okay the attraction will be greater the further away we are
     max_attraction_factor = 100000
-    attraction_factor = min(cur_distance*cur_distance, max_attraction_factor) * 0.0001
+    factor_normalizer = 0.0001
+    attraction_factor = min(cur_distance*cur_distance, max_attraction_factor) * factor_normalizer
 
     # Compute normalized distance vectors
     norm_st, norm_ts = normalized_distance_vectors(source, target)
 
     # Final Attraction Calculation
     source_attraction = (norm_st[0] * attraction_factor, norm_st[1] * attraction_factor)
+    target_attraction = (-source_attraction[0], -source_attraction[1])  # Opposite
+    return source_attraction, target_attraction
+
+
+def attack_forces(source, target):
+    """Forces used to attack a target"""
+
+    # Compute normalized distance vectors
+    norm_st, norm_ts = normalized_distance_vectors(source, target)
+
+    # Final Attraction Calculation
+    source_attraction = (norm_st[0], norm_st[1])
     target_attraction = (-source_attraction[0], -source_attraction[1])  # Opposite
     return source_attraction, target_attraction
 

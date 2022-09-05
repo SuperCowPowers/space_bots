@@ -13,10 +13,10 @@ class TorpLauncher:
         # TorpLauncher specific stuff
         self.origin_ship = ship
         self.torps = []
-        self.torp_range = 300
+        self.torp_range = 400
         self.next_torp_reload = 0
         self.current_time = None
-        self.torp_cap_cost = 1.0
+        self.torp_cap_cost = 0.75
 
         # These vars are defined in set_configuration
         self.launch_points = None
@@ -25,13 +25,13 @@ class TorpLauncher:
         self.torp_reload_rate = None
         self.min_capacitor = None
 
-    def set_deployment(self, launch_points, level=1):
+    def set_deployment(self, launch_points, level=1, min_capacitor=None):
         """Set the deployment of the Torp Launcher"""
         self.max_torps = launch_points
         self.torp_level = level
         self.launch_points = self._generate_launch_points(launch_points)
         self.torp_reload_rate = 1.0/launch_points
-        self.min_capacitor = self.torp_cap_cost * launch_points
+        self.min_capacitor = min_capacitor if min_capacitor else self.torp_cap_cost * launch_points * 2
 
     def is_deployed(self):
         return self.launch_points is not None
@@ -134,6 +134,7 @@ def test():
     from space_bots.universe import Universe
     from space_bots.ships.ship import Ship
     from space_bots.ships.tank import Tank
+    from space_bots.ships.healer import Healer
 
     # Create a Universe
     my_universe = Universe()
@@ -148,10 +149,14 @@ def test():
     my_planet = planet.Planet(my_game_engine, 600, 300)
     my_universe.add_planet(my_planet)
 
-    # Create a Tank and fire some Torps
+    # Create a Tank, healer, and fire some Torps
     tank = Tank(my_game_engine, 300, 600)
     my_universe.add_ship(tank, team='earth')
+    healer_ship = Healer(my_game_engine, 400, 400)
+    my_universe.add_ship(healer_ship, team='earth')
 
+    zerg = Ship(my_game_engine, 900, 600, ship_type='mega_bug')
+    my_universe.add_ship(zerg, team='zerg')
     zerg = Ship(my_game_engine, 900, 600, ship_type='mega_bug')
     my_universe.add_ship(zerg, team='zerg')
 
