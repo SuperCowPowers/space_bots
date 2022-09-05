@@ -60,13 +60,10 @@ def test():
     my_universe.add_planet(my_planet)
 
     # Create a Drone ship and a Miner Ship
-    drone = Drone(my_game_engine, 300, 300)
+    drone = Drone(my_game_engine, 400, 450)
     my_universe.add_ship(drone, team='earth')
     healer_ship = Healer(my_game_engine, 400, 400)
     my_universe.add_ship(healer_ship, team='earth')
-
-    # Give the miner some damage to heal up
-    drone.damage(350)
 
     # Invoke the event loop
     my_game_engine.event_loop()

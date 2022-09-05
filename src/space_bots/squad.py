@@ -87,7 +87,6 @@ class Squad:
 
     def pre_delete(self):
         """All Entities have a pre_delete method where they might take some action/set stuff before being deleted"""
-        print(f"Squad pre_delete {self}")
         for ship in self.ships:
             ship.pre_delete()
         self.ships = []
@@ -344,14 +343,14 @@ def test():
     my_squad.add_ship(miner.Miner(my_game_engine, 600, 400))
 
     # Create a Pirate Squad (who doesn't want to be a pirate?)
-    pirate_squad = Squad('xenos', 'pirates', target_strategy='nearest')
+    pirate_squad = Squad('zerg', 'pirates', target_strategy='nearest')
     pirate_squad.add_ship(ship.Ship(my_game_engine, 1200, 700, ship_type='spitter'))
     pirate_squad.add_ship(ship.Ship(my_game_engine, 1200, 700, ship_type='spitter'))
     pirate_squad.add_ship(ship.Ship(my_game_engine, 1200, 700, ship_type='berserker'))
     pirate_squad.add_ship(ship.Ship(my_game_engine, 1200, 700, ship_type='berserker'))
 
     # Add a Zerg squad
-    zerg_squad = Squad('xenos', 'zerg me', target_strategy='low_health')
+    zerg_squad = Squad('zerg', 'zerg me', target_strategy='low_health')
     for _ in range(10):
         zerg_squad.add_ship(ship.Ship(my_game_engine, 1200, 700, ship_type='zergling'))
 

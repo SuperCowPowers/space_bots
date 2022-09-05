@@ -1,7 +1,7 @@
 """Miner: A Miner ship in Space Bots"""
 
 # Local Imports
-from space_bots.utils import force_utils
+from space_bots.utils import weapon, force_utils
 from space_bots.ships import ship
 
 
@@ -16,6 +16,7 @@ class Miner(ship.Ship):
         self.mining_planet = None
         self.mining_yield = 0
         self.mining_announced = False
+        self.laser_guns = weapon.NoWeapon(self)  # Miners don't have lasers
 
         # Mining level adjustments
         self.level = level
@@ -79,7 +80,7 @@ def test():
     my_universe.set_game_engine(my_game_engine)
 
     # Create a Planet
-    my_planet = planet.Planet(my_game_engine, 500, 500)
+    my_planet = planet.Planet(my_game_engine, 600, 500)
     my_universe.add_planet(my_planet)
 
     # Create a Miner ship

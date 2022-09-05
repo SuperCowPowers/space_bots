@@ -3,7 +3,7 @@ from queue import SimpleQueue
 
 # Local Imports
 from space_bots import entity
-from space_bots.utils import force_utils, torp_launcher, laser_guns
+from space_bots.utils import force_utils, weapon, laser_guns
 from space_bots.ships import ship_parameters, ship_state
 
 
@@ -26,6 +26,11 @@ class Ship(entity.Entity):
         self.level = level
         self.p.laser_damage *= self.level
 
+        # Infinite Capacitor
+        # Note: For now we're going to give all ships infinite capacitor
+        #       in the future we'll play with cap limits/tradeoffs
+        self.p.cap_recharge = 1
+
         # Battle State/Reconnaissance
         self.battle_info = None
         self.self_buffs = []
@@ -40,14 +45,15 @@ class Ship(entity.Entity):
         self.death_announced = False
         self.damage_done = 0
         self.damage_taken = 0
-        self.laser_sound = False
 
-        # Most ships have laser guns so set up the deployment here
+        # Weapon Slots
+        # - lasers
+        # - torps
+        # All ships have two default slots they can be equipped or left empty
+        # for instance healers have two empty slots, basic 'ship' has lasers
+        # but not torps, tanks have torps, fighters have both :)
         self.laser_guns = laser_guns.LaserGuns(self)
-        self.laser_guns.set_deployment(1)
-
-        # Most ships DON'T have a Torp Launcher (so they set_deployment in their subclass init
-        self.torp_launcher = torp_launcher.TorpLauncher(self)
+        self.torp_launcher = weapon.NoWeapon(self)  # An Empty Weapon (can be filled in by subclasses)
 
         # Communications Message Queues
         self.announcer_messages = SimpleQueue()
@@ -140,11 +146,9 @@ class Ship(entity.Entity):
             comms.announce(f"{self.ship_type}_down")
             self.death_announced = True
 
-        # Laser Sound
-        if self.laser_sound:
-            comms.play_sound('laser')
-            comms.put_message('universe', 'laser')
-            self.laser_sound = False
+        # Our Weapons might want to communicate
+        self.laser_guns.communicate(comms)
+        self.torp_launcher.communicate(comms)
 
         # Also communicate any queued announcer messages
         while not self.announcer_messages.empty():
@@ -164,10 +168,6 @@ class Ship(entity.Entity):
         self.s.capacitor += self.p.cap_recharge
         self.s.capacitor = min(self.s.capacitor, self.p.capacitor)
 
-        # TorpLauncher update/fire
-        self.torp_launcher.update()
-        self.torp_launcher.fire(self.squad.main_target)
-
     def general_targeting(self):
         """Targeting logic that's useful for most ships"""
         # Choose the main target if it's within range, otherwise ask for secondary target
@@ -175,6 +175,10 @@ class Ship(entity.Entity):
             self.s.target = self.squad.main_target
         else:
             self.s.target = self.squad.secondary_target(self)
+
+        # Weapon Updates
+        self.laser_guns.update(self.s.target)
+        self.torp_launcher.update(self.squad.main_target)
 
     def general_movement(self):
         """Movement Logic that's useful for most ships"""
@@ -204,8 +208,14 @@ class Ship(entity.Entity):
 
     def draw(self):
         """Draw the ship, weapons, shields..."""
-        self.draw_lasers()
-        self.draw_torps()
+
+        # Weapons will both drawn and fired
+        self.laser_guns.draw(self.s.target)
+        self.laser_guns.fire(self.s.target)
+        self.torp_launcher.draw(self.squad.main_target)
+        self.torp_launcher.fire(self.squad.main_target)
+
+        # Ship Stuff
         self.draw_buffs()
         self.draw_ship()
         self.draw_shield()
@@ -240,16 +250,10 @@ class Ship(entity.Entity):
 
     def get_torps(self):
         """Return the LIVE Torps from the Launcher"""
-        return self.torp_launcher.live_torps()
-
-    def draw_torps(self):
-        """Draw any Torps we launch"""
-        for torp in self.torp_launcher.torps:
-            torp.draw()
-
-    def draw_lasers(self):
-        """Draw (and fire) lasers for this ship"""
-        self.laser_guns.draw_fire(self.s.target)
+        if hasattr(self.torp_launcher, 'live_torps'):
+            return self.torp_launcher.live_torps()
+        else:
+            return []
 
     def draw_shield(self):
         """Draw the Shield"""

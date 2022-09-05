@@ -50,8 +50,6 @@ class GimbalMount:
             self.target_theta = 0
         self.mount_points = self._compute_mount_rotation()
 
-
-
     def draw(self):
         """Draw the Gimbal Mounts"""
         for mount in self.mount_points:

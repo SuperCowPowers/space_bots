@@ -40,7 +40,7 @@ def test():
     """Test for Zergling Class"""
     from space_bots import game_engine_adapter, planet
     from space_bots.universe import Universe
-    from space_bots.ships.healer import Healer
+    from space_bots.ships.miner import Miner
 
     # Create a Universe
     my_universe = Universe()
@@ -55,14 +55,19 @@ def test():
     my_planet = planet.Planet(my_game_engine, 700, 400)
     my_universe.add_planet(my_planet)
 
-    # Create a Zergling ship and a Healer Ship
-    zerg_ship = Zergling(my_game_engine, 300, 300)
-    my_universe.add_ship(zerg_ship, team='zerg')
-    healer_ship = Healer(my_game_engine, 400, 400)
-    my_universe.add_ship(healer_ship, team='zerg')
+    # Create some Zerglings and a Miner Ship
+    for _ in range(10):
+        zerg_ship = Zergling(my_game_engine, 300, 300)
+        my_universe.add_ship(zerg_ship, team='zerg')
+    miner = Miner(my_game_engine, 400, 400)
+    my_universe.add_ship(miner, team='earth')
 
-    # Give the miner some damage to heal up
-    zerg_ship.damage(100)
+    # Set mining planet
+    class pos:
+        pass
+    pos.x = 500
+    pos.y = 500
+    miner.squad.protect(my_universe.battle_info.closest_planet(pos))
 
     # Invoke the event loop
     my_game_engine.event_loop()

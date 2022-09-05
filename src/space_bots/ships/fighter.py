@@ -2,6 +2,7 @@
 
 # Local Imports
 from space_bots.ships import ship
+from space_bots.utils import weapon, laser_guns
 
 
 class Fighter(ship.Ship):
@@ -19,8 +20,9 @@ class Fighter(ship.Ship):
         self.p.laser_damage *= self.level
 
         # Weapons
-        self.laser_guns.set_deployment(2)  # Twin Laser :)
-        self.torp_launcher.set_deployment(self.p.max_torps, level, min_capacitor=20)
+        self.laser_guns = laser_guns.LaserGuns(self, mount_points=2)  # Twin Laser :)
+        self.torp_launcher = weapon.NoWeapon(self)  # An Empty Weapon (can be filled in by subclasses)
+        # self.torp_launcher.set_deployment(self.p.max_torps, level, min_capacitor=10)
 
 
 # Simple test of the Fighter functionality
@@ -44,7 +46,7 @@ def test():
     my_planet = planet.Planet(my_game_engine, 700, 400)
     my_universe.add_planet(my_planet)
 
-    # Create a Fighter, Healer and lets rumble
+    # Create a Fighter, Healer, and Zerg Ship
     fighter = Fighter(my_game_engine, 300, 400)
     my_universe.add_ship(fighter, team='earth')
     healer_ship = Healer(my_game_engine, 300, 400, level=2)

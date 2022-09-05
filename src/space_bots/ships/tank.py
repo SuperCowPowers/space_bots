@@ -1,7 +1,7 @@
 """Tank: A Tank ship in Space Bots"""
 
 # Local Imports
-from space_bots.utils import force_utils
+from space_bots.utils import weapon, force_utils, torp_launcher
 from space_bots.ships import ship
 
 
@@ -28,7 +28,10 @@ class Tank(ship.Ship):
         self.p.shield_recharge *= self.level
         self.p.hull_recharge *= self.level
         self.p.cap_recharge *= self.level
-        self.torp_launcher.set_deployment(self.p.max_torps, level)
+
+        # Weapons
+        self.laser_guns = weapon.NoWeapon(self)  # Tanks don't have lasers
+        self.torp_launcher = torp_launcher.TorpLauncher(self, self.p.max_torps, level)
 
     def update(self):
         """Update the Tank"""
@@ -39,7 +42,7 @@ class Tank(ship.Ship):
 
         # Move towards squads primary target (Tanks need to 'get in there')
         if self.squad.main_target:
-            (dx, dy), (_, _) = force_utils.attraction_forces(self, self.squad.main_target, 0)
+            (dx, dy), (_, _) = force_utils.attraction_forces(self, self.squad.main_target, 100)
             self.force_x += dx * 2
             self.force_y += dy * 2
 
@@ -77,14 +80,14 @@ def test():
     my_universe.set_game_engine(my_game_engine)
 
     # Create a Planet
-    my_planet = planet.Planet(my_game_engine, 500, 500)
+    my_planet = planet.Planet(my_game_engine, 800, 500)
     my_universe.add_planet(my_planet)
 
-    # Create a Tank ship and a Healer Ship
-    tank = Tank(my_game_engine, 300, 300)
-    my_universe.add_ship(tank, team='earth')
+    # Create a Healer ship and a Tank Ship
     healer_ship = Healer(my_game_engine, 400, 400)
     my_universe.add_ship(healer_ship, team='earth')
+    tank = Tank(my_game_engine, 300, 300)
+    my_universe.add_ship(tank, team='earth')
 
     # Add a Zerg enemy
     zerg = Ship(my_game_engine, 500, 700, ship_type='mega_bug')

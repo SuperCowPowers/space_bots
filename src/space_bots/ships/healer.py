@@ -1,7 +1,7 @@
 """Healer: A Healer ship in Space Bots"""
 
 # Local Imports
-from space_bots.utils import force_utils
+from space_bots.utils import weapon, force_utils
 from space_bots.ships import ship
 
 
@@ -16,6 +16,7 @@ class Healer(ship.Ship):
         self.healing_target = None
         self.salvation_thrown = False
         self.squad_buffs = ['fortitude']
+        self.laser_guns = weapon.NoWeapon(self)  # Healer don't have lasers
 
         # Healing Level adjustments
         self.level = level

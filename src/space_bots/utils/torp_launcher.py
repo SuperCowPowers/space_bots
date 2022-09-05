@@ -3,42 +3,77 @@ import time
 import math
 
 # Local Imports
-from space_bots.utils import force_utils, torp
+from space_bots.utils import weapon, force_utils, torp
 
 
-class TorpLauncher:
+class TorpLauncher(weapon.Weapon):
     """TorpLauncher: A Torpedo Launcher for Space Bots"""
-    def __init__(self, ship):
+    def __init__(self, ship, mount_points=8, level=1, min_capacitor=None):
+
+        # Call SuperClass (Weapon) Initialization
+        super().__init__(ship)
 
         # TorpLauncher specific stuff
-        self.origin_ship = ship
         self.torps = []
         self.torp_range = 400
         self.next_torp_reload = 0
         self.current_time = None
         self.torp_cap_cost = 0.75
-
-        # These vars are defined in set_configuration
-        self.launch_points = None
-        self.torp_level = None
-        self.max_torps = None
-        self.torp_reload_rate = None
-        self.min_capacitor = None
-
-    def set_deployment(self, launch_points, level=1, min_capacitor=None):
-        """Set the deployment of the Torp Launcher"""
-        self.max_torps = launch_points
+        self.max_torps = mount_points
         self.torp_level = level
-        self.launch_points = self._generate_launch_points(launch_points)
-        self.torp_reload_rate = 1.0/launch_points
-        self.min_capacitor = min_capacitor if min_capacitor else self.torp_cap_cost * launch_points * 2
+        self.launch_points = self._generate_launch_points(mount_points)
+        self.torp_reload_rate = 1.0/mount_points
+        self.min_capacitor = min_capacitor if min_capacitor else self.torp_cap_cost * mount_points * 2
 
-    def is_deployed(self):
-        return self.launch_points is not None
+    def communicate(self, comms):
+        """Weapons can post sounds and even announcements"""
+        pass
+
+    def update(self, target):
+        """We need to manage both staged and launched Torps"""
+        # Delete expired or exploded torps
+        self.current_time = time.time()
+        self.expire_torps()
+        self.torps = [t for t in self.torps if not t.delete_me]
+
+        # Load Torps into our launch points
+        if self.torp_available_for_loading():
+            self.load_next_available_launch_point()
+
+        # Update launch points relative to ship movements
+        for lp in self.launch_points:
+            if lp['torp']:
+                lp['torp'].x = lp['x'] + self.my_ship.x
+                lp['torp'].y = lp['y'] + self.my_ship.y
+
+        # Update All of my Torps (both staged and launched)
+        for t in self.torps:
+            t.update()
+
+    def draw(self, target):
+        """Draw All of my Torps (both staged and launched)"""
+        for t in self.torps:
+            t.draw()
+
+    def fire(self, target):
+        """Launch a Torpedo at the given Target"""
+
+        # Is the target out of range?
+        if target is None or force_utils.distance_between(self.my_ship, target) > self.torp_range:
+            return
+
+        # Fire Torps (by setting the active target)
+        if self.fully_loaded():
+            for lp in self.launch_points:
+                lp['torp'].set_target(target)
+                lp['torp'].force_x = lp['x'] * .1
+                lp['torp'].force_y = lp['y'] * .1
+                lp['torp'].released = True
+                lp['torp'] = None  # Torp released, so remove it from launch point
 
     def _generate_launch_points(self, n):
         """Internal: Generate N Launch Points Along the Circumference of the origin ship"""
-        radius = self.origin_ship.p.shield_radius
+        radius = self.my_ship.p.shield_radius
         theta_list = [2.0*math.pi*i/n for i in range(n)]
         hard_points = [(radius * math.cos(t), radius * math.sin(t)) for t in theta_list]
         launch_points = [{'torp': None, 'x': h[0], 'y': h[1]} for h in hard_points]
@@ -51,10 +86,10 @@ class TorpLauncher:
         # Select the next launch point
         for lp in self.launch_points:
             if lp['torp'] is None:
-                new_torp = torp.Torp(self.origin_ship, self.torp_level)
+                new_torp = torp.Torp(self.my_ship, self.torp_level)
                 lp['torp'] = new_torp
                 self.torps.append(new_torp)  # We have to track torps even after they get released
-                self.origin_ship.s.capacitor -= self.torp_cap_cost
+                self.my_ship.s.capacitor -= self.torp_cap_cost
                 return
 
         # Shouldn't get here
@@ -74,57 +109,11 @@ class TorpLauncher:
             if t.release_counter > t.expire:
                 t.delete_me = True
 
-    def update(self):
-        """Update Existing Torps"""
-
-        # Many ships do not have a TorpLauncher
-        if not self.is_deployed():
-            return
-
-        # Delete expired or exploded torps
-        self.current_time = time.time()
-        self.expire_torps()
-        self.torps = [t for t in self.torps if not t.delete_me]
-
-        # Load Torps into our launch points
-        if self.torp_available_for_loading():
-            self.load_next_available_launch_point()
-
-        # Update launch points relative to ship movements
-        for lp in self.launch_points:
-            if lp['torp']:
-                lp['torp'].x = lp['x'] + self.origin_ship.x
-                lp['torp'].y = lp['y'] + self.origin_ship.y
-
-        # Update already launched Torps
-        for t in self.torps:
-            t.update()
-
     def torp_available_for_loading(self):
         """Is a new Torp available for firing?"""
-        return (self.origin_ship.s.capacitor > self.min_capacitor) and \
+        return (self.my_ship.s.capacitor > self.min_capacitor) and \
                (self.current_time > self.next_torp_reload) and \
                (len(self.torps) < self.max_torps)
-
-    def fire(self, target):
-        """Launch a Torpedo at the given Target"""
-
-        # Many ships do not have a TorpLauncher
-        if not self.is_deployed():
-            return
-
-        # Is the target out of range?
-        if target is None or force_utils.distance_between(self.origin_ship, target) > self.torp_range:
-            return
-
-        # Fire Torps (by setting the active target)
-        if self.fully_loaded():
-            for lp in self.launch_points:
-                lp['torp'].set_target(target)
-                lp['torp'].force_x = lp['x'] * .1
-                lp['torp'].force_y = lp['y'] * .1
-                lp['torp'].released = True
-                lp['torp'] = None  # Torp released, so remove it from launch point
 
 
 # Simple test of the TorpLauncher functionality
@@ -152,7 +141,7 @@ def test():
     # Create a Tank, healer, and fire some Torps
     tank = Tank(my_game_engine, 300, 600)
     my_universe.add_ship(tank, team='earth')
-    healer_ship = Healer(my_game_engine, 400, 400)
+    healer_ship = Healer(my_game_engine, 400, 400, level=2)
     my_universe.add_ship(healer_ship, team='earth')
 
     zerg = Ship(my_game_engine, 900, 600, ship_type='mega_bug')

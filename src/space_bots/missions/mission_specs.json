@@ -41,7 +41,7 @@
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
             {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 2}}},
-            {"time": 15, "event_info": {"squad": {"type": "spitter", "count": 1}}},
+            {"time": 15, "event_info": {"squad": {"type": "spitter", "count": 2}}},
             {"time": 20, "event_info": {"squad": {"type": "zergling", "count": 4}}}
         ],
          "test_squads": [
@@ -64,7 +64,7 @@
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
             {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 4}}},
-            {"time": 15, "event_info": {"squad": {"type": "spitter", "count": 1}}},
+            {"time": 15, "event_info": {"squad": {"type": "spitter", "count": 2}}},
             {"time": 20, "event_info": {"squad": {"type": "zergling", "count": 8}}}
         ],
          "test_squads": [
@@ -182,7 +182,7 @@
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
             {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 8}}},
-            {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 2}}},
+            {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 3}}},
             {"time": 13, "event_info": {"squad": {"type": "mega_bug", "count": 1}}},
             {"time": 15, "event_info": {"squad": {"type": "spitter", "count": 1}}},
             {"time": 20, "event_info": {"squad": {"type": "zergling", "count": 4}}},
@@ -210,7 +210,7 @@
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
             {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 8}}},
-            {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 2}}},
+            {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 3}}},
             {"time": 13, "event_info": {"squad": {"type": "mega_bug", "count": 1}}},
             {"time": 15, "event_info": {"squad": {"type": "spitter", "count": 1}}},
             {"time": 20, "event_info": {"squad": {"type": "zergling", "count": 4}}},
@@ -238,7 +238,7 @@
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
             {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 8}}},
-            {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 2}}},
+            {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 3}}},
             {"time": 13, "event_info": {"squad": {"type": "mega_bug", "count": 1}}},
             {"time": 15, "event_info": {"squad": {"type": "spitter", "count": 1}}},
             {"time": 20, "event_info": {"squad": {"type": "zergling", "count": 4}}},
@@ -276,7 +276,7 @@
          "test_squads": [
             {
                 "name": "miner_squad", "targeting": "threat",
-                "ships": [{"type":"healer", "level": 1}, {"type":"healer", "level": 1},
+                "ships": [{"type":"healer", "level": 1},
                     {"type":"miner", "level": 1}, {"type":"fighter", "level": 1},
                     {"type":"tank", "level": 1}]
             },
@@ -305,7 +305,7 @@
          "test_squads": [
             {
                 "name": "miner_squad", "targeting": "threat",
-                "ships": [{"type":"healer", "level": 1}, {"type":"healer", "level": 1},
+                "ships": [{"type":"healer", "level": 1},
                     {"type":"miner", "level": 1}, {"type":"fighter", "level": 1},
                     {"type":"tank", "level": 1},
                     {"type": "drone", "level": 1}, {"type": "drone", "level": 1},
@@ -336,7 +336,7 @@
          "test_squads": [
             {
                 "name": "miner_squad", "targeting": "threat",
-                "ships": [{"type":"healer", "level": 1}, {"type":"healer", "level": 1},
+                "ships": [{"type":"healer", "level": 1},
                     {"type":"miner", "level": 1}, {"type":"fighter", "level": 1}, {"type":"tank", "level": 1},
                     {"type":"fighter", "level": 1}, {"type":"fighter", "level": 1}]
             },
@@ -445,15 +445,15 @@
         "event_sequence": [
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
             {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
-            {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 5}}},
-            {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 3}}},
-            {"time": 10, "event_info": {"squad": {"type": "spitter", "count": 3}}},
-            {"time": 35, "event_info": {"squad": {"type": "zergling", "count": 5}}},
-            {"time": 35, "event_info": {"squad": {"type": "berserker", "count": 3}}},
-            {"time": 35, "event_info": {"squad": {"type": "spitter", "count": 3}}},
-            {"time": 60, "event_info": {"squad": {"type": "zergling", "count": 5}}},
-            {"time": 60, "event_info": {"squad": {"type": "berserker", "count": 3}}},
-            {"time": 60, "event_info": {"squad": {"type": "spitter", "count": 3}}}
+            {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 15, "level": 2}}},
+            {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 2, "level": 2}}},
+            {"time": 10, "event_info": {"squad": {"type": "spitter", "count": 3, "level": 2}}},
+            {"time": 25, "event_info": {"squad": {"type": "zergling", "count": 15, "level": 2}}},
+            {"time": 25, "event_info": {"squad": {"type": "berserker", "count": 2, "level": 2}}},
+            {"time": 25, "event_info": {"squad": {"type": "spitter", "count": 3, "level": 2}}},
+            {"time": 40, "event_info": {"squad": {"type": "zergling", "count": 15, "level": 2}}},
+            {"time": 40, "event_info": {"squad": {"type": "berserker", "count": 2, "level": 2}}},
+            {"time": 40, "event_info": {"squad": {"type": "spitter", "count": 3, "level": 2}}}
         ],
          "test_squads": [
             {
