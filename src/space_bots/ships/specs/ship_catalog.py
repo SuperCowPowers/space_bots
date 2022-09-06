@@ -137,7 +137,7 @@ ship_specs = {
          'hull_recharge': 0.001,
          'cap_recharge': 0.05,
          'keep_range': 20,
-         'threat': 20
+         'threat': 1
          },
     'spitter':
         {'color': (180, 100, 80),
@@ -156,7 +156,7 @@ ship_specs = {
          'hull_recharge': 0.0025,
          'cap_recharge': 0.05,
          'keep_range': 100,
-         'threat': 80
+         'threat': 60
          },
     'berserker':
         {'color': (160, 60, 60),
@@ -175,7 +175,7 @@ ship_specs = {
          'hull_recharge': 0.005,
          'cap_recharge': 0.05,
          'keep_range': 100,
-         'threat': 50
+         'threat': 80
          },
     'mega_bug':
         {'color': (140, 60, 80),

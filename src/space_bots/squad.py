@@ -207,15 +207,15 @@ class Squad:
         squad_radius = 50 + len(group_ships) * 10
         for _ship in self.ships:
             (_, _), (dx, dy) = force_utils.attraction_forces(self, _ship, squad_radius)
-            _ship.force_x += dx
-            _ship.force_y += dy
+            _ship.force_x += dx * .5
+            _ship.force_y += dy * .5
 
         # Protecting an Asset
         if self.protection_asset:
             for _ship in self.ships:
                 (_, _), (dx, dy) = force_utils.attraction_forces(self.protection_asset, _ship, self.protection_distance)
-                _ship.force_x += dx
-                _ship.force_y += dy
+                _ship.force_x += dx * .5
+                _ship.force_y += dy * .5
 
         # Update each ship
         for _ship in self.ships:
@@ -254,7 +254,9 @@ class Squad:
         return [s[0] for s in ship_mass]
 
     def highest_threat(self):
-        ship_threat = [(s, s.p.threat) for s in self.adversaries]
+        """Combination of Distance and Threat"""
+        _distance = [force_utils.distance_between(self, s) for s in self.adversaries]
+        ship_threat = [(s, s.p.threat*1.0/(d+10)) for s,d in zip(self.adversaries, _distance)]
         ship_threat.sort(key=lambda tup: tup[1], reverse=True)
         return [s[0] for s in ship_threat]
 

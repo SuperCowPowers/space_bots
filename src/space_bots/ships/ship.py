@@ -184,8 +184,8 @@ class Ship(entity.Entity):
         """Movement Logic that's useful for most ships"""
         if self.squad.main_target:
             (dx, dy), (_, _) = force_utils.attraction_forces(self, self.squad.main_target, self.p.laser_range/1.1)
-            self.force_x += dx * .5
-            self.force_y += dy * .5
+            self.force_x += dx * 0.5
+            self.force_y += dy * 0.5
 
     def general_avoidance(self):
         """Avoidance Logic that's useful for most ships"""

@@ -39,10 +39,12 @@ class Tank(ship.Ship):
         # General updates
         self.general_ship_updates()
         self.general_targeting()
+        self.general_movement()
 
         # Move towards squads primary target (Tanks need to 'get in there')
         if self.squad.main_target:
-            (dx, dy), (_, _) = force_utils.attraction_forces(self, self.squad.main_target, 50)
+            # (dx, dy), (_, _) = force_utils.attraction_forces(self, self.squad.main_target, 50)
+            (dx, dy), (_, _) = force_utils.attack_forces(self, self.squad.main_target)
             self.force_x += dx
             self.force_y += dy
 
