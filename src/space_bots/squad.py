@@ -79,6 +79,10 @@ class Squad:
         else:  # I'm not dead yet :)
             return False
 
+    def average_health(self):
+        """What's the average/mean health of all the ships in the Squad"""
+        return statistics.fmean([s.health_percent() for s in self.ships])
+
     def set_battle_info(self, battle_info):
         """Someone has given us battle info/reconnaissance"""
         self.battle_info = battle_info
@@ -196,7 +200,7 @@ class Squad:
         self.ship_health = self.lowest_health()
         self.ship_distance = self.distance_from_squad()
         self.ship_mass = self.highest_mass()
-        self.ship_threat = self.highest_threat()
+        self.ship_threat = self.highest_priority()  # FIXME
 
         # Compute information about the squad
         self.x, self.y = self.compute_centroid()
@@ -257,6 +261,14 @@ class Squad:
         """Combination of Distance and Threat"""
         _distance = [force_utils.distance_between(self, s) for s in self.adversaries]
         ship_threat = [(s, s.p.threat/(d+10.0)) for s, d in zip(self.adversaries, _distance)]
+        ship_threat.sort(key=lambda tup: tup[1], reverse=True)
+        return [s[0] for s in ship_threat]
+
+    def highest_priority(self):
+        """Combination of Distance, Threat, and Health"""
+        _distance = [force_utils.distance_between(self, s) for s in self.adversaries]
+        _health = [s.health()+1 for s in self.adversaries]
+        ship_threat = [(s, s.p.threat/((d+10.0)*h)) for s, d, h in zip(self.adversaries, _distance, _health)]
         ship_threat.sort(key=lambda tup: tup[1], reverse=True)
         return [s[0] for s in ship_threat]
 

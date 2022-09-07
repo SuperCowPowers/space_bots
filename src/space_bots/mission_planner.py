@@ -54,8 +54,8 @@ class MissionPlanner:
     def buff_squads(self):
         self.universe.game_engine.restricted_announce('power_cord_d', None)
         self.universe.game_engine.restricted_announce('get_buffed')
-        for squad in self.test_squads:
-            squad.get_buffed()
+        for _squad in self.test_squads:
+            _squad.get_buffed()
 
     def add_zerg_squad(self, ship_type, num_ships, targeting, level=1):
         """Add a Zerg Squad to the mission"""

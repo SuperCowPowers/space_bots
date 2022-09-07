@@ -17,6 +17,7 @@ class Tank(ship.Ship):
         self.p.damage_modifier = 0.7  # 30% reduction
         self.pad_radius += 10  # Tanks need their space
         self.shield_thrown = False
+        self.iron_will_thrown = False
         self.squad_buffs = ['protection']
 
         # Tank Level adjustments
@@ -50,11 +51,18 @@ class Tank(ship.Ship):
 
         # Track the lowest health TeamMate
         self.protect_target = self.battle_info.lowest_health_teammate(self)
-        if not self.shield_thrown and self.protect_target.health_percent() < .1:
+        if not self.shield_thrown and self.protect_target.health_percent() < .15:
             print('Tank: Take the Pain!')
             self.announcer_messages.put('tank_cast_pain')
             self.protect_target.add_buff('take_the_pain')
             self.shield_thrown = True
+
+        # Cast Iron Will
+        if self.protect_target.health_percent() < .07 and not self.iron_will_thrown:
+            self.announcer_messages.put('tank_cast_iron_will')
+            for _ship in self.squad.ships:
+                _ship.add_buff('iron_will')
+            self.iron_will_thrown = True
 
         # Now actually call the move command
         self.move()

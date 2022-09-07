@@ -15,6 +15,7 @@ class Healer(ship.Ship):
         # Healer specific stuff
         self.healing_target = None
         self.salvation_thrown = False
+        self.blood_pact_thrown = False
         self.squad_buffs = ['fortitude']
         self.laser_guns = weapon.NoWeapon(self)  # Healer don't have lasers
 
@@ -37,10 +38,22 @@ class Healer(ship.Ship):
             self.force_y += dy
 
             # Cast Salvation
-            if self.healing_target.health_percent() < .07 and not self.salvation_thrown:
+            if self.healing_target.health_percent() < .05 and not self.salvation_thrown:
                 self.announcer_messages.put('healer_cast_salvation')
                 self.healing_target.add_buff('salvation')
                 self.salvation_thrown = True
+
+            # Cast Blood Pact
+            if self.healing_target.health_percent() < .12 and not self.blood_pact_thrown:
+                self.announcer_messages.put('healer_cast_blood_pact')
+                avg_health_percent = self.squad.average_health() - 0.10  # Blood tax :)
+                for _ship in self.squad.ships:
+                    if _ship != self.healing_target:
+                        _ship.add_buff('blood_pact', avg_health_percent=avg_health_percent)
+                    else:
+                        _ship.add_buff('blood_pact_target')
+
+                self.blood_pact_thrown = True
 
         # Now actually call the move command
         self.move()

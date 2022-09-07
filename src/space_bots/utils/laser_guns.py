@@ -56,7 +56,7 @@ class LaserGuns(weapon.Weapon):
             return
 
         # Get our current laser damage from my ship (might be buffed)
-        laser_damage = self.my_ship.p.laser_damage * self.mount.num_mount_points()
+        laser_damage = self.my_ship.p.laser_damage * self.mount.num_mount_points() * self.my_ship.p.outgoing_damage_modifier
 
         # Fire (and Draw) the lasers
         for mount_point in self.mount.get_mount_locations():

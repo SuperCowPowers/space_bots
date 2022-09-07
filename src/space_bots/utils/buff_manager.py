@@ -47,10 +47,14 @@ class BuffManager:
                 ship.p.hp *= value
             elif effect == 'incoming_damage_modifier':
                 ship.p.incoming_damage_modifier *= value
+            elif effect == 'outgoing_damage_modifier':
+                ship.p.outgoing_damage_modifier *= value
             elif effect == 'shield':
                 ship.s.shield += value
             elif effect == 'heal':
                 ship.s.hp += value
+            elif effect == 'mean_health':
+                ship.s.hp = ship.p.hp * kwargs['avg_health_percent']
             else:
                 print(f"{buff_name}: Don't know how to apply")
         print(effects)

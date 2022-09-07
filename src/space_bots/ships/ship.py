@@ -264,9 +264,9 @@ class Ship(entity.Entity):
             shield_color = (shield_health, shield_health, shield_health)
         self.game_engine.draw_circle(shield_color, (self.x, self.y), self.p.shield_radius, width=self.p.shield_width)
 
-    def add_buff(self, buff):
+    def add_buff(self, buff, **kwargs):
         """Any buff goes to the buff manager who manages the application and expiration of buffs"""
-        self.buff_manager.apply(buff, self)
+        self.buff_manager.apply(buff, self, **kwargs)
 
     def draw_buffs(self):
         """Draw any buffs we might have"""
