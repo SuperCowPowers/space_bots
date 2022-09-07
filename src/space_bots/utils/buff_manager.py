@@ -19,7 +19,7 @@ class BuffManager:
         self._buff_info = ship_buffs.ship_buffs
         self.ship_buffs = defaultdict(dict)
 
-    def apply(self, buff_name, ship):
+    def apply(self, buff_name, ship, **kwargs):
         """Apply a previous registered buff to the ship
            Args:
                buff_name: The name of the buff

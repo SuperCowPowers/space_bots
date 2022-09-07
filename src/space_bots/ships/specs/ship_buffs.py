@@ -2,7 +2,7 @@
 
 ship_buffs = {
     'protection':
-        {'effects': {'incoming_damage_modifier': 0.8},
+        {'effects': {'incoming_damage_modifier': 0.9},
          'display': False
          },
     'kings':
@@ -22,8 +22,13 @@ ship_buffs = {
          'timer': 5,
          'display': False
          },
+    'blood_pact':
+        {'effects': {'mean_health': 0},
+         'display': True,
+         'color': (220, 60, 180)
+         },
     'first_strike':
-        {'effects': {'laser_range_modifier': 1.5},
+        {'effects': {'laser_range_modifier': 1.1},
          'timer': 5,
          'display': True,
          'color': (180, 60, 200)

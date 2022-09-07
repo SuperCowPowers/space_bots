@@ -447,7 +447,7 @@
             {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
             {"time": 10, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.6, "level": 2}}},
             {"time": 20, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.8, "level": 2}}},
-            {"time": 30, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.8, "level": 2}}},
+            {"time": 30, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.0, "level": 2}}},
             {"time": 40, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.0, "level": 2}}},
             {"time": 50, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.2, "level": 2}}}
         ],

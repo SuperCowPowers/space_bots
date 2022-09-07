@@ -51,6 +51,12 @@ class MissionPlanner:
         # Set the Universe Text
         self.universe.current_text = self.current_mission['title']
 
+    def buff_squads(self):
+        self.universe.game_engine.restricted_announce('power_cord_d', None)
+        self.universe.game_engine.restricted_announce('get_buffed')
+        for squad in self.test_squads:
+            squad.get_buffed()
+
     def add_zerg_squad(self, ship_type, num_ships, targeting, level=1):
         """Add a Zerg Squad to the mission"""
         x = self.zerg_pos[0]
@@ -154,6 +160,7 @@ class MissionPlanner:
         """Main Mission Planner Functionality"""
         if self.mission_begin_time is None:
             self.mission_begin_time = time.time()
+            self.buff_squads()
 
         # If we have no more events in this mission just return
         if self.event_queue.empty():
