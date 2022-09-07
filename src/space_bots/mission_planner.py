@@ -64,6 +64,19 @@ class MissionPlanner:
                 zerg_squad.add_ship(ship.Ship(self.universe.game_engine, x=x, y=y, ship_type=ship_type, level=level))
         self.universe.add_squad(zerg_squad)
 
+    def standard_zerg_pack(self, pack_size=1.0, targeting='nearest', level=1):
+        """Add a predefined/diverse set of Zerg Squads to the mission"""
+        pack = {
+            'zergling': 5,
+            'spitter': 2,
+            'berserker': 1,
+            'mega_bug': 0.25
+        }
+        for ship_type, count in pack.items():
+            num_ships = int(count * pack_size)
+            if num_ships:
+                self.add_zerg_squad(ship_type, num_ships, targeting, level)
+
     def add_test_squads(self):
         """We can add 'earth' Squads to test the Mission balance/level/etc"""
 
@@ -159,8 +172,15 @@ class MissionPlanner:
             # Add Squads
             if 'squad' in event_info:
                 squad_info = event_info['squad']
-                self.add_zerg_squad(squad_info['type'], squad_info['count'],
-                                    squad_info.get('targeting', 'nearest'), squad_info.get('level', 1))
+                # Add a Standard Zerg Pack
+                if squad_info['type'] == 'standard_zerg_pack':
+                    self.standard_zerg_pack(squad_info['pack_size'], squad_info.get('targeting', 'nearest'),
+                                            squad_info.get('level', 1))
+
+                # Add an individual Squad
+                else:
+                    self.add_zerg_squad(squad_info['type'], squad_info['count'],
+                                        squad_info.get('targeting', 'nearest'), squad_info.get('level', 1))
 
             # Protection Orders
             if 'protect' in event_info:

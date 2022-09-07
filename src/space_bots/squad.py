@@ -256,7 +256,7 @@ class Squad:
     def highest_threat(self):
         """Combination of Distance and Threat"""
         _distance = [force_utils.distance_between(self, s) for s in self.adversaries]
-        ship_threat = [(s, s.p.threat/(d+10.0)) for s,d in zip(self.adversaries, _distance)]
+        ship_threat = [(s, s.p.threat/(d+10.0)) for s, d in zip(self.adversaries, _distance)]
         ship_threat.sort(key=lambda tup: tup[1], reverse=True)
         return [s[0] for s in ship_threat]
 
