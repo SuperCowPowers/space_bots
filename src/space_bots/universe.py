@@ -23,15 +23,24 @@ class Universe:
             self.time_slow = 0.0  # FIXME
         else:
             self.time_slow = 0
-        self.pad = 150
+
+        # Dimensions and Boundaries
+        self.pad = 50
         self.width = width
         self.height = height
+        self.top = self.pad
+        self.bottom = self.height - 3 * self.pad
+        self.left = self.pad
+        self.right = self.width - self.pad
+
+        # Track asteroids, squads, ships, and torpedoes
         self.planets = []
         self.squads = []
         self.all_ships = []
         self.torps = []
-        self.is_finalized = False
 
+        # Universe State vars
+        self.is_finalized = False
         self.initial_count_down = False
         self.wave_over = False
         self.current_text = None
@@ -191,8 +200,8 @@ class Universe:
             squad.update()
 
         # Time Slow
-        time.sleep(self.time_slow)
-        self.time_slow *= .9
+        # time.sleep(self.time_slow)
+        # self.time_slow *= .9
 
         # Do we only have one team left?
         # FIXME
@@ -259,12 +268,19 @@ class Universe:
                 ship.force_x += dx * 10  # Planets are big
                 ship.force_y += dy * 10
 
-        # Last: Ships against boundaries
-        # Note: This is a 'hard' boundary
+        # Last: Ships against boundaries (bounce effect)
         for _ship in self.all_ships:
-            ship_pad = self.pad/4
-            _ship.x = min(max(_ship.x, ship_pad), self.width-ship_pad)
-            _ship.y = min(max(_ship.y, ship_pad), self.height-ship_pad)
+            if _ship.x < self.left or _ship.x > self.right:
+                _ship.force_x = -_ship.force_x
+            if _ship.y < self.top or _ship.y > self.bottom:
+                _ship.force_y = -_ship.force_y
+
+        # Last: Planets against boundaries (bounce effect)
+        for planet in self.planets:
+            if planet.x < self.left or planet.x > self.right:
+                planet.force_x = -planet.force_x
+            if planet.y < self.top or planet.y > self.bottom:
+                planet.force_y = -planet.force_y
 
     def _space_out_planets(self):
         """Make sure planets don't overlap"""

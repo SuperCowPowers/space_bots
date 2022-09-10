@@ -63,7 +63,7 @@ ship_specs = {
     'miner':
         {'color': (180, 160, 60),
          'mass': 500,
-         'speed': 0.25,
+         'speed': 0.5,
          'radius': 12,
          'hp': 200,
          'shield': 150,

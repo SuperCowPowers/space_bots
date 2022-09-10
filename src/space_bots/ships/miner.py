@@ -41,9 +41,9 @@ class Miner(ship.Ship):
         # Get my closest Planet and go mine it
         self.mining_planet = self.squad.protection_asset
         if self.mining_planet:
-            (_, _), (dx, dy) = force_utils.attraction_forces(self.mining_planet, self, self.p.laser_range-10)
-            self.force_x += dx
-            self.force_y += dy
+            (_, _), (dx, dy) = force_utils.attraction_forces(self.mining_planet, self, self.p.laser_range/1.2)
+            self.force_x += dx * 2
+            self.force_y += dy * 2
 
         # Let Squad know my Zenite Yield
         self.squad.total_zenite += self.mining_yield
