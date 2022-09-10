@@ -31,8 +31,8 @@ class Fighter(ship.Ship):
         # General updates
         self.general_ship_updates()
         self.general_targeting()
-        self.general_movement()
         self.general_avoidance()
+        self.general_target_movement()
 
         # If the Fighter gets low health cast buff
         if self.health_percent() < .5 and not self.mad_thrown:

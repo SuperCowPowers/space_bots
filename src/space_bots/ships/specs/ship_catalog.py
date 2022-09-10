@@ -93,8 +93,8 @@ ship_specs = {
          'capacitor': 10,
          'ship_width': 3,
          'shield_width': 1,
-         'shield_recharge': 0.15,  # Drones can't be healed, so nanobot repairs
-         'hull_recharge': 0.15,
+         'shield_recharge': 0.1,  # Drones can't be healed, so nanobot repairs
+         'hull_recharge': 0.1,
          'cap_recharge': 0.025,
          'keep_range': 60,
          'threat': 20

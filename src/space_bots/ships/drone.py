@@ -26,14 +26,15 @@ class Drone(ship.Ship):
         # General updates
         self.general_ship_updates()
         self.general_targeting()
-        self.general_movement()
+        self.general_avoidance()
+        self.general_target_movement(aggressive=0.05)
 
         # Move towards protecting asset (Drones need to protect the Asset)
         self.protect_asset = self.squad.protection_asset
         if self.protect_asset:
             (dx, dy), (_, _) = force_utils.attraction_forces(self, self.protect_asset, self.squad.protection_distance)
-            self.force_x += dx * 3
-            self.force_y += dy * 3
+            self.force_x += dx
+            self.force_y += dy
 
         # Now actually call the move command (which uses force/mass calc)
         self.move()

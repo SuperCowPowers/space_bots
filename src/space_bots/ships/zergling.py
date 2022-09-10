@@ -29,7 +29,7 @@ class Zergling(ship.Ship):
         # General updates
         self.general_ship_updates()
         self.general_targeting()
-        self.general_movement()
+        self.general_target_movement(1.0)
 
         # Now actually call the move command (which uses force/mass calc)
         self.move()

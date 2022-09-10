@@ -180,19 +180,19 @@ class Ship(entity.Entity):
         self.laser_guns.update(self.s.target)
         self.torp_launcher.update(self.squad.main_target)
 
-    def general_movement(self):
+    def general_target_movement(self, aggressive=0.5):
         """Movement Logic that's useful for most ships"""
         if self.squad.main_target:
             (dx, dy), (_, _) = force_utils.attraction_forces(self, self.squad.main_target, self.p.laser_range/1.3)
-            self.force_x += dx * 0.5
-            self.force_y += dy * 0.5
+            self.force_x += dx * aggressive
+            self.force_y += dy * aggressive
 
-    def general_avoidance(self):
+    def general_avoidance(self, passive=1.0):
         """Avoidance Logic that's useful for most ships"""
         for enemy_ship in self.squad.adversaries:
             (dx, dy), (_, _) = force_utils.repulsion_forces(self, enemy_ship, rest_distance=self.p.keep_range)
-            self.force_x += dx
-            self.force_y += dy
+            self.force_x += dx * passive
+            self.force_y += dy * passive
 
     def update(self):
         """Update the Ship"""
@@ -200,8 +200,8 @@ class Ship(entity.Entity):
         # General updates
         self.general_ship_updates()
         self.general_targeting()
-        self.general_movement()
         self.general_avoidance()
+        self.general_target_movement()
 
         # Now actually call the move command
         self.move()

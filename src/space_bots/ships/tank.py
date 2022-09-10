@@ -1,7 +1,7 @@
 """Tank: A Tank ship in Space Bots"""
 
 # Local Imports
-from space_bots.utils import weapon, force_utils, torp_launcher
+from space_bots.utils import weapon, torp_launcher
 from space_bots.ships import ship
 
 
@@ -40,14 +40,7 @@ class Tank(ship.Ship):
         # General updates
         self.general_ship_updates()
         self.general_targeting()
-        self.general_movement()
-
-        # Move towards squads primary target (Tanks need to 'get in there')
-        if self.squad.main_target:
-            # (dx, dy), (_, _) = force_utils.attraction_forces(self, self.squad.main_target, 50)
-            (dx, dy), (_, _) = force_utils.attack_forces(self, self.squad.main_target)
-            self.force_x += dx
-            self.force_y += dy
+        self.general_target_movement(aggressive=1.0)
 
         # Track the lowest health TeamMate
         self.protect_target = self.battle_info.lowest_health_teammate(self)
@@ -66,10 +59,6 @@ class Tank(ship.Ship):
 
         # Now actually call the move command
         self.move()
-
-    def draw_laser(self):
-        """Tank has no laser"""
-        pass
 
 
 # Simple test of the Tank functionality
