@@ -88,8 +88,13 @@ class GameEngineAdapter:
         pygame.draw.circle(self.screen, color, center, radius, width)
 
     def draw_line(self, color, start, end, width=2):
-        """Draw a Lince with the given parameters"""
+        """Draw a Line with the given parameters"""
         pygame.draw.line(self.screen, color, start, end, width)
+
+    def draw_mineral(self, color, center, radius):
+        """Draw a Circle with the given parameters"""
+        pygame.draw.circle(self.screen, color, center, radius, width=0)
+        pygame.draw.circle(self.screen, (0, 0, 0), center, radius, 1)
 
     def draw_polygon(self, color, points, width=3):
         pygame.draw.polygon(self.screen, color, points, width)
@@ -105,11 +110,8 @@ class GameEngineAdapter:
             _image = pygame.transform.scale(_image, (x_size, y_size))
         return _image
 
-    def draw_image(self, image, x, y, rotation=0):
-        if rotation != 0:
-            self.image_rotate_blit(image, x, y, rotation)
-        else:
-            self.screen.blit(image, (x, y))
+    def draw_image(self, image, x, y):
+        self.screen.blit(image, (x, y))
 
     def draw_background(self):
         self.screen.fill(self.background_color)
@@ -119,33 +121,6 @@ class GameEngineAdapter:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
-
-    def image_rotate_blit(self, image, x, y, angle):
-
-        # FIXME: Optimize this
-        # Get the image midpoint
-        width, height = image.get_size()
-        mid_x = width/2
-        mid_y = height/2
-        x += mid_x
-        y += mid_y
-
-        # offset from pivot to center
-        image_rect = image.get_rect(topleft=(x - mid_x, y - mid_y))
-        offset_center_to_pivot = pygame.math.Vector2((x, y)) - image_rect.center
-
-        # rotated offset from pivot to center
-        rotated_offset = offset_center_to_pivot.rotate(-angle)
-
-        # rotated image center
-        rotated_image_center = (x - rotated_offset.x, y - rotated_offset.y)
-
-        # get a rotated image and return it
-        rotated_image = pygame.transform.rotate(image, angle)
-        rotated_image_rect = rotated_image.get_rect(center=rotated_image_center)
-
-        # rotate and blit the image
-        self.screen.blit(rotated_image, rotated_image_rect)
 
     @staticmethod
     def quit():

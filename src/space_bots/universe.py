@@ -34,7 +34,7 @@ class Universe:
         self.right = self.width - self.pad
 
         # Track asteroids, squads, ships, and torpedoes
-        self.planets = []
+        self.asteroids = []
         self.squads = []
         self.all_ships = []
         self.torps = []
@@ -64,7 +64,7 @@ class Universe:
         self.all_ships = [ship for _squad in self.squads for ship in _squad.ships]
 
         # Make sure all entities are in a reasonable starting position
-        self._space_out_planets()
+        self._space_out_asteroids()
         force_utils.resolve_coincident(self.all_ships)
 
         # Mission Planner Finalize
@@ -87,9 +87,9 @@ class Universe:
     def get_comms(self):
         return self.comms
 
-    def add_planet(self, planet):
-        """Add a Planet to the Universe"""
-        self.planets.append(planet)
+    def add_asteroid(self, asteroid):
+        """Add a Asteroid to the Universe"""
+        self.asteroids.append(asteroid)
 
     def add_squad(self, squad):
         """Add a Squad to the Universe"""
@@ -191,9 +191,9 @@ class Universe:
         # Update/Manage the buffs for all the ships
         self.buffs.update()
 
-        # Now update all the Planets in the Universe
-        for planet in self.planets:
-            planet.update()
+        # Now update all the Asteroids in the Universe
+        for asteroid in self.asteroids:
+            asteroid.update()
 
         # Now update all the Squads in the Universe
         for squad in self.squads:
@@ -222,9 +222,9 @@ class Universe:
         for ship in self.all_ships:
             ship.draw()
 
-        # Planets next
-        for planet in self.planets:
-            planet.draw()
+        # Asteroids next
+        for asteroid in self.asteroids:
+            asteroid.draw()
 
         # Draw Text
         if self.current_text:
@@ -260,59 +260,66 @@ class Universe:
                 co_ship.force_x += co_dx * ship.mass/co_ship.mass
                 co_ship.force_y += co_dy * ship.mass/co_ship.mass
 
-        # Third: Ships vs Planet
+        # Third: Ships vs Asteroid
         for ship in self.all_ships:
-            for planet in self.planets:
+            for asteroid in self.asteroids:
                 # Compute any collision forces
-                (dx, dy), (p_dx, p_dy) = force_utils.repulsion_forces(ship, planet)
-                ship.force_x += dx * 10  # Planets are big
+                (dx, dy), (p_dx, p_dy) = force_utils.repulsion_forces(ship, asteroid)
+                ship.force_x += dx * 10  # Asteroids are big
                 ship.force_y += dy * 10
 
-        # Last: Ships against boundaries (bounce effect)
+        # Fourth: Asteroid vs Asteroid
+        for index, asteroid in enumerate(self.asteroids):
+            for co_asteroid in self.asteroids[index+1:]:
+                (dx, dy), (co_dx, co_dy) = force_utils.repulsion_forces(asteroid, co_asteroid)
+                asteroid.force_x += dx * 10
+                asteroid.force_y += dy * 10
+                co_asteroid.force_x += co_dx * 10
+                co_asteroid.force_y += co_dy * 10
+
+        # Fifth: Ships against boundaries (bounce effect)
         for _ship in self.all_ships:
             if _ship.x < self.left or _ship.x > self.right:
                 _ship.force_x = -_ship.force_x
             if _ship.y < self.top or _ship.y > self.bottom:
                 _ship.force_y = -_ship.force_y
 
-        # Last: Planets against boundaries (bounce effect)
-        for planet in self.planets:
-            if planet.x < self.left or planet.x > self.right:
-                planet.force_x = -planet.force_x
-            if planet.y < self.top or planet.y > self.bottom:
-                planet.force_y = -planet.force_y
+        # Last: Asteroids against boundaries (bounce effect)
+        for asteroid in self.asteroids:
+            if asteroid.x < self.left or asteroid.x > self.right:
+                asteroid.force_x = -asteroid.force_x
+            if asteroid.y < self.top or asteroid.y > self.bottom:
+                asteroid.force_y = -asteroid.force_y
 
-    def _space_out_planets(self):
-        """Make sure planets don't overlap"""
+    def _space_out_asteroids(self):
+        """Make sure asteroids don't overlap"""
 
-        # First resolve any coincident planets
-        force_utils.resolve_coincident(self.planets)
+        # First resolve any coincident asteroids
+        force_utils.resolve_coincident(self.asteroids)
 
-        # Now Space out the planets
+        # Now Space out the asteroids
         for _ in range(50):
-            for _planet in self.planets:
-                for co_planet in self.planets:
+            for _asteroid in self.asteroids:
+                for co_asteroid in self.asteroids:
                     # Skip self
-                    if _planet == co_planet:
+                    if _asteroid == co_asteroid:
                         continue
                     # Move if too close
-                    if force_utils.distance_between(_planet, co_planet) < 350:
-                        (dx, dy), (co_dx, co_dy) = force_utils.normalized_distance_vectors(_planet, co_planet)
-                        _planet.x -= dx * 5
-                        _planet.y -= dy * 5
-                        co_planet.x -= co_dx * 5
-                        co_planet.y -= co_dy * 5
+                    if force_utils.distance_between(_asteroid, co_asteroid) < 250:
+                        (dx, dy), (co_dx, co_dy) = force_utils.normalized_distance_vectors(_asteroid, co_asteroid)
+                        _asteroid.x -= dx * 5
+                        _asteroid.y -= dy * 5
+                        co_asteroid.x -= co_dx * 5
+                        co_asteroid.y -= co_dy * 5
                     # Boundaries
-                    _planet.x = max(min(_planet.x, self.width-self.pad), self.pad)
-                    _planet.y = max(min(_planet.y, self.height-self.pad), self.pad)
+                    _asteroid.x = max(min(_asteroid.x, self.right), self.left)
+                    _asteroid.y = max(min(_asteroid.y, self.bottom), self.top)
 
 
 # Simple test of the Universe functionality
 def test():
     from space_bots import game_engine_adapter
-    from space_bots.squad import Squad
-    from space_bots.ships import ship, miner, healer, tank, fighter, drone, zergling
-    from space_bots.planet import Planet
+    from space_bots.asteroid import Asteroid
 
     """Test for Universe Class"""
 
@@ -325,65 +332,14 @@ def test():
     # Give the universe the game engine
     my_universe.set_game_engine(my_game_engine)
 
-    # Create two Pirate Squads (who doesn't want to be a pirate?)
-    xpos = 300
-    ypos = 850
-    for squad_name in ['berserker', 'spitter', 'mega_bug']:
-        my_squad = Squad(team='zerg', squad_name=squad_name, target_strategy='nearest')
-        for _ in range(2):
-            my_squad.add_ship(ship.Ship(my_game_engine, xpos, ypos, ship_type=squad_name, level=2))
-        my_universe.add_squad(my_squad)
-        xpos = 300
-        ypos = 300
+    # Get the Universe Mission Planner
+    my_mission = my_universe.mission_planner
+    my_mission.set_mission(18, test_squads=True)
 
-    # Add two zerg squads
-    xpos = 300
-    ypos = 150
-    for squad_name in ['zerg1', 'zerg2']:
-        zerg_squad = Squad(team='zerg', squad_name=squad_name, target_strategy='nearest')
-        for _ in range(25):
-            zerg_squad.add_ship(zergling.Zergling(my_game_engine, xpos, ypos))
-        my_universe.add_squad(zerg_squad)
-        xpos = 100
-        ypos = 900
-
-    # Create our Squad
-    level = 1
-    earth_squad = Squad(team='earth', squad_name='roughnecks', target_strategy='threat')
-    my_miner = miner.Miner(my_game_engine, 850, 700, level=2)
-    earth_squad.add_ship(my_miner)
-    earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=2))
-    earth_squad.add_ship(healer.Healer(my_game_engine, 850, 700, level=2))
-    earth_squad.add_ship(tank.Tank(my_game_engine, 850, 700, level=2))
-    for _ in range(2):
-        earth_squad.add_ship(fighter.Fighter(my_game_engine, 850, 700, level=level))
-    my_universe.add_squad(earth_squad)
-
-    drone_squad = Squad(team='earth', squad_name='drones', target_strategy='nearest')
-    for _ in range(2):
-        drone_squad.add_ship(drone.Drone(my_game_engine, 850, 700, level=level))
-    my_universe.add_squad(drone_squad)
-
-    # Add some planets
-    for _ in range(8):
-        my_planet = Planet(my_game_engine, x=randint(800, 850), y=randint(500, 550))
-        my_universe.add_planet(my_planet)
-
-    # Explicitly call finalize on the Universe
-    my_universe.finalize()
-
-    # Position
-    class Pos:
-        pass
-    Pos.x = 1200
-    Pos.y = 500
-
-    # Add Protection Orders
-    earth_squad.protect(my_universe.battle_info.closest_planet(Pos))
-    drone_squad.protect(my_miner, 30)
-
-    # Have the Zerg squad target the miner
-    zerg_squad.attack_target(my_miner)
+    # Add some asteroids
+    for _ in range(5):
+        my_asteroid = Asteroid(my_game_engine, x=randint(500, 1000), y=randint(500, 600))
+        my_universe.add_asteroid(my_asteroid)
 
     # Invoke the event loop
     my_game_engine.event_loop()

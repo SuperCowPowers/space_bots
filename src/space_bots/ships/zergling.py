@@ -38,7 +38,7 @@ class Zergling(ship.Ship):
 # Simple test of the Zergling functionality
 def test():
     """Test for Zergling Class"""
-    from space_bots import game_engine_adapter, planet
+    from space_bots import game_engine_adapter, asteroid
     from space_bots.universe import Universe
     from space_bots.ships.miner import Miner
 
@@ -51,9 +51,9 @@ def test():
     # Give the universe the game engine
     my_universe.set_game_engine(my_game_engine)
 
-    # Create a Planet
-    my_planet = planet.Planet(my_game_engine, 700, 400)
-    my_universe.add_planet(my_planet)
+    # Create a Asteroid
+    my_asteroid = asteroid.Asteroid(my_game_engine, 700, 400)
+    my_universe.add_asteroid(my_asteroid)
 
     # Create some Zerglings and a Miner Ship
     for _ in range(10):
@@ -62,12 +62,12 @@ def test():
     miner = Miner(my_game_engine, 400, 400)
     my_universe.add_ship(miner, team='earth')
 
-    # Set mining planet
+    # Set mining asteroid
     class pos:
         pass
     pos.x = 500
     pos.y = 500
-    miner.squad.protect(my_universe.battle_info.closest_planet(pos))
+    miner.squad.protect(my_universe.battle_info.closest_asteroid(pos))
 
     # Invoke the event loop
     my_game_engine.event_loop()

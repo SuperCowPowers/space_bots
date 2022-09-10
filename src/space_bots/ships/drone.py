@@ -33,8 +33,8 @@ class Drone(ship.Ship):
         self.protect_asset = self.squad.protection_asset
         if self.protect_asset:
             (dx, dy), (_, _) = force_utils.attraction_forces(self, self.protect_asset, self.squad.protection_distance)
-            self.force_x += dx * 2
-            self.force_y += dy * 2
+            self.force_x += dx * 3
+            self.force_y += dy * 3
 
         # Now actually call the move command (which uses force/mass calc)
         self.move()
@@ -43,7 +43,7 @@ class Drone(ship.Ship):
 # Simple test of the Drone functionality
 def test():
     """Test for Drone Class"""
-    from space_bots import game_engine_adapter, planet
+    from space_bots import game_engine_adapter, asteroid
     from space_bots.universe import Universe
     from space_bots.ships.healer import Healer
 
@@ -56,9 +56,9 @@ def test():
     # Give the universe the game engine
     my_universe.set_game_engine(my_game_engine)
 
-    # Create a Planet
-    my_planet = planet.Planet(my_game_engine, 500, 500)
-    my_universe.add_planet(my_planet)
+    # Create a Asteroid
+    my_asteroid = asteroid.Asteroid(my_game_engine, 500, 500)
+    my_universe.add_asteroid(my_asteroid)
 
     # Create a Drone ship and a Miner Ship
     drone = Drone(my_game_engine, 400, 450)

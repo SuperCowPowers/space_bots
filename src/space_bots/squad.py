@@ -63,6 +63,7 @@ class Squad:
         self.total_zenite = 0
         self.total_damage = 0
         self.buff_manager = None
+        self.asteroids = None
 
     def add_ship(self, ship):
         """Add a Ship to this Squad"""
@@ -88,6 +89,9 @@ class Squad:
         self.battle_info = battle_info
         for ship in self.ships:
             ship.set_battle_info(battle_info)
+
+        # Get Asteroids in the Battle Zone
+        self.asteroids = battle_info.all_asteroids()
 
     def pre_delete(self):
         """All Entities have a pre_delete method where they might take some action/set stuff before being deleted"""
@@ -138,12 +142,12 @@ class Squad:
                     self.in_combat = False
 
     def protect(self, asset, distance=120):
-        """Tell the Squad to protect a planet, squad or a ship (asset)"""
+        """Tell the Squad to protect a asteroid, squad or a ship (asset)"""
         self.protection_asset = asset
         self.protection_distance = distance
 
     def attack_target(self, target):
-        """Tell the Squad to attack a planet, squad or a ship (target)"""
+        """Tell the Squad to attack a asteroid, squad or a ship (target)"""
         self.primary_attack_target = target
 
     def communicate(self, comms):
@@ -256,6 +260,24 @@ class Squad:
         ship_mass = [(s, s.mass) for s in self.adversaries]
         ship_mass.sort(key=lambda tup: tup[1], reverse=True)
         return [s[0] for s in ship_mass]
+
+    def highest_minerals(self):
+        asteroid_minerals = [(a, a.concentration) for a in self.asteroids]
+        asteroid_minerals.sort(key=lambda tup: tup[1], reverse=True)
+        return [a[0] for a in asteroid_minerals][0]  # Just returning the top asteroid
+
+    def closest_asteroid(self, ship):
+        ast_distance = [(a, force_utils.distance_between(ship, a)) for a in self.asteroids]
+        ast_distance.sort(key=lambda tup: tup[1])
+        return [s[0] for s in ast_distance][0]  # Just returning the nearest asteroid
+
+    def best_asteroid(self, ship):
+        """Combination of Distance and Minerals"""
+        _distance = [force_utils.distance_between(ship, a) for a in self.asteroids]
+        best_asteroid = [(a, a.concentration/d) for a, d in zip(self.asteroids, _distance)]
+        best_asteroid.sort(key=lambda tup: tup[1], reverse=True)
+        best = [a[0] for a in best_asteroid][0]  # Just returning the top asteroid
+        return best if best.concentration else None
 
     def highest_threat(self):
         """Combination of Distance and Threat"""

@@ -2,7 +2,7 @@
     "mission_0": {
         "title": "Mission 0: Lonely",
         "event_sequence": [
-            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "asteroid"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 12}}}
         ],
          "test_squads": [
@@ -16,7 +16,7 @@
         "title": "Mission 1: Drones are Great",
         "event_sequence": [
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
-            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "asteroid"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 12}}}
         ],
          "test_squads": [
@@ -37,7 +37,7 @@
         "title": "Mission 2: Drones are Tough but have Limited Range",
         "event_sequence": [
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
-            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "asteroid"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 2}}},
             {"time": 15, "event_info": {"squad": {"type": "spitter", "count": 2}}},
             {"time": 20, "event_info": {"squad": {"type": "zergling", "count": 4}}}
@@ -60,7 +60,7 @@
         "title": "Mission 3: Fighters are your Friends",
         "event_sequence": [
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
-            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "asteroid"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 4}}},
             {"time": 15, "event_info": {"squad": {"type": "spitter", "count": 2}}},
             {"time": 20, "event_info": {"squad": {"type": "zergling", "count": 8}}}
@@ -83,7 +83,7 @@
         "title": "Mission 4: Feeling the Pain",
         "event_sequence": [
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
-            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "asteroid"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 4}}},
             {"time": 15, "event_info": {"squad": {"type": "spitter", "count": 5}}},
             {"time": 25, "event_info": {"squad": {"type": "zergling", "count": 8}}}
@@ -106,7 +106,7 @@
         "title": "Mission 5: Healers are Handy",
         "event_sequence": [
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
-            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "asteroid"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 4}}},
             {"time": 15, "event_info": {"squad": {"type": "spitter", "count": 5}}},
             {"time": 25, "event_info": {"squad": {"type": "zergling", "count": 8}}}
@@ -129,7 +129,7 @@
         "title": "Mission 6: Fighters aren't Tanks",
         "event_sequence": [
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
-            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "asteroid"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 8}}},
             {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 4}}},
             {"time": 11, "event_info": {"squad": {"type": "spitter", "count": 2}}},
@@ -153,7 +153,7 @@
         "title": "Mission 7: Tanks are Tanks",
         "event_sequence": [
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
-            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "asteroid"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 8}}},
             {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 4}}},
             {"time": 11, "event_info": {"squad": {"type": "spitter", "count": 2}}},
@@ -178,7 +178,7 @@
         "title": "Mission 8: Tanks have Limits",
         "event_sequence": [
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
-            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "asteroid"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 20}}},
             {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 5}}},
             {"time": 13, "event_info": {"squad": {"type": "mega_bug", "count": 1}}}
@@ -202,7 +202,7 @@
         "title": "Mission 9: Double Heals for the Win",
         "event_sequence": [
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
-            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "asteroid"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 20}}},
             {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 5}}},
             {"time": 13, "event_info": {"squad": {"type": "mega_bug", "count": 1}}}
@@ -226,7 +226,7 @@
         "title": "Mission 10: Double DPS for the Win",
         "event_sequence": [
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
-            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "asteroid"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 20}}},
             {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 5}}},
             {"time": 13, "event_info": {"squad": {"type": "mega_bug", "count": 1}}}
@@ -250,7 +250,7 @@
         "title": "Mission 11: Zerg Crunch",
         "event_sequence": [
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
-            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "asteroid"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 8}}},
             {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 2}}},
             {"time": 15, "event_info": {"squad": {"type": "spitter", "count": 3}}},
@@ -279,7 +279,6 @@
         "title": "Mission 12: Drones = Zerg Counter",
         "event_sequence": [
             {"time": 0, "event_info": {"protect": {"miner_drones": {"target": "miner", "distance": 30}}}},
-            {"time": 2, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 8}}},
             {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 2}}},
             {"time": 15, "event_info": {"squad": {"type": "spitter", "count": 3}}},
@@ -310,7 +309,7 @@
         "title": "Mission 13: Fighters = Zerg Counter",
         "event_sequence": [
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
-            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "asteroid"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 8}}},
             {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 2}}},
             {"time": 15, "event_info": {"squad": {"type": "spitter", "count": 3}}},
@@ -338,7 +337,7 @@
         "title": "Mission 14: Torps=good against Big enemies",
         "event_sequence": [
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
-            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "asteroid"}}}},
             {"time": 10, "event_info": {"squad": {"type": "mega_bug", "count": 3, "level":2}}}
         ],
          "test_squads": [
@@ -359,7 +358,7 @@
         "title": "Mission 15: Torps=bad against Zerglings",
         "event_sequence": [
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
-            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "asteroid"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 30, "targeting": "nearest", "level":2}}},
             {"time": 11, "event_info": {"squad": {"type": "zergling", "count": 30, "targeting": "nearest","level":2}}},
             {"time": 12, "event_info": {"squad": {"type": "zergling", "count": 30, "targeting": "nearest","level":2}}}
@@ -382,7 +381,7 @@
         "title": "Mission 16: Drones are good against Zerglings",
         "event_sequence": [
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
-            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "asteroid"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 20, "level":2}}},
             {"time": 15, "event_info": {"squad": {"type": "zergling", "count": 20, "level":2}}},
             {"time": 20, "event_info": {"squad": {"type": "zergling", "count": 20, "level":2}}}
@@ -406,7 +405,7 @@
         "title": "Mission 17: Drones are bad against Big Enemies",
         "event_sequence": [
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
-            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "asteroid"}}}},
             {"time": 10, "event_info": {"squad": {"type": "mega_bug", "count": 2, "level":2}}},
             {"time": 15, "event_info": {"squad": {"type": "mega_bug", "count": 2, "level":2}}}
         ],
@@ -429,13 +428,12 @@
         "title": "Mission 18: Waves",
         "event_sequence": [
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
-            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
-            {"time": 10, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.9, "level": 2}}},
-            {"time": 20, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.0, "level": 2}}},
-            {"time": 30, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.1, "level": 2}}},
-            {"time": 40, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.2, "level": 2}}},
-            {"time": 50, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.2, "level": 2}}},
-            {"time": 60, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.2, "level": 2}}}
+            {"time": 10, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.5, "level": 2}}},
+            {"time": 25, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.6, "level": 2}}},
+            {"time": 40, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.7, "level": 2}}},
+            {"time": 55, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.8, "level": 2}}},
+            {"time": 70, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.9, "level": 2}}},
+            {"time": 85, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.0, "level": 2}}}
         ],
          "test_squads": [
             {
@@ -457,7 +455,7 @@
         "title": "Mission 101: Just Zerg",
         "event_sequence": [
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
-            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "asteroid"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 20, "level":2}}},
             {"time": 15, "event_info": {"squad": {"type": "zergling", "count": 20, "level":2}}},
             {"time": 20, "event_info": {"squad": {"type": "zergling", "count": 20, "level":2}}}
@@ -481,7 +479,7 @@
         "title": "Mission 142: Experimental",
         "event_sequence": [
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
-            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "planet"}}}},
+            {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "asteroid"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 8, "level":2}}},
             {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 2, "level":2}}},
             {"time": 10, "event_info": {"squad": {"type": "mega_bug", "count": 1, "level":2}}},

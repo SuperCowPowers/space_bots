@@ -6,7 +6,7 @@ from queue import Queue
 
 # Local Imports
 from space_bots import squad
-from space_bots.planet import Planet
+from space_bots.asteroid import Asteroid
 from space_bots.ships import drone, miner, healer, tank, fighter
 from space_bots.ships import zergling, ship
 
@@ -22,7 +22,7 @@ class MissionPlanner:
         self.test_squads = None
         self.test_squads_pos = (300, 500)
         self.zerg_pos = (1100, 700)
-        self.mission_planet = None
+        self.mission_asteroid = None
         self.mission_begin_time = None
         self.event_queue = Queue()
 
@@ -36,9 +36,9 @@ class MissionPlanner:
         mission_name = f"mission_{mission_level}"
         self.current_mission = self.mission_specs[mission_name]
 
-        # FIXME: Planets should be part of the mission specifications
-        self.mission_planet = Planet(self.universe.game_engine, x=600, y=400)
-        self.universe.add_planet(self.mission_planet)
+        # FIXME: Asteroids should be part of the mission specifications
+        self.mission_asteroid = Asteroid(self.universe.game_engine, x=600, y=400)
+        self.universe.add_asteroid(self.mission_asteroid)
 
         # Do we want some test squads for this mission?
         if test_squads:
@@ -105,14 +105,14 @@ class MissionPlanner:
         """Internal: Get the current mission and pull out focus (protect or attack) orders"""
 
         # This code is a bit wonky, we want flexibility in protection/attack orders
-        # So for the target we need to go through planets, squads and ships to see what they want
+        # So for the target we need to go through asteroids, squads and ships to see what they want
 
         # Get the source
         source = self._get_squad(source_name)
 
-        # Get the target (planet, squad or ship)
-        if target_name == 'planet':
-            target = self.mission_planet
+        # Get the target (asteroid, squad or ship)
+        if target_name == 'asteroid':
+            target = self.mission_asteroid
         else:
             # The Target might be a Squad
             target = self._get_squad(target_name)

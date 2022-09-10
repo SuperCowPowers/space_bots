@@ -22,8 +22,7 @@ class Fighter(ship.Ship):
 
         # Weapons
         self.laser_guns = laser_guns.LaserGuns(self, mount_points=2)  # Twin Laser :)
-        self.torp_launcher = weapon.NoWeapon(self)  # An Empty Weapon (can be filled in by subclasses)
-        # self.torp_launcher.set_deployment(self.p.max_torps, level, min_capacitor=10)
+        self.torp_launcher = weapon.NoWeapon(self)
 
     def update(self):
         """Update the Ship"""
@@ -48,7 +47,7 @@ class Fighter(ship.Ship):
 # Simple test of the Fighter functionality
 def test():
     """Test for Fighter Class"""
-    from space_bots import game_engine_adapter, planet
+    from space_bots import game_engine_adapter, asteroid
     from space_bots.universe import Universe
     from space_bots.ships.ship import Ship
     from space_bots.ships.healer import Healer
@@ -62,9 +61,9 @@ def test():
     # Give the universe the game engine
     my_universe.set_game_engine(my_game_engine)
 
-    # Create a Planet
-    my_planet = planet.Planet(my_game_engine, 700, 400)
-    my_universe.add_planet(my_planet)
+    # Create a Asteroid
+    my_asteroid = asteroid.Asteroid(my_game_engine, 700, 400)
+    my_universe.add_asteroid(my_asteroid)
 
     # Create a Fighter, Healer, and Zerg Ship
     fighter = Fighter(my_game_engine, 300, 400)

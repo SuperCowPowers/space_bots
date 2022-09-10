@@ -122,7 +122,7 @@ class TorpLauncher(weapon.Weapon):
 # Simple test of the TorpLauncher functionality
 def test():
     """Test for TorpLauncher Class"""
-    from space_bots import game_engine_adapter, planet
+    from space_bots import game_engine_adapter, asteroid
     from space_bots.universe import Universe
     from space_bots.ships.ship import Ship
     from space_bots.ships.tank import Tank
@@ -137,9 +137,9 @@ def test():
     # Give the universe the game engine
     my_universe.set_game_engine(my_game_engine)
 
-    # Create a Planet
-    my_planet = planet.Planet(my_game_engine, 600, 300)
-    my_universe.add_planet(my_planet)
+    # Create a Asteroid
+    my_asteroid = asteroid.Asteroid(my_game_engine, 600, 300)
+    my_universe.add_asteroid(my_asteroid)
 
     # Create a Tank, healer, and fire some Torps
     tank = Tank(my_game_engine, 300, 600)

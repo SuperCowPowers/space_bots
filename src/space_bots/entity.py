@@ -1,4 +1,4 @@
-"""Entity: Abstract Base Class for all collidable/movable objects (ships, planets, etc)"""
+"""Entity: Abstract Base Class for all collidable/movable objects (ships, asteroids, etc)"""
 from abc import ABC, abstractmethod
 
 # Local Imports
@@ -6,7 +6,7 @@ from space_bots.utils import force_utils
 
 
 class Entity(ABC):
-    """Entity: Abstract Base Class for all collidable/movable objects (ships, planets, etc)"""
+    """Entity: Abstract Base Class for all collidable/movable objects (ships, asteroids, etc)"""
     def __init__(self, game_engine, x=500, y=500, speed=0.1, mass=10, collision_radius=10):
         self.game_engine = game_engine
         self.x = x

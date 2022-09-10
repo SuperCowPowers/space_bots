@@ -77,7 +77,7 @@ class Healer(ship.Ship):
 # Simple test of the Healer functionality
 def test():
     """Test for Healer Class"""
-    from space_bots import game_engine_adapter, planet
+    from space_bots import game_engine_adapter, asteroid
     from space_bots.universe import Universe
     from space_bots.ships.miner import Miner
 
@@ -90,9 +90,9 @@ def test():
     # Give the universe the game engine
     my_universe.set_game_engine(my_game_engine)
 
-    # Create a Planet
-    my_planet = planet.Planet(my_game_engine, 500, 500)
-    my_universe.add_planet(my_planet)
+    # Create a Asteroid
+    my_asteroid = asteroid.Asteroid(my_game_engine, 500, 500)
+    my_universe.add_asteroid(my_asteroid)
 
     # Create a Healer ship and a Miner Ship
     healer_ship = Healer(my_game_engine, 300, 300)
