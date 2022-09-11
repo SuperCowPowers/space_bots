@@ -126,7 +126,7 @@ ship_specs = {
          'radius': 6,
          'hp': 50,
          'shield': 30,
-         'laser_range': 60,
+         'laser_range': 70,
          'laser_damage': 0.03,
          'laser_width': 2,
          'laser_heat': 1.1,
