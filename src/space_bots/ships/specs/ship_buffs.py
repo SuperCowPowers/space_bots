@@ -6,7 +6,7 @@ ship_buffs = {
          'display': False
          },
     'iron_will':
-        {'effects': {'incoming_damage_modifier': 0.5},
+        {'effects': {'incoming_damage_modifier': 0.75},
          'display': True,
          'timer': 3,
          'color': (60, 60, 220)

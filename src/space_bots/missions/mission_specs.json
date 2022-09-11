@@ -343,7 +343,7 @@
          "test_squads": [
             {
                 "name": "miner_squad",
-                "ships": [{"type":"healer", "level": 2}, {"type":"miner", "level": 1},
+                "ships": [{"type":"healer", "level": 1}, {"type":"miner", "level": 1},
                      {"type":"fighter", "level": 2}, {"type":"tank", "level": 2}]
             },
             {
@@ -366,7 +366,7 @@
          "test_squads": [
             {
                 "name": "miner_squad",
-                "ships": [{"type":"healer", "level": 2}, {"type":"miner", "level": 1},
+                "ships": [{"type":"healer", "level": 1}, {"type":"miner", "level": 1},
                      {"type":"fighter", "level": 2}, {"type":"tank", "level": 2}]
             },
             {
