@@ -84,7 +84,7 @@
         "event_sequence": [
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
             {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "asteroid"}}}},
-            {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 4}}},
+            {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 8}}},
             {"time": 15, "event_info": {"squad": {"type": "spitter", "count": 5}}},
             {"time": 25, "event_info": {"squad": {"type": "zergling", "count": 8}}}
         ],
@@ -107,7 +107,7 @@
         "event_sequence": [
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
             {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "asteroid"}}}},
-            {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 4}}},
+            {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 8}}},
             {"time": 15, "event_info": {"squad": {"type": "spitter", "count": 5}}},
             {"time": 25, "event_info": {"squad": {"type": "zergling", "count": 8}}}
         ],
@@ -131,7 +131,7 @@
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
             {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "asteroid"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 8}}},
-            {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 4}}},
+            {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 6}}},
             {"time": 11, "event_info": {"squad": {"type": "spitter", "count": 2}}},
             {"time": 15, "event_info": {"squad": {"type": "zergling", "count": 8}}}
         ],
@@ -155,7 +155,7 @@
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
             {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "asteroid"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 8}}},
-            {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 4}}},
+            {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 6}}},
             {"time": 11, "event_info": {"squad": {"type": "spitter", "count": 2}}},
             {"time": 15, "event_info": {"squad": {"type": "zergling", "count": 8}}}
         ],
@@ -181,7 +181,7 @@
             {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "asteroid"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 20}}},
             {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 5}}},
-            {"time": 13, "event_info": {"squad": {"type": "mega_bug", "count": 1}}}
+            {"time": 13, "event_info": {"squad": {"type": "mega_bug", "count": 2}}}
         ],
          "test_squads": [
             {
@@ -205,7 +205,7 @@
             {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "asteroid"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 20}}},
             {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 5}}},
-            {"time": 13, "event_info": {"squad": {"type": "mega_bug", "count": 1}}}
+            {"time": 13, "event_info": {"squad": {"type": "mega_bug", "count": 2}}}
         ],
          "test_squads": [
             {
@@ -229,7 +229,7 @@
             {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "asteroid"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 20}}},
             {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 5}}},
-            {"time": 13, "event_info": {"squad": {"type": "mega_bug", "count": 1}}}
+            {"time": 13, "event_info": {"squad": {"type": "mega_bug", "count": 2}}}
         ],
          "test_squads": [
             {

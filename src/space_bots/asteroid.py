@@ -29,8 +29,8 @@ class Asteroid(entity.Entity):
         self.image_y = self.y - self.image_offset_y
 
         # Set additional asteroid attributes
-        self.force_x = randint(-100, 100)
-        self.force_y = randint(-100, 100)
+        self.force_x = randint(-2000, 2000)
+        self.force_y = randint(-2000, 2000)
         self.force_damp = 1.0
         self.mineral = mineral
         self.concentration = randint(0, concentration)

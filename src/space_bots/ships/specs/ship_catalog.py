@@ -24,7 +24,7 @@ ship_specs = {
     'healer':
         {'color': (100, 200, 100),
          'mass': 300,
-         'speed': 0.25,
+         'speed': 0.3,
          'radius': 14,
          'hp': 150,
          'shield': 100,
@@ -43,7 +43,7 @@ ship_specs = {
     'fighter':
         {'color': (180, 60, 200),
          'mass': 400,
-         'speed': 0.2,
+         'speed': 0.25,
          'radius': 16,
          'hp': 200,
          'shield': 150,
@@ -63,7 +63,7 @@ ship_specs = {
     'miner':
         {'color': (180, 160, 60),
          'mass': 500,
-         'speed': 0.5,
+         'speed': 0.3,
          'radius': 12,
          'hp': 200,
          'shield': 150,

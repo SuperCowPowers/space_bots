@@ -2,6 +2,7 @@
 import os
 import json
 import time
+from random import randint
 from queue import Queue
 
 # Local Imports
@@ -36,9 +37,10 @@ class MissionPlanner:
         mission_name = f"mission_{mission_level}"
         self.current_mission = self.mission_specs[mission_name]
 
-        # FIXME: Asteroids should be part of the mission specifications
-        self.mission_asteroid = Asteroid(self.universe.game_engine, x=600, y=400)
-        self.universe.add_asteroid(self.mission_asteroid)
+        # Add some asteroids
+        for _ in range(8):
+            my_asteroid = Asteroid(self.universe.game_engine, x=randint(300, 1200), y=randint(200, 700))
+            self.universe.add_asteroid(my_asteroid)
 
         # Do we want some test squads for this mission?
         if test_squads:
@@ -224,7 +226,7 @@ def test():
 
     # Get the Universe Mission Planner
     my_mission = my_universe.mission_planner
-    my_mission.set_mission(12, test_squads=True)
+    my_mission.set_mission(13, test_squads=True)
 
     # Invoke the event loop
     my_game_engine.event_loop()
