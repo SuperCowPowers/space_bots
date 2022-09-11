@@ -2,7 +2,7 @@
 
 # Note: This class should be refactored to handle additional backends at some point
 #       Right now it's pygame specific, but later we'll have more options
-
+import os
 import pygame
 
 # Local imports
@@ -34,6 +34,13 @@ class GameEngineAdapter:
 
         # Clock
         self.clock = pygame.time.Clock()
+
+        # Background Image
+        try:
+            image_path = os.path.join(os.path.dirname(__file__), 'images/space_background.png')
+            self.background_image = self.image_load(image_path, width, height).convert()
+        except FileNotFoundError:
+            self.background_image = None
 
         # Universe has 3 callbacks (communicate(), update() and draw()
         self.universe = universe
@@ -99,9 +106,10 @@ class GameEngineAdapter:
     def draw_polygon(self, color, points, width=3):
         pygame.draw.polygon(self.screen, color, points, width)
 
-    def draw_text(self, text, color=(140, 200, 140)):
+    def draw_text(self, text, color=(140, 200, 140), pos='bottom'):
+        pos = (450, 80) if pos == 'top' else (450, self.height-80)
         img = self.font.render(text, True, color)
-        self.screen.blit(img, (450, self.height-80))
+        self.screen.blit(img, pos)
 
     @staticmethod
     def image_load(image_file, x_size=0, y_size=0):
@@ -114,7 +122,10 @@ class GameEngineAdapter:
         self.screen.blit(image, (x, y))
 
     def draw_background(self):
-        self.screen.fill(self.background_color)
+        if self.background_image:
+            self.screen.blit(self.background_image, (0, 0))
+        else:
+            self.screen.fill(self.background_color)
 
     def check_for_quit(self):
         """Check if the user/application wants to quit"""

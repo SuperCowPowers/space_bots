@@ -164,7 +164,7 @@ class Squad:
                 self.first_combat = False
 
         # Squad Zenite Extracted and Damage Taken
-        zenite_market_price = 100
+        zenite_market_price = 3000
         repair_unit_cost = 50
         zenite_worth = self.total_zenite*zenite_market_price / 1000.0
         repair_cost = self.total_damage*repair_unit_cost / 1000.0
@@ -173,9 +173,9 @@ class Squad:
         net = zenite_worth - repair_cost
         total = f' = ${net:.1f}k'
 
-        # FIXME: Not currently using this
+        # Display the current mission income
         display_text = zenite + repairs + total
-        # comms.display('mission_info', display_text)
+        comms.display('mission_info', display_text)
 
         # Also communicate any queued announcer messages
         while not self.announcer_messages.empty():
@@ -215,15 +215,15 @@ class Squad:
         squad_radius = 50 + len(group_ships) * 10
         for _ship in self.ships:
             (_, _), (dx, dy) = force_utils.attraction_forces(self, _ship, squad_radius)
-            _ship.force_x += dx * .5
-            _ship.force_y += dy * .5
+            _ship.force_x += dx * .25
+            _ship.force_y += dy * .25
 
         # Protecting an Asset
         if self.protection_asset:
             for _ship in self.ships:
                 (_, _), (dx, dy) = force_utils.attraction_forces(self.protection_asset, _ship, self.protection_distance)
-                _ship.force_x += dx
-                _ship.force_y += dy
+                _ship.force_x += dx * .5
+                _ship.force_y += dy * .5
 
         # Update each ship
         for _ship in self.ships:

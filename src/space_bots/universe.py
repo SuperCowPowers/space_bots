@@ -43,7 +43,8 @@ class Universe:
         self.is_finalized = False
         self.initial_count_down = False
         self.wave_over = False
-        self.current_text = None
+        self.top_text = None
+        self.bottom_text = None
         self.squads_buffed = False
 
         # Universal Battle Info and Buff Manager
@@ -141,7 +142,7 @@ class Universe:
 
         # Display info/stats
         for display_text in self.comms.get_messages('display'):
-            self.current_text = display_text
+            self.bottom_text = display_text
 
         # Log messages sent to the universe
         for message in self.comms.get_messages('universe'):
@@ -227,8 +228,10 @@ class Universe:
             asteroid.draw()
 
         # Draw Text
-        if self.current_text:
-            self.game_engine.draw_text(self.current_text)
+        if self.top_text:
+            self.game_engine.draw_text(self.top_text, pos='top')
+        if self.bottom_text:
+            self.game_engine.draw_text(self.bottom_text)
 
         # Countdown timer
         if self.initial_count_down:

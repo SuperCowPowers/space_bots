@@ -40,7 +40,7 @@ class Tank(ship.Ship):
         # General updates
         self.general_ship_updates()
         self.general_targeting()
-        self.general_target_movement(aggressive=1.0)
+        self.general_target_movement(aggressive=2.0)
 
         # Track the lowest health TeamMate
         self.protect_target = self.battle_info.lowest_health_teammate(self)

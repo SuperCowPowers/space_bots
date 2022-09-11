@@ -60,8 +60,8 @@ class Miner(ship.Ship):
         # Move toward the mining asteroid
         if self.mining_asteroid:
             (_, _), (dx, dy) = force_utils.attraction_forces(self.mining_asteroid, self, self.p.laser_range/1.3)
-            self.force_x += dx * 3
-            self.force_y += dy * 3
+            self.force_x += dx * 2
+            self.force_y += dy * 2
 
         # Let Squad know my Zenite Yield
         self.squad.total_zenite += self.mining_yield

@@ -1,16 +1,24 @@
 """Asteroid: Class for the Asteroids in Space Bots"""
 import os
 import math
-from random import random, randint
+from random import randint, choice
 
 # Local Imports
 from space_bots import entity
 
 
+# FIXME
+minerals = {'blue': (140, 140, 255),
+            'green': (120, 220, 120),
+            'yellow': (210, 240, 100),
+            'orange': (255, 200, 80)
+            }
+
+
 class Asteroid(entity.Entity):
     """Asteroid: Class for the Asteroids in Space Bots"""
 
-    def __init__(self, game_engine, x, y, mineral='blue', concentration=50):
+    def __init__(self, game_engine, x, y, mineral='blue', concentration=30):
 
         # Set attributes needed for super class
         self.radius = 35  # Hard coded for now
@@ -21,7 +29,7 @@ class Asteroid(entity.Entity):
 
         # Grab our asteroid image
         image_path = os.path.join(os.path.dirname(__file__), 'images/planet_brown.png')
-        self.asteroid_image = game_engine.image_load(image_path, 80, 80)
+        self.asteroid_image = game_engine.image_load(image_path)
         self.img_width, self.img_height = self.asteroid_image.get_size()
         self.image_offset_x = self.img_width/2
         self.image_offset_y = self.img_height/2
@@ -29,11 +37,11 @@ class Asteroid(entity.Entity):
         self.image_y = self.y - self.image_offset_y
 
         # Set additional asteroid attributes
-        self.force_x = randint(-2000, 2000)
-        self.force_y = randint(-2000, 2000)
+        self.force_x = randint(-200, 200)
+        self.force_y = randint(-200, 200)
         self.force_damp = 1.0
-        self.mineral = mineral
-        self.concentration = randint(0, concentration)
+        self.mineral = minerals[choice(list(minerals.keys()))]
+        self.concentration = randint(10, concentration)
 
         # Precompute mineral locations
         self.mineral_locations = self.precompute_minerals()
@@ -51,10 +59,16 @@ class Asteroid(entity.Entity):
     def precompute_minerals(self):
         """Precompute Mineral positions"""
         positions = []
-        mineral_radius = self.radius/1.3
+        mineral_radius = self.radius/1.4
+        alpha = 0
+        radius = 1
+        alpha_delta = 2.0 * math.pi / 6
+        radius_delta = mineral_radius / 25
         for _ in range(self.concentration):
-            alpha = 2 * math.pi * random()  # Random Angle
-            radius = mineral_radius * random()  # Random Radius
+            alpha += alpha_delta
+            alpha_delta *= .95
+            radius += radius_delta
+            radius_delta *= .95
             x = radius * math.cos(alpha)
             y = radius * math.sin(alpha)
             positions.append((x, y))
@@ -79,7 +93,7 @@ class Asteroid(entity.Entity):
         """Draw the entire Asteroid"""
         self.draw_asteroid()
         self.draw_minerals()
-        self.draw_glow()
+        self.draw_outline()
 
     def draw_asteroid(self):
         """Draw the Asteroid Icon"""
@@ -88,11 +102,11 @@ class Asteroid(entity.Entity):
     def draw_minerals(self):
         """Draw the minerals for this asteroid"""
         for pos in self.mineral_locations[:int(self.concentration)]:
-            self.game_engine.draw_mineral((120, 120, 255), (self.x+pos[0], self.y+pos[1]), radius=4)
+            self.game_engine.draw_mineral(self.mineral, (self.x+pos[0], self.y+pos[1]), radius=5)
 
-    def draw_glow(self):
-        """Draw the Asteroid Glow"""
-        self.game_engine.draw_circle((120, 120, 255), (self.x-1, self.y), self.radius, width=3)
+    def draw_outline(self):
+        """Draw the Asteroid Outline"""
+        self.game_engine.draw_circle((0, 0, 0), (self.x, self.y), self.radius-1, width=2)
 
 
 # Simple test of the Asteroid functionality

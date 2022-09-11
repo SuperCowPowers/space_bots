@@ -433,7 +433,9 @@
             {"time": 40, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.7, "level": 2}}},
             {"time": 55, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.8, "level": 2}}},
             {"time": 70, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.9, "level": 2}}},
-            {"time": 85, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.0, "level": 2}}}
+            {"time": 85, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.0, "level": 2}}},
+            {"time": 100, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.1, "level": 2}}},
+            {"time": 115, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.2, "level": 2}}}
         ],
          "test_squads": [
             {

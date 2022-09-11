@@ -51,7 +51,7 @@ class MissionPlanner:
             self.event_queue.put(event)
 
         # Set the Universe Text
-        self.universe.current_text = self.current_mission['title']
+        self.universe.top_text = self.current_mission['title']
 
     def buff_squads(self):
         self.universe.game_engine.restricted_announce('power_cord_d', None)
