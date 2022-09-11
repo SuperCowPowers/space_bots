@@ -443,6 +443,7 @@
     },
      "mission_18": {
         "title": "Mission 18: Waves",
+         "minerals": 30,
         "event_sequence": [
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
             {"time": 10, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.5, "level": 2}}},

@@ -274,7 +274,7 @@ class Squad:
     def best_asteroid(self, ship):
         """Combination of Distance and Minerals"""
         _distance = [force_utils.distance_between(ship, a) for a in self.asteroids]
-        best_asteroid = [(a, 1e-6*a.concentration/d) for a, d in zip(self.asteroids, _distance)]
+        best_asteroid = [(a, a.concentration/(d*d)) for a, d in zip(self.asteroids, _distance)]
         best_asteroid.sort(key=lambda tup: tup[1], reverse=True)
         best = [a[0] for a in best_asteroid][0]  # Just returning the top asteroid
         return best if best.concentration else None

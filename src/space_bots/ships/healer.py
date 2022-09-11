@@ -28,12 +28,12 @@ class Healer(ship.Ship):
 
         # General updates
         self.general_ship_updates()
-        self.general_avoidance()  # Healer needs to avoid enemies
+        self.general_avoidance(passive=2.0)  # Healer needs to avoid enemies
 
         # Get the lowest health TeamMate and move towards them
         self.healing_target = self.battle_info.lowest_health_teammate(self)
         if self.healing_target and self.healing_target != self:
-            (_, _), (dx, dy) = force_utils.attraction_forces(self.healing_target, self, self.p.laser_range - 10)
+            (_, _), (dx, dy) = force_utils.attraction_forces(self.healing_target, self, self.p.laser_range/1.2)
             self.force_x += dx
             self.force_y += dy
 
