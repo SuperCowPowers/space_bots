@@ -24,7 +24,7 @@ ship_specs = {
     'healer':
         {'color': (100, 200, 100),
          'mass': 300,
-         'speed': 0.3,
+         'speed': 0.4,
          'radius': 14,
          'hp': 150,
          'shield': 100,
