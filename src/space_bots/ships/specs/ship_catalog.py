@@ -63,7 +63,7 @@ ship_specs = {
     'miner':
         {'color': (180, 160, 60),
          'mass': 500,
-         'speed': 0.3,
+         'speed': 0.4,
          'radius': 12,
          'hp': 200,
          'shield': 150,
@@ -142,7 +142,7 @@ ship_specs = {
     'spitter':
         {'color': (180, 100, 80),
          'mass': 300,
-         'speed': 0.25,
+         'speed': 0.4,
          'radius': 14,
          'hp': 150,
          'shield': 100,
@@ -161,7 +161,7 @@ ship_specs = {
     'berserker':
         {'color': (160, 60, 60),
          'mass': 400,
-         'speed': 0.2,
+         'speed': 0.4,
          'radius': 16,
          'hp': 200,
          'shield': 150,

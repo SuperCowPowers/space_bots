@@ -38,8 +38,9 @@ class MissionPlanner:
         self.current_mission = self.mission_specs[mission_name]
 
         # Add some asteroids
+        minerals = self.current_mission.get('minerals', 10)
         for _ in range(8):
-            my_asteroid = Asteroid(self.universe.game_engine, x=randint(300, 1200), y=randint(200, 700))
+            my_asteroid = Asteroid(self.universe.game_engine, randint(300, 1200), randint(200, 700), minerals)
             self.universe.add_asteroid(my_asteroid)
 
         # Do we want some test squads for this mission?
@@ -226,7 +227,7 @@ def test():
 
     # Get the Universe Mission Planner
     my_mission = my_universe.mission_planner
-    my_mission.set_mission(18, test_squads=True)
+    my_mission.set_mission(11, test_squads=True)
 
     # Invoke the event loop
     my_game_engine.event_loop()

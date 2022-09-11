@@ -8,17 +8,17 @@ from space_bots import entity
 
 
 # FIXME
-minerals = {'blue': (140, 140, 255),
-            'green': (120, 220, 120),
-            'yellow': (210, 240, 100),
-            'orange': (255, 200, 80)
-            }
+mineral_colors = {'blue': (140, 140, 255),
+                  'green': (120, 220, 120),
+                  'yellow': (210, 240, 100),
+                  'orange': (255, 200, 80)
+                  }
 
 
 class Asteroid(entity.Entity):
     """Asteroid: Class for the Asteroids in Space Bots"""
 
-    def __init__(self, game_engine, x, y, mineral='blue', concentration=30):
+    def __init__(self, game_engine, x, y, minerals=50):
 
         # Set attributes needed for super class
         self.radius = 35  # Hard coded for now
@@ -40,8 +40,8 @@ class Asteroid(entity.Entity):
         self.force_x = randint(-200, 200)
         self.force_y = randint(-200, 200)
         self.force_damp = 1.0
-        self.mineral = minerals[choice(list(minerals.keys()))]
-        self.concentration = randint(10, concentration)
+        self.mineral = mineral_colors[choice(list(mineral_colors.keys()))]
+        self.concentration = randint(1, minerals)
 
         # Precompute mineral locations
         self.mineral_locations = self.precompute_minerals()
