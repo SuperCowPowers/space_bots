@@ -63,7 +63,7 @@ class TorpLauncher(weapon.Weapon):
             return
 
         # Only launch half if target at low health
-        launch = int(self.max_torps/2) if target.low_health() else self.max_torps
+        launch = self.max_torps  # FIXME: int(self.max_torps/2) if target.low_health() else self.max_torps
 
         # Fire Torps (by setting the active target)
         if self.fully_loaded():

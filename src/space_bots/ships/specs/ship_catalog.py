@@ -28,7 +28,7 @@ ship_specs = {
          'radius': 14,
          'hp': 150,
          'shield': 100,
-         'laser_range': 140,
+         'laser_range': 150,
          'laser_damage': 0.2,  # Healing
          'laser_width': 4,
          'capacitor': 20,
@@ -84,8 +84,8 @@ ship_specs = {
          'mass': 150,
          'speed': 0.6,
          'radius': 7,
-         'hp': 60,
-         'shield': 50,
+         'hp': 70,
+         'shield': 70,
          'laser_range': 80,
          'laser_damage': 0.2,
          'laser_width': 2,
@@ -142,7 +142,7 @@ ship_specs = {
     'spitter':
         {'color': (180, 100, 80),
          'mass': 300,
-         'speed': 0.4,
+         'speed': 0.5,
          'radius': 14,
          'hp': 150,
          'shield': 100,
@@ -180,7 +180,7 @@ ship_specs = {
     'mega_bug':
         {'color': (140, 60, 80),
          'mass': 800,
-         'speed': 1.0,
+         'speed': 0.8,
          'radius': 20,
          'hp': 800,
          'shield': 500,
