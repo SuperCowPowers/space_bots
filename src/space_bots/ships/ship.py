@@ -31,6 +31,25 @@ class Ship(entity.Entity):
         #       in the future we'll play with cap limits/tradeoffs
         self.p.cap_recharge = 1
 
+        # Level Upgrades (General: Each ship can customize these)
+        #
+        # Lasers (Miners/Healer use these but in a different way)
+        self.p.laser_damage *= self.level
+        self.p.laser_range *= (0.9 + self.level/10.0)
+        self.p.laser_width = int(self.p.laser_width * (0.9 + self.level/10.0))
+        #
+        # Ship HP/Size
+        self.p.hp *= (0.8 + self.level/5.0)
+        self.p.shield *= (0.8 + self.level/5.0)
+        # self.p.radius = int(self.p.radius * (0.9 + self.level/10.0))
+        self.s.hp = self.p.hp
+        self.s.shield = self.p.shield
+        #
+        # NanoBot Recharge Rates
+        self.p.shield_recharge *= (0.8 + self.level/5.0)
+        self.p.hull_recharge *= (0.8 + self.level/5.0)
+        self.p.cap_recharge *= (0.8 + self.level/5.0)
+
         # Battle State/Reconnaissance
         self.battle_info = None
         self.self_buffs = []

@@ -10,15 +10,14 @@ class Drone(ship.Ship):
     def __init__(self, game_engine, x=300, y=300, level=1):
 
         # Call SuperClass (Entity) Initialization
-        super().__init__(game_engine, x, y, ship_type='drone')
+        super().__init__(game_engine, x, y, ship_type='drone', level=level)
 
         # Drone specific stuff
         self.protect_asset = None
         self.p.damage_modifier = 0.5  # 50% reduction (reflection science)
 
         # Drone Level adjustments
-        self.level = level
-        self.p.laser_damage *= self.level*self.level  # Hee Hee
+        pass
 
     def update(self):
         """Update the Drone"""

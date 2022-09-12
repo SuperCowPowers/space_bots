@@ -9,7 +9,7 @@ class Zergling(ship.Ship):
     def __init__(self, game_engine, x=300, y=300, level=1):
 
         # Call SuperClass (Entity) Initialization
-        super().__init__(game_engine, x, y, ship_type='zergling')
+        super().__init__(game_engine, x, y, ship_type='zergling', level=level)
 
         # Zergling specific stuff
         self.protect_asset = None
@@ -17,8 +17,7 @@ class Zergling(ship.Ship):
         self.p.collision_radius = 2.0  # Small collision radius helps avoid Torps
 
         # Zergling Level adjustments
-        self.level = level
-        self.p.laser_damage *= self.level
+        pass
 
         # Zerglings are 'frenzied'
         self.force_damp = 0.998

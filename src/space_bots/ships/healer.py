@@ -10,7 +10,7 @@ class Healer(ship.Ship):
     def __init__(self, game_engine, x=300, y=300, level=1):
 
         # Call SuperClass (Entity) Initialization
-        super().__init__(game_engine, x, y, ship_type='healer')
+        super().__init__(game_engine, x, y, ship_type='healer', level=level)
 
         # Healer specific stuff
         self.healing_target = None
@@ -20,8 +20,7 @@ class Healer(ship.Ship):
         self.laser_guns = weapon.NoWeapon(self)  # Healer don't have lasers
 
         # Healing Level adjustments
-        self.level = level
-        self.p.laser_damage *= self.level
+        pass
 
     def update(self):
         """Update the Healer"""

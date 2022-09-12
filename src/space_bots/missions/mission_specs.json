@@ -95,7 +95,7 @@
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
             {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "asteroid"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 8}}},
-            {"time": 15, "event_info": {"squad": {"type": "spitter", "count": 5}}},
+            {"time": 15, "event_info": {"squad": {"type": "spitter", "count": 6}}},
             {"time": 25, "event_info": {"squad": {"type": "zergling", "count": 8}}}
         ],
          "test_squads": [
@@ -119,7 +119,7 @@
             {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
             {"time": 1, "event_info": {"protect": {"miner_squad": {"target": "asteroid"}}}},
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 8}}},
-            {"time": 15, "event_info": {"squad": {"type": "spitter", "count": 5}}},
+            {"time": 15, "event_info": {"squad": {"type": "spitter", "count": 6}}},
             {"time": 25, "event_info": {"squad": {"type": "zergling", "count": 8}}}
         ],
          "test_squads": [
@@ -441,7 +441,7 @@
             }
          ]
     },
-     "mission_18": {
+    "mission_18": {
         "title": "Mission 18: Waves",
          "minerals": 30,
         "event_sequence": [
@@ -467,6 +467,150 @@
                 "ships": [
                     {"type": "drone", "level": 1}, {"type": "drone", "level": 1},
                     {"type": "drone", "level": 1}, {"type": "drone", "level": 1}
+                ]
+            }
+         ]
+    },
+    "mission_19": {
+        "title": "Mission 19: Lower Repair Costs (Fighters Lvl 2)",
+         "minerals": 30,
+        "event_sequence": [
+            {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
+            {"time": 10, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.5, "level": 2}}},
+            {"time": 25, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.6, "level": 2}}},
+            {"time": 40, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.7, "level": 2}}},
+            {"time": 55, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.8, "level": 2}}},
+            {"time": 70, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.9, "level": 2}}},
+            {"time": 85, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.0, "level": 2}}},
+            {"time": 105, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.1, "level": 2}}},
+            {"time": 130, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.2, "level": 2}}}
+        ],
+         "test_squads": [
+            {
+                "name": "miner_squad", "targeting": "threat",
+                "ships": [{"type":"healer", "level": 2}, {"type":"healer", "level": 2},
+                    {"type":"miner", "level": 1}, {"type":"fighter", "level": 2}, {"type":"tank", "level": 1},
+                    {"type":"fighter", "level": 2}]
+            },
+            {
+                "name": "drones",
+                "ships": [
+                    {"type": "drone", "level": 1}, {"type": "drone", "level": 1},
+                    {"type": "drone", "level": 1}, {"type": "drone", "level": 1}
+                ]
+            }
+         ]
+    },
+    "mission_20": {
+        "title": "Mission 20: Dual Level 1s",
+         "minerals": 30,
+        "event_sequence": [
+            {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
+            {"time": 10, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.5, "level": 2}}},
+            {"time": 25, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.6, "level": 2}}},
+            {"time": 40, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.7, "level": 2}}},
+            {"time": 55, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.8, "level": 2}}},
+            {"time": 70, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.9, "level": 2}}},
+            {"time": 85, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.0, "level": 2}}},
+            {"time": 105, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.1, "level": 2}}},
+            {"time": 130, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.2, "level": 2}}}
+        ],
+         "test_squads": [
+            {
+                "name": "miner_squad", "targeting": "threat",
+                "ships": [{"type":"healer", "level": 1}, {"type":"healer", "level": 1},
+                    {"type":"miner", "level": 1}, {"type":"fighter", "level": 1}, {"type":"tank", "level": 1},
+                    {"type":"fighter", "level": 1}]
+            },
+            {
+                "name": "drones",
+                "ships": [
+                    {"type": "drone", "level": 1}, {"type": "drone", "level": 1},
+                    {"type": "drone", "level": 1}, {"type": "drone", "level": 1}
+                ]
+            }
+         ]
+    },
+    "mission_21": {
+        "title": "Mission 21: Single Level 2s",
+         "minerals": 30,
+        "event_sequence": [
+            {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
+            {"time": 10, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.5, "level": 2}}},
+            {"time": 25, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.6, "level": 2}}},
+            {"time": 40, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.7, "level": 2}}},
+            {"time": 55, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.8, "level": 2}}},
+            {"time": 70, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.9, "level": 2}}},
+            {"time": 85, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.0, "level": 2}}},
+            {"time": 105, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.1, "level": 2}}},
+            {"time": 130, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.2, "level": 2}}}
+        ],
+         "test_squads": [
+            {
+                "name": "miner_squad", "targeting": "threat",
+                "ships": [{"type":"healer", "level": 2},
+                    {"type":"miner", "level": 2}, {"type":"fighter", "level": 2}, {"type":"tank", "level": 2}]
+            },
+            {
+                "name": "drones",
+                "ships": [
+                    {"type": "drone", "level": 2}, {"type": "drone", "level": 2}
+                ]
+            }
+         ]
+    },
+    "mission_22": {
+        "title": "Mission 22: Tanks are for suckers (maybe...Lvl 3 Fighters)",
+         "minerals": 30,
+        "event_sequence": [
+            {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
+            {"time": 10, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.5, "level": 2}}},
+            {"time": 25, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.6, "level": 2}}},
+            {"time": 40, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.7, "level": 2}}},
+            {"time": 55, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.8, "level": 2}}},
+            {"time": 70, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.9, "level": 2}}},
+            {"time": 85, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.0, "level": 2}}},
+            {"time": 105, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.1, "level": 2}}},
+            {"time": 130, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.2, "level": 2}}}
+        ],
+         "test_squads": [
+            {
+                "name": "miner_squad", "targeting": "threat",
+                "ships": [{"type":"healer", "level": 2},
+                    {"type":"miner", "level": 2}, {"type":"fighter", "level": 3}, {"type":"fighter", "level": 3}]
+            },
+            {
+                "name": "drones",
+                "ships": [
+                    {"type": "drone", "level": 2}, {"type": "drone", "level": 2}
+                ]
+            }
+         ]
+    },
+        "mission_23": {
+        "title": "Mission 23: Tanks are for suckers (Lvl 4 Fighters)",
+         "minerals": 30,
+        "event_sequence": [
+            {"time": 0, "event_info": {"protect": {"drones": {"target": "miner", "distance": 30}}}},
+            {"time": 10, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.5, "level": 2}}},
+            {"time": 25, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.6, "level": 2}}},
+            {"time": 40, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.7, "level": 2}}},
+            {"time": 55, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.8, "level": 2}}},
+            {"time": 70, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.9, "level": 2}}},
+            {"time": 85, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.0, "level": 2}}},
+            {"time": 105, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.1, "level": 2}}},
+            {"time": 130, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.2, "level": 2}}}
+        ],
+         "test_squads": [
+            {
+                "name": "miner_squad", "targeting": "threat",
+                "ships": [{"type":"healer", "level": 2},
+                    {"type":"miner", "level": 2}, {"type":"fighter", "level": 4}, {"type":"fighter", "level":4}]
+            },
+            {
+                "name": "drones",
+                "ships": [
+                    {"type": "drone", "level": 2}, {"type": "drone", "level": 2}
                 ]
             }
          ]

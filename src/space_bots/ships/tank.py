@@ -10,7 +10,7 @@ class Tank(ship.Ship):
     def __init__(self, game_engine, x=300, y=300, level=1):
 
         # Call SuperClass (Entity) Initialization
-        super().__init__(game_engine, x, y, ship_type='tank')
+        super().__init__(game_engine, x, y, ship_type='tank', level=level)
 
         # Tank specific stuff
         self.protect_target = None
@@ -20,15 +20,12 @@ class Tank(ship.Ship):
         self.iron_will_thrown = False
         self.squad_buffs = ['protection']
 
-        # Tank Level adjustments
-        self.level = level
-        self.p.hp *= self.level
+        # Tank Level adjustments (Super Size Me)
+        self.p.hp *= (0.8 + self.level/5.0)
+        self.p.shield *= (0.8 + self.level/5.0)
+        # self.p.radius = int(self.p.radius * (0.9 + self.level/10.0))
         self.s.hp = self.p.hp
-        self.p.shield *= self.level
         self.s.shield = self.p.shield
-        self.p.shield_recharge *= self.level
-        self.p.hull_recharge *= self.level
-        self.p.cap_recharge *= self.level
 
         # Weapons
         self.laser_guns = weapon.NoWeapon(self)  # Tanks don't have lasers

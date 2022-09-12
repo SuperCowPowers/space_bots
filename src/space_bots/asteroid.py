@@ -101,7 +101,7 @@ class Asteroid(entity.Entity):
 
     def draw_minerals(self):
         """Draw the minerals for this asteroid"""
-        for pos in self.mineral_locations[:int(self.concentration)]:
+        for pos in self.mineral_locations[:int(self.concentration+.5)]:
             self.game_engine.draw_mineral(self.mineral, (self.x+pos[0], self.y+pos[1]), radius=5)
 
     def draw_outline(self):

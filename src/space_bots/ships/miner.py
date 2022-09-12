@@ -10,7 +10,7 @@ class Miner(ship.Ship):
     def __init__(self, game_engine, x=300, y=300, level=1):
 
         # Call SuperClass (Entity) Initialization
-        super().__init__(game_engine, x, y, ship_type='miner')
+        super().__init__(game_engine, x, y, ship_type='miner', level=level)
 
         # Miner specific stuff
         self.mining_asteroid = None
@@ -19,8 +19,7 @@ class Miner(ship.Ship):
         self.report_depleted = False
 
         # Mining level adjustments
-        self.level = level
-        self.p.laser_damage *= self.level
+        pass
 
         # Weapons
         self.laser_guns = laser_guns.LaserGuns(self, mount_points=2)  # Mining Lasers :)

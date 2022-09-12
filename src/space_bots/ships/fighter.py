@@ -10,15 +10,14 @@ class Fighter(ship.Ship):
     def __init__(self, game_engine, x=300, y=300, level=1):
 
         # Call SuperClass (Entity) Initialization
-        super().__init__(game_engine, x, y, ship_type='fighter')
+        super().__init__(game_engine, x, y, ship_type='fighter', level=level)
 
         # Fighter specific stuff
         self.self_buffs = ['first_strike']
+        self.mad_thrown = False
 
         # Fighter Level adjustments
-        self.level = level
-        self.p.laser_damage *= self.level
-        self.mad_thrown = False
+        pass
 
         # Weapons
         self.laser_guns = laser_guns.LaserGuns(self, mount_points=2)  # Twin Laser :)
