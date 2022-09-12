@@ -54,7 +54,6 @@ class Miner(ship.Ship):
             new_asteroid = self.squad.best_asteroid(self)
             self.squad.protect(new_asteroid)
             self.mining_asteroid = self.squad.protection_asset
-            print("New Mining Asteroid...")
 
         # Move toward the mining asteroid
         if self.mining_asteroid:

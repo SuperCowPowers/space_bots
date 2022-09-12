@@ -34,7 +34,7 @@ class Ship(entity.Entity):
         # Level Upgrades (General: Each ship can customize these)
         #
         # Lasers (Miners/Healer use these but in a different way)
-        self.p.laser_damage *= self.level
+        self.p.laser_damage *= (0.75 + self.level/4.0)
         self.p.laser_range *= (0.9 + self.level/10.0)
         self.p.laser_width = int(self.p.laser_width * (0.9 + self.level/10.0))
         #
