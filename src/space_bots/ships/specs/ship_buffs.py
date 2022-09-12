@@ -2,7 +2,7 @@
 
 ship_buffs = {
     'protection':
-        {'effects': {'incoming_damage_modifier': 0.9},
+        {'effects': {'incoming_damage_modifier': 0.75},
          'display': False
          },
     'iron_will':

@@ -180,7 +180,7 @@ ship_specs = {
     'mega_bug':
         {'color': (140, 60, 80),
          'mass': 800,
-         'speed': 0.8,
+         'speed': 1.0,
          'radius': 20,
          'hp': 800,
          'shield': 500,

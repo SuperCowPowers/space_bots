@@ -14,7 +14,7 @@ class Tank(ship.Ship):
 
         # Tank specific stuff
         self.protect_target = None
-        self.p.damage_modifier = 0.7  # 30% reduction
+        self.p.incoming_damage_modifier *= 0.7  # 30% reduction
         self.pad_radius += 10  # Tanks need their space
         self.shield_thrown = False
         self.iron_will_thrown = False
@@ -48,7 +48,7 @@ class Tank(ship.Ship):
             self.shield_thrown = True
 
         # Cast Iron Will
-        if self.protect_target.health_percent() < .07 and not self.iron_will_thrown:
+        if False and self.protect_target.health_percent() < .07 and not self.iron_will_thrown:
             self.announcer_messages.put('tank_cast_iron_will')
             for _ship in self.squad.ships:
                 _ship.add_buff('iron_will')
