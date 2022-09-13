@@ -15,7 +15,6 @@ class Tank(ship.Ship):
         # Tank specific stuff
         self.protect_target = None
         self.p.incoming_damage_modifier *= 0.7  # 30% reduction
-        self.pad_radius += 10  # Tanks need their space
         self.shield_thrown = False
         self.iron_will_thrown = False
         self.squad_buffs = ['protection']

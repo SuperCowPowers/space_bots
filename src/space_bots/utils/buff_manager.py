@@ -19,11 +19,12 @@ class BuffManager:
         self._buff_info = ship_buffs.ship_buffs
         self.ship_buffs = defaultdict(dict)
 
-    def apply(self, buff_name, ship, **kwargs):
+    def apply(self, buff_name, ship, level=1, **kwargs):
         """Apply a previous registered buff to the ship
            Args:
                buff_name: The name of the buff
                ship: The ship to apply the buff to
+               level: The level of the ship applying the buff
            Returns:
                boolean: True or False
         """
@@ -50,9 +51,9 @@ class BuffManager:
             elif effect == 'outgoing_damage_modifier':
                 ship.p.outgoing_damage_modifier *= value
             elif effect == 'shield':
-                ship.s.shield += value
+                ship.s.shield += value * level
             elif effect == 'heal':
-                ship.s.hp += value
+                ship.s.hp += value * level
             elif effect == 'mean_health':
                 ship.s.hp = ship.p.hp * kwargs['avg_health_percent']
             else:

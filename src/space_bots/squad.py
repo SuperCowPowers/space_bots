@@ -113,7 +113,7 @@ class Squad:
         # Self buffs
         for ship in self.ships:
             for buff in ship.self_buffs:
-                self.buff_manager.apply(buff, ship)
+                self.buff_manager.apply(buff, ship, ship.level)
                 self.announcer_messages.put(buff)
 
         # Squad buffs
@@ -121,7 +121,7 @@ class Squad:
             for buff in ship.squad_buffs:
                 self.announcer_messages.put(buff)
                 for _ship in self.ships:
-                    self.buff_manager.apply(buff, _ship)
+                    self.buff_manager.apply(buff, _ship, ship.level)
 
     def set_combat_status(self, combat):
 
@@ -212,7 +212,7 @@ class Squad:
 
         # Squad Movement: Group up
         group_ships = [s for s in self.ships if s.ship_type not in ['zergling', 'drone']]
-        squad_radius = 50 + len(group_ships) * 10
+        squad_radius = 40 + len(group_ships) * 10
         for _ship in self.ships:
             (_, _), (dx, dy) = force_utils.attraction_forces(self, _ship, squad_radius)
             _ship.force_x += dx * .25

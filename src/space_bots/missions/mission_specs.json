@@ -524,13 +524,35 @@
          "test_squads": [
             {
                 "name": "miner_squad",
-                "ships": [{"type":"healer", "level": 3},
-                          {"type":"healer", "level": 3},
-                          {"type":"healer", "level": 3},
+                "ships": [{"type":"healer", "level": 2},
                           {"type":"miner", "level": 2},
-                          {"type":"fighter", "level": 3},
-                          {"type":"fighter", "level": 3},
-                          {"type":"fighter", "level": 3}]
+                          {"type":"fighter", "level": 4},
+                          {"type":"tank", "level": 3},
+                          {"type": "drone", "level": 3},
+                          {"type": "drone", "level": 3}]
+            }
+         ]
+    },
+    "mission_145": {
+        "title": "Mission 145: Experimental",
+        "minerals": 30,
+        "event_sequence": [
+            {"time": 10, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.0, "level": 2}}},
+            {"time": 20, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.2, "level": 2}}},
+            {"time": 30, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.4, "level": 2}}},
+            {"time": 40, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.8, "level": 2}}},
+            {"time": 50, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 3.2, "level": 2}}},
+            {"time": 60, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 3.4, "level": 2}}},
+            {"time": 70, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 3.8, "level": 2}}},
+            {"time": 80, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 4.2, "level": 2}}}
+        ],
+         "test_squads": [
+            {
+                "name": "miner_squad",
+                "ships": [{"type":"healer", "level": 7},
+                          {"type":"miner", "level": 2},
+                          {"type": "drone", "level": 5},
+                          {"type": "drone", "level": 5}]
             }
          ]
     }
