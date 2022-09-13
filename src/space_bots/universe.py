@@ -29,7 +29,7 @@ class Universe:
         self.width = width
         self.height = height
         self.top = self.pad
-        self.bottom = self.height - 3 * self.pad
+        self.bottom = self.height - self.pad
         self.left = self.pad
         self.right = self.width - self.pad
 

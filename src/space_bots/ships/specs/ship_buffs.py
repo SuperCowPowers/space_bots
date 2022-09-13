@@ -50,7 +50,7 @@ ship_buffs = {
          'color': (180, 60, 200)
          },
     'now_im_mad':
-        {'effects': {'outgoing_damage_modifier': 1.5},
+        {'effects': {'outgoing_damage_modifier': 1.25},
          'display': True,
          'timer': 5,
          'color': (220, 100, 100)

@@ -33,7 +33,7 @@ class Fighter(ship.Ship):
         self.general_target_movement()
 
         # If the Fighter gets low health cast buff
-        if self.health_percent() < .35 and not self.mad_thrown:
+        if self.health_percent() < .25 and not self.mad_thrown:
             print('Fighter: Now Im Mad!')
             self.announcer_messages.put('fighter_now_im_mad')
             self.add_buff('now_im_mad')

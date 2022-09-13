@@ -139,7 +139,7 @@
         "minerals": 10,
         "event_sequence": [
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 30}}},
-            {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 3, "level":  2}}},
+            {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 4, "level":  2}}},
             {"time": 13, "event_info": {"squad": {"type": "mega_bug", "count": 1}}}
         ],
          "test_squads": [
@@ -157,7 +157,7 @@
         "minerals": 10,
         "event_sequence": [
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 30}}},
-            {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 3, "level":  2}}},
+            {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 4, "level":  2}}},
             {"time": 13, "event_info": {"squad": {"type": "mega_bug", "count": 1}}}
         ],
          "test_squads": [
@@ -175,15 +175,15 @@
         "minerals": 10,
         "event_sequence": [
             {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 30}}},
-            {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 3, "level":  2}}},
+            {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 4, "level":  2}}},
             {"time": 13, "event_info": {"squad": {"type": "mega_bug", "count": 1}}}
         ],
          "test_squads": [
             {
                 "name": "miner_squad",
-                "ships": [{"type":"healer", "level": 1}, {"type":"fighter", "level": 1},
+                "ships": [{"type":"healer", "level": 1},
                           {"type":"miner", "level": 1}, {"type":"fighter", "level": 1},
-                          {"type":"tank", "level": 1},
+                          {"type":"tank", "level": 1}, {"type":"fighter", "level": 1},
                           {"type": "drone", "level": 1}, {"type": "drone", "level": 1}]
             }
          ]
@@ -198,7 +198,7 @@
             {"time": 20, "event_info": {"squad": {"type": "zergling", "count": 10, "level": 2}}},
             {"time": 25, "event_info": {"squad": {"type": "zergling", "count": 10, "level": 2}}},
             {"time": 30, "event_info": {"squad": {"type": "zergling", "count": 10, "level": 2}}},
-            {"time": 40, "event_info": {"squad": {"type": "zergling", "count": 10, "level": 2}}}
+            {"time": 40, "event_info": {"squad": {"type": "zergling", "count": 30, "level": 2}}}
         ],
          "test_squads": [
             {
@@ -220,7 +220,7 @@
             {"time": 20, "event_info": {"squad": {"type": "zergling", "count": 10, "level": 2}}},
             {"time": 25, "event_info": {"squad": {"type": "zergling", "count": 10, "level": 2}}},
             {"time": 30, "event_info": {"squad": {"type": "zergling", "count": 10, "level": 2}}},
-            {"time": 40, "event_info": {"squad": {"type": "zergling", "count": 10, "level": 2}}}
+            {"time": 40, "event_info": {"squad": {"type": "zergling", "count": 30, "level": 2}}}
         ],
          "test_squads": [
             {
@@ -228,6 +228,7 @@
                 "ships": [{"type":"healer", "level": 1},
                           {"type":"miner", "level": 1}, {"type":"fighter", "level": 1},
                           {"type":"tank", "level": 1}, {"type": "drone", "level": 1},
+                          {"type": "drone", "level": 1}, {"type": "drone", "level": 1},
                           {"type": "drone", "level": 1}, {"type": "drone", "level": 1},
                           {"type": "drone", "level": 1}]
             }
@@ -242,7 +243,7 @@
             {"time": 20, "event_info": {"squad": {"type": "zergling", "count": 10, "level": 2}}},
             {"time": 25, "event_info": {"squad": {"type": "zergling", "count": 10, "level": 2}}},
             {"time": 30, "event_info": {"squad": {"type": "zergling", "count": 10, "level": 2}}},
-            {"time": 40, "event_info": {"squad": {"type": "zergling", "count": 10, "level": 2}}}
+            {"time": 40, "event_info": {"squad": {"type": "zergling", "count": 30, "level": 2}}}
         ],
          "test_squads": [
             {
@@ -425,7 +426,7 @@
     },
         "mission_23": {
         "title": "Mission 23: Tanks are for suckers (Lvl 3 Fighters)",
-         "minerals": 30,
+            "minerals": 30,
         "event_sequence": [
             {"time": 10, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.5, "level": 2}}},
             {"time": 25, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.6, "level": 2}}},
@@ -465,21 +466,45 @@
     },
     "mission_142": {
         "title": "Mission 142: Experimental",
+        "minerals": 30,
         "event_sequence": [
-            {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 8, "level":2}}},
-            {"time": 10, "event_info": {"squad": {"type": "berserker", "count": 2, "level":2}}},
-            {"time": 10, "event_info": {"squad": {"type": "mega_bug", "count": 1, "level":2}}},
-            {"time": 30, "event_info": {"squad": {"type": "mega_bug", "count": 4, "level":2}}},
-            {"time": 35, "event_info": {"squad": {"type": "zergling", "count": 20, "level":2}}}
+            {"time": 10, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.0, "level": 2}}},
+            {"time": 20, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.2, "level": 2}}},
+            {"time": 30, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.4, "level": 2}}},
+            {"time": 40, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.8, "level": 2}}},
+            {"time": 50, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.8, "level": 2}}},
+            {"time": 60, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.8, "level": 2}}},
+            {"time": 70, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.8, "level": 2}}},
+            {"time": 80, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 3.2, "level": 2}}}
         ],
          "test_squads": [
             {
                 "name": "miner_squad",
-                "ships": [{"type":"healer", "level": 2}, {"type":"healer", "level": 2},
-                          {"type":"miner", "level": 2}, {"type":"fighter", "level": 2},
-                          {"type":"fighter", "level": 2}, {"type":"tank", "level": 2},
-                          {"type": "drone", "level": 2},
-                          {"type": "drone", "level": 2}]
+                "ships": [{"type":"healer", "level": 2},
+                          {"type":"miner", "level": 2},
+                          {"type":"fighter", "level": 5}]
+            }
+         ]
+    },
+    "mission_143": {
+        "title": "Mission 143: Experimental",
+        "minerals": 30,
+        "event_sequence": [
+            {"time": 10, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.0, "level": 2}}},
+            {"time": 20, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.2, "level": 2}}},
+            {"time": 30, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.4, "level": 2}}},
+            {"time": 40, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.8, "level": 2}}},
+            {"time": 50, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 3.2, "level": 2}}},
+            {"time": 60, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 3.4, "level": 2}}},
+            {"time": 70, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 3.8, "level": 2}}},
+            {"time": 80, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 4.2, "level": 2}}}
+        ],
+         "test_squads": [
+            {
+                "name": "miner_squad",
+                "ships": [{"type":"healer", "level": 5},
+                          {"type":"miner", "level": 2},
+                          {"type":"fighter", "level": 5}]
             }
          ]
     }

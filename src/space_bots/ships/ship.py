@@ -38,10 +38,10 @@ class Ship(entity.Entity):
         self.p.laser_range *= (0.9 + self.level/10.0)
         self.p.laser_width = int(self.p.laser_width * (0.9 + self.level/10.0))
         #
-        # Ship HP/Size
+        # Ship HP, Shield, and Threat
         self.p.hp *= (0.8 + self.level/5.0)
         self.p.shield *= (0.8 + self.level/5.0)
-        # self.p.radius = int(self.p.radius * (0.9 + self.level/10.0))
+        self.p.threat *= (0.75 + self.level/4.0)
         self.s.hp = self.p.hp
         self.s.shield = self.p.shield
         #
