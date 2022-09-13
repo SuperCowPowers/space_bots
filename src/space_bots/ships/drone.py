@@ -25,7 +25,7 @@ class Drone(ship.Ship):
         # General updates
         self.general_ship_updates()
         self.general_targeting()
-        self.general_avoidance()
+        self.general_avoidance(passive=2.0)  # Drones should be careful
         self.general_target_movement(aggressive=0.25)
 
         # Move towards protecting asset (Drones need to protect the Asset)

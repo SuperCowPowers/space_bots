@@ -44,7 +44,7 @@ class Miner(ship.Ship):
 
         # General updates
         self.general_ship_updates()
-        self.general_avoidance(passive=3.0)  # Miner needs to avoid enemies
+        self.general_avoidance(passive=3.0)  # Miner really needs to avoid enemies
 
         # Mining laser update
         self.laser_guns.update(self.mining_asteroid)
