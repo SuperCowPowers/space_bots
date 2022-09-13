@@ -44,7 +44,7 @@ class Miner(ship.Ship):
 
         # General updates
         self.general_ship_updates()
-        self.general_avoidance(passive=2.0)  # Miner needs to avoid enemies
+        self.general_avoidance(passive=3.0)  # Miner needs to avoid enemies
 
         # Mining laser update
         self.laser_guns.update(self.mining_asteroid)
@@ -57,7 +57,7 @@ class Miner(ship.Ship):
 
         # Move toward the mining asteroid
         if self.mining_asteroid:
-            (_, _), (dx, dy) = force_utils.attraction_forces(self.mining_asteroid, self, self.p.laser_range/1.5)
+            (_, _), (dx, dy) = force_utils.attraction_forces(self.mining_asteroid, self, self.p.laser_range/5)
             self.force_x += dx
             self.force_y += dy
 

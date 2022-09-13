@@ -358,7 +358,7 @@
          ]
     },
     "mission_20": {
-        "title": "Mission 20: Dual Level 1s",
+        "title": "Mission 20: Two Fighters/Healers (Lvl 1)",
          "minerals": 30,
         "event_sequence": [
             {"time": 10, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.5, "level": 2}}},
@@ -374,13 +374,13 @@
             {
                 "name": "miner_squad", "targeting": "threat",
                 "ships": [{"type":"healer", "level": 1}, {"type":"healer", "level": 1},
-                    {"type":"miner", "level": 1}, {"type":"fighter", "level": 1}, {"type":"tank", "level": 1},
-                    {"type":"fighter", "level": 1}, {"type": "drone", "level": 1}, {"type": "drone", "level": 1}]
+                    {"type":"miner", "level": 1}, {"type":"fighter", "level": 1}, {"type":"tank", "level": 2},
+                    {"type":"fighter", "level": 1}, {"type": "drone", "level": 2}, {"type": "drone", "level": 2}]
             }
          ]
     },
     "mission_21": {
-        "title": "Mission 21: Single Level 2s",
+        "title": "Mission 21: Single Fighter/Healer (Lvl 2)",
          "minerals": 30,
         "event_sequence": [
             {"time": 10, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 1.5, "level": 1}}},
@@ -505,6 +505,32 @@
                 "ships": [{"type":"healer", "level": 5},
                           {"type":"miner", "level": 2},
                           {"type":"fighter", "level": 5}]
+            }
+         ]
+    },
+    "mission_144": {
+        "title": "Mission 144: Experimental",
+        "minerals": 30,
+        "event_sequence": [
+            {"time": 10, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.0, "level": 2}}},
+            {"time": 20, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.2, "level": 2}}},
+            {"time": 30, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.4, "level": 2}}},
+            {"time": 40, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 2.8, "level": 2}}},
+            {"time": 50, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 3.2, "level": 2}}},
+            {"time": 60, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 3.4, "level": 2}}},
+            {"time": 70, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 3.8, "level": 2}}},
+            {"time": 80, "event_info": {"squad": {"type": "standard_zerg_pack", "pack_size": 4.2, "level": 2}}}
+        ],
+         "test_squads": [
+            {
+                "name": "miner_squad",
+                "ships": [{"type":"healer", "level": 3},
+                          {"type":"healer", "level": 3},
+                          {"type":"healer", "level": 3},
+                          {"type":"miner", "level": 2},
+                          {"type":"fighter", "level": 3},
+                          {"type":"fighter", "level": 3},
+                          {"type":"fighter", "level": 3}]
             }
          ]
     }

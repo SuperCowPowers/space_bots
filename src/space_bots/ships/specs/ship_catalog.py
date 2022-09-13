@@ -62,12 +62,12 @@ ship_specs = {
          },
     'miner':
         {'color': (180, 160, 60),
-         'mass': 500,
+         'mass': 300,
          'speed': 0.6,
          'radius': 12,
          'hp': 200,
          'shield': 150,
-         'laser_range': 100,
+         'laser_range': 80,
          'laser_damage': 0.005,  # Mining
          'laser_width': 5,
          'capacitor': 30,
