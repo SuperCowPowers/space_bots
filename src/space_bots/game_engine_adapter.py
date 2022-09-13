@@ -107,7 +107,7 @@ class GameEngineAdapter:
         pygame.draw.polygon(self.screen, color, points, width)
 
     def draw_text(self, text, color=(140, 200, 140), pos='bottom'):
-        pos = (450, 80) if pos == 'top' else (450, self.height-80)
+        pos = (450, 20) if pos == 'top' else (400, self.height-50)
         img = self.font.render(text, True, color)
         self.screen.blit(img, pos)
 

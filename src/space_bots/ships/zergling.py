@@ -13,14 +13,14 @@ class Zergling(ship.Ship):
 
         # Zergling specific stuff
         self.protect_asset = None
-        self.p.damage_modifier = 0.5   # 50% reduction (they are slippery)
+        self.p.incoming_damage_modifier = 0.75   # 25% reduction (they are slippery)
         self.p.collision_radius = 2.0  # Small collision radius helps avoid Torps
 
         # Zergling Level adjustments
         pass
 
         # Zerglings are 'frenzied'
-        self.force_damp = 0.998
+        self.force_damp = 0.999
 
     def update(self):
         """Update the Zergling"""

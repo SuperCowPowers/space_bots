@@ -215,8 +215,8 @@ class Squad:
         squad_radius = 50 + len(group_ships) * 10
         for _ship in self.ships:
             (_, _), (dx, dy) = force_utils.attraction_forces(self, _ship, squad_radius)
-            _ship.force_x += dx * .5
-            _ship.force_y += dy * .5
+            _ship.force_x += dx * .25
+            _ship.force_y += dy * .25
 
         # Protecting an Asset
         if self.protection_asset:
@@ -274,7 +274,7 @@ class Squad:
     def best_asteroid(self, ship):
         """Combination of Distance and Minerals"""
         _distance = [force_utils.distance_between(ship, a) for a in self.asteroids]
-        best_asteroid = [(a, a.concentration/(d*d)) for a, d in zip(self.asteroids, _distance)]
+        best_asteroid = [(a, a.concentration/(d*d*d)) for a, d in zip(self.asteroids, _distance)]
         best_asteroid.sort(key=lambda tup: tup[1], reverse=True)
         best = [a[0] for a in best_asteroid][0]  # Just returning the top asteroid
         return best if best.concentration else None

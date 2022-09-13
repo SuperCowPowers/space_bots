@@ -25,7 +25,7 @@ class Universe:
             self.time_slow = 0
 
         # Dimensions and Boundaries
-        self.pad = 50
+        self.pad = 80
         self.width = width
         self.height = height
         self.top = self.pad
@@ -308,7 +308,7 @@ class Universe:
                     if _asteroid == co_asteroid:
                         continue
                     # Move if too close
-                    if force_utils.distance_between(_asteroid, co_asteroid) < 400:
+                    if force_utils.distance_between(_asteroid, co_asteroid) < 300:
                         (dx, dy), (co_dx, co_dy) = force_utils.normalized_distance_vectors(_asteroid, co_asteroid)
                         _asteroid.x -= dx * 5
                         _asteroid.y -= dy * 5

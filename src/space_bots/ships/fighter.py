@@ -13,8 +13,8 @@ class Fighter(ship.Ship):
         super().__init__(game_engine, x, y, ship_type='fighter', level=level)
 
         # Fighter specific stuff
-        self.self_buffs = ['first_strike']
-        self.mad_thrown = False
+        self.self_buffs = []  # ['first_strike'] Needs a rework
+        self.mad_thrown = False  # Need to expire buffs
 
         # Fighter Level adjustments
         pass
@@ -33,7 +33,7 @@ class Fighter(ship.Ship):
         self.general_target_movement()
 
         # If the Fighter gets low health cast buff
-        if False and self.health_percent() < .5 and not self.mad_thrown:
+        if self.health_percent() < .35 and not self.mad_thrown:
             print('Fighter: Now Im Mad!')
             self.announcer_messages.put('fighter_now_im_mad')
             self.add_buff('now_im_mad')

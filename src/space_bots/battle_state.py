@@ -35,7 +35,7 @@ class BattleState:
     def lowest_health_teammate(self, ship):
         if not self.all_ships():
             return None
-        ship_health = [(s, s.health_percent()) for s in self.team_ships(ship) if s.ship_type != 'drone']
+        ship_health = [(s, s.health_percent()) for s in self.team_ships(ship)]
         ship_health.sort(key=lambda tup: tup[1])
         return [s[0] for s in ship_health][0]
 

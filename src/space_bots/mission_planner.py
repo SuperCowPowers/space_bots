@@ -79,8 +79,15 @@ class MissionPlanner:
             'zergling': 5,
             'spitter': 2,
             'berserker': 1,
-            'mega_bug': 0.25
+            'mega_bug': 0  # Special Logic
         }
+        # Special Logic for Mega Bugs
+        num_mega_bugs = int(pack_size/2)
+        print(f'Mega Bugs: {num_mega_bugs}')
+        pack_size -= num_mega_bugs
+        pack['mega_bug'] = num_mega_bugs/pack_size
+
+        # Rest of the ships
         for ship_type, count in pack.items():
             num_ships = int(count * pack_size)
             if num_ships:
@@ -227,7 +234,7 @@ def test():
 
     # Get the Universe Mission Planner
     my_mission = my_universe.mission_planner
-    my_mission.set_mission(21, test_squads=True)
+    my_mission.set_mission(8, test_squads=True)
 
     # Invoke the event loop
     my_game_engine.event_loop()

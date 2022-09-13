@@ -199,8 +199,9 @@ class Ship(entity.Entity):
         self.laser_guns.update(self.s.target)
         self.torp_launcher.update(self.squad.main_target)
 
-    def general_target_movement(self, aggressive=0.5):
+    def general_target_movement(self, aggressive=1.0):
         """Movement Logic that's useful for most ships"""
+        aggressive *= 0.5
         if self.squad.main_target:
             (dx, dy), (_, _) = force_utils.attraction_forces(self, self.squad.main_target, self.p.laser_range/1.3)
             self.force_x += dx * aggressive
@@ -208,10 +209,11 @@ class Ship(entity.Entity):
 
     def general_avoidance(self, passive=1.0):
         """Avoidance Logic that's useful for most ships"""
+        passive *= 0.01
         for enemy_ship in self.squad.adversaries:
             (dx, dy), (_, _) = force_utils.repulsion_forces(self, enemy_ship, rest_distance=self.p.keep_range)
-            self.force_x += dx * passive
-            self.force_y += dy * passive
+            self.force_x += dx * passive * enemy_ship.mass
+            self.force_y += dy * passive * enemy_ship.mass
 
     def update(self):
         """Update the Ship"""
