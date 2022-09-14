@@ -1,7 +1,6 @@
 """Drone: A Drone ship in Space Bots"""
 
 # Local Imports
-from space_bots.utils import force_utils
 from space_bots.ships import ship
 
 
@@ -25,15 +24,8 @@ class Drone(ship.Ship):
         # General updates
         self.general_ship_updates()
         self.general_targeting()
-        self.general_avoidance(passive=2.0)  # Drones should be careful
-        self.general_target_movement(aggressive=0.25)
-
-        # Move towards protecting asset (Drones need to protect the Asset)
-        self.protect_asset = self.squad.protection_asset
-        if self.protect_asset:
-            (dx, dy), (_, _) = force_utils.attraction_forces(self, self.protect_asset, self.squad.protection_distance)
-            self.force_x += dx
-            self.force_y += dy
+        self.general_avoidance(passive=2.0)
+        self.general_target_movement(aggressive=0.1)  # Drones should be careful
 
         # Now actually call the move command (which uses force/mass calc)
         self.move()

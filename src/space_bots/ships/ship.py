@@ -202,8 +202,11 @@ class Ship(entity.Entity):
     def general_target_movement(self, aggressive=1.0):
         """Movement Logic that's useful for most ships"""
         aggressive *= 0.5
+
+        # Zerg have 0 range
+        ship_range = 0 if self.team == 'zerg' else self.p.laser_range/1.3
         if self.squad.main_target:
-            (dx, dy), (_, _) = force_utils.attraction_forces(self, self.squad.main_target, self.p.laser_range/1.3)
+            (dx, dy), (_, _) = force_utils.attraction_forces(self, self.squad.main_target, ship_range)
             self.force_x += dx * aggressive
             self.force_y += dy * aggressive
 

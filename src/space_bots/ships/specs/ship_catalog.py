@@ -43,7 +43,7 @@ ship_specs = {
     'fighter':
         {'color': (180, 60, 200),
          'mass': 400,
-         'speed': 0.25,
+         'speed': 0.35,
          'radius': 16,
          'hp': 200,
          'shield': 150,
@@ -63,7 +63,7 @@ ship_specs = {
     'miner':
         {'color': (180, 160, 60),
          'mass': 300,
-         'speed': 0.6,
+         'speed': 0.5,
          'radius': 12,
          'hp': 200,
          'shield': 150,
@@ -82,7 +82,7 @@ ship_specs = {
     'drone':
         {'color': (180, 200, 100),
          'mass': 150,
-         'speed': 0.6,
+         'speed': 0.7,
          'radius': 7,
          'hp': 60,
          'shield': 60,

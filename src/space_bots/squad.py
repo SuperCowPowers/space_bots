@@ -212,7 +212,7 @@ class Squad:
 
         # Squad Movement: Group up
         group_ships = [s for s in self.ships if s.ship_type not in ['zergling', 'drone']]
-        squad_radius = 40 + len(group_ships) * 10
+        squad_radius = 60 + len(group_ships) * 10
         for _ship in self.ships:
             (_, _), (dx, dy) = force_utils.attraction_forces(self, _ship, squad_radius)
             _ship.force_x += dx * .25

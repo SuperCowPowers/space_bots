@@ -76,9 +76,12 @@ def attraction_forces(source, target, within_range):
         return (0, 0), (0, 0)
 
     # Okay the attraction will be greater the further away we are
-    max_attraction_factor = 100000
-    factor_normalizer = 0.0001
-    attraction_factor = min(cur_distance*cur_distance, max_attraction_factor) * factor_normalizer
+    # We want it to be slope down to something small (like 0.1) when we're
+    # almost at the 'within range' border and maybe be like 10 (shrug) max force
+    # >500 units away = 5 force
+    # close to 0 away = 1 force
+    away_distance = min(cur_distance-within_range, 500)
+    attraction_factor = max(away_distance*0.01, 1)
 
     # Compute normalized distance vectors
     norm_st, norm_ts = normalized_distance_vectors(source, target)
@@ -106,8 +109,6 @@ def force_based_movement(entity, limit=None):
     # Experimenting with 'forces' (in air quotes)
     delta_x = entity.force_x / entity.mass
     delta_y = entity.force_y / entity.mass
-    # delta_x = entity.force_x / (entity.mass * entity.mass)
-    # delta_y = entity.force_y / (entity.mass * entity.mass)
     if limit is not None:
         delta_x = max(min(delta_x, limit), -limit)
         delta_y = max(min(delta_y, limit), -limit)

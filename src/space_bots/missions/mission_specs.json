@@ -16,9 +16,9 @@
         "title": "Mission 1: Drones are Great",
         "minerals": 8,
         "event_sequence": [
-            {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 8}}},
-            {"time": 20, "event_info": {"squad": {"type": "zergling", "count": 8}}},
-            {"time": 30, "event_info": {"squad": {"type": "zergling", "count": 8}}}
+            {"time": 10, "event_info": {"squad": {"type": "zergling", "count": 6}}},
+            {"time": 20, "event_info": {"squad": {"type": "zergling", "count": 6}}},
+            {"time": 30, "event_info": {"squad": {"type": "zergling", "count": 6}}}
         ],
          "test_squads": [
             {
