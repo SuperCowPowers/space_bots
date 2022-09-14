@@ -47,7 +47,7 @@ ship_specs = {
          'radius': 16,
          'hp': 200,
          'shield': 150,
-         'laser_range': 180,
+         'laser_range': 200,
          'laser_damage': 0.2,
          'laser_width': 3,
          'capacitor': 40,
@@ -63,7 +63,7 @@ ship_specs = {
     'miner':
         {'color': (180, 160, 60),
          'mass': 300,
-         'speed': 0.5,
+         'speed': 0.6,
          'radius': 12,
          'hp': 200,
          'shield': 150,
@@ -194,6 +194,6 @@ ship_specs = {
          'hull_recharge': 0.005,
          'cap_recharge': 0.05,
          'keep_range': 100,
-         'threat': 400
+         'threat': 100
          }
 }
