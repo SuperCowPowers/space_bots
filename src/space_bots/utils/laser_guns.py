@@ -19,7 +19,7 @@ class LaserGuns(weapon.Weapon):
         self.needs_recharge = False
         self.full_charge = 400
         self.current_charge = 0
-        self.mount = CenterMount(ship) if mount_points == 1 else GimbalMount(ship)
+        self.mount = CenterMount(ship) if mount_points == 1 else GimbalMount(ship, mount_points)
         self.cap_cost *= mount_points
         self.min_capacitor = self.cap_cost
 

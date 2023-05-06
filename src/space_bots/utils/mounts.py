@@ -24,7 +24,7 @@ class CenterMount:
 
 
 class GimbalMount:
-    def __init__(self, ship):
+    def __init__(self, ship, mount_points=2):
         self.my_ship = ship
         self.game_engine = ship.game_engine
         self.color = ship.p.color

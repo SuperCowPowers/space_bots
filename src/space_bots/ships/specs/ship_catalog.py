@@ -30,7 +30,7 @@ ship_specs = {
          'shield': 100,
          'laser_range': 150,
          'laser_damage': 0.2,  # Healing
-         'laser_width': 4,
+         'laser_width': 6,
          'capacitor': 20,
          'ship_width': 5,
          'shield_width': 2,
@@ -49,7 +49,7 @@ ship_specs = {
          'shield': 150,
          'laser_range': 200,
          'laser_damage': 0.2,
-         'laser_width': 3,
+         'laser_width': 4,
          'capacitor': 40,
          'ship_width': 5,
          'shield_width': 2,
@@ -69,7 +69,7 @@ ship_specs = {
          'shield': 150,
          'laser_range': 80,
          'laser_damage': 0.005,  # Mining
-         'laser_width': 5,
+         'laser_width': 7,
          'capacitor': 30,
          'ship_width': 5,
          'shield_width': 2,

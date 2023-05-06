@@ -22,7 +22,7 @@ class Miner(ship.Ship):
         pass
 
         # Weapons
-        self.laser_guns = laser_guns.LaserGuns(self, mount_points=2)  # Mining Lasers :)
+        self.laser_guns = laser_guns.LaserGuns(self, mount_points=3)  # Mining Lasers :)
         self.torp_launcher = weapon.NoWeapon(self)
 
     def communicate(self, comms):
