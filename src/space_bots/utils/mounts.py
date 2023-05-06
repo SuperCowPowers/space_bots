@@ -29,6 +29,7 @@ class GimbalMount:
         self.game_engine = ship.game_engine
         self.color = ship.p.color
         self.radius = self.my_ship.p.shield_radius - 1
+        self.mount_radius = 7
         self.offset_theta = math.pi / 2
         self.target_theta = self.offset_theta
         self.mount_points = self._compute_mount_rotation()
@@ -53,8 +54,8 @@ class GimbalMount:
     def draw(self):
         """Draw the Gimbal Mounts"""
         for mount in self.mount_points:
-            self.game_engine.draw_circle(self.color, mount, 6, width=0)
-            self.game_engine.draw_circle((220, 220, 220), mount, 7, width=1)
+            self.game_engine.draw_circle(self.color, mount, self.mount_radius, width=0)
+            self.game_engine.draw_circle((220, 220, 220), mount, self.mount_radius, width=2)
 
     def num_mount_points(self):
         return len(self.mount_points)

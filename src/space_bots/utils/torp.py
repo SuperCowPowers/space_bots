@@ -20,6 +20,7 @@ class Torp(entity.Entity):
         self.released = False
         self.release_counter = 0
         self.expire = 300
+        self.radius = 5
 
         # Call SuperClass (Entity) Initialization
         super().__init__(origin_ship.game_engine, origin_ship.x, origin_ship.y, mass=self.mass, speed=self.speed)
@@ -65,8 +66,8 @@ class Torp(entity.Entity):
 
     def draw(self):
         """Draw the torpedo"""
-        self.game_engine.draw_circle(self.color, (self.x, self.y), 3, width=0)
-        self.game_engine.draw_circle((220, 220, 220), (self.x, self.y), 4, width=1)
+        self.game_engine.draw_circle(self.color, (self.x, self.y), self.radius, width=0)
+        self.game_engine.draw_circle((220, 220, 220), (self.x, self.y), self.radius+1, width=1)
 
 
 # Simple test of the Torp functionality

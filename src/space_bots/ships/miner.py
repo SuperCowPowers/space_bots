@@ -57,7 +57,7 @@ class Miner(ship.Ship):
 
         # Move toward the mining asteroid
         if self.mining_asteroid:
-            (_, _), (dx, dy) = force_utils.attraction_forces(self.mining_asteroid, self, self.p.laser_range/1.1)
+            (_, _), (dx, dy) = force_utils.attraction_forces(self.mining_asteroid, self, self.p.laser_range/1.3)
             self.force_x += dx
             self.force_y += dy
 

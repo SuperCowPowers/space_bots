@@ -222,8 +222,8 @@ class Squad:
         if self.protection_asset:
             for _ship in self.ships:
                 (_, _), (dx, dy) = force_utils.attraction_forces(self.protection_asset, _ship, self.protection_distance)
-                _ship.force_x += dx * .25
-                _ship.force_y += dy * .25
+                _ship.force_x += dx * .5
+                _ship.force_y += dy * .5
 
         # Update each ship
         for _ship in self.ships:
